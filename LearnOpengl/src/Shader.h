@@ -39,7 +39,9 @@ void Shader::compileShader(const std::string& path, GLenum shaderType)
 		shaderFile.close();
 		shaderCode = shaderStream.str();
 		const char* vShaderCode = shaderCode.c_str();
-		glCreateShader(shaderType);
+		unsigned shaderID = glCreateShader(shaderType);
+		glShaderSource(shaderID, 1, &vShaderCode, nullptr);
+		glCompileShader(shaderID);
 	}
 	catch (const std::exception&)
 	{
