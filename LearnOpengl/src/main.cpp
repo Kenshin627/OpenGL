@@ -118,9 +118,10 @@ unsigned shaderCompile()
 	//FRAGMENT
 	const char* fragmentShaderSource = "#version 330 core\n"
 		"out vec4 FragColor;\n"
+		"uniform vec4 color;\n"
 		"void main()\n"
 		"{\n"
-		"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+		"FragColor = color;\n"
 		"}\n";
 	unsigned fragmentShader;
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -161,8 +162,11 @@ void render(GLFWwindow* window)
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		float time = glfwGetTime();
+		float green = (sin(time) / 2.0) + 0.5;
+		auto colorLocation = glGetUniformLocation(program, "color");
+		glUniform4f(colorLocation, 0.0, green, 1.0, 1.0);
 		glUseProgram(program);
 		glBindVertexArray(vao);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
