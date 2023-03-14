@@ -29,5 +29,8 @@
     <ClInclude Include="dependencies\GLAD\include\KHR\khrplatform.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
