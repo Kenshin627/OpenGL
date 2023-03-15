@@ -84,13 +84,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(ProjectDir)dependencies\GLFW\include\GLFW;$(ProjectDir)dependencies\GLAD\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)dependencies\GLFW\include\GLFW;$(ProjectDir)dependencies\GLAD\include;$(ProjectDir)dependencies\STB_IMAGE\includes;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(ProjectDir)dependencies\GLFW\include\GLFW;$(ProjectDir)dependencies\GLAD\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)dependencies\GLFW\include\GLFW;$(ProjectDir)dependencies\GLAD\include;$(ProjectDir)dependencies\STB_IMAGE\includes;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)</IntDir>
   </PropertyGroup>
@@ -159,6 +159,7 @@
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
     <ClCompile Include="src\VertexDataLayout.cpp" />
@@ -166,8 +167,10 @@
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h" />
     <ClInclude Include="dependencies\GLAD\include\KHR\khrplatform.h" />
+    <ClInclude Include="dependencies\STB_IMAGE\includes\stb_image.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\VertexArray.h" />
     <ClInclude Include="src\VertexBuffer.h" />
     <ClInclude Include="src\VertexDataLayout.h" />
@@ -175,6 +178,9 @@
   <ItemGroup>
     <None Include="shader\triangle\fragment.glsl" />
     <None Include="shader\triangle\vertex.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resource\textures\container.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

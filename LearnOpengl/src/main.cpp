@@ -1,12 +1,13 @@
 #include <glad/gl.h>
 #include <glfw3.h>
 #include <iostream>
-#include <array>
+#include <vector>
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "VertexDataLayout.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
+#include "Texture.h"
 
 using std::cout;
 using std::endl;
@@ -89,14 +90,14 @@ VertexArray prepareData()
 void render(GLFWwindow* window)
 {
 	//VertexArray vao = prepareData();
-	std::array<float, 24> vertices = { 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // top right
-									   0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
-									  -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
-									  -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, // top left 
-	};
-	std::array<unsigned, 6> indices = { 0, 1, 3,   // first triangle
-										1, 2, 3    // second triangle
-	};
+	std::vector<float> vertices = {    0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+									   0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,// bottom right
+									  -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// bottom left
+									  -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f// top left 
+	                              };
+	std::vector<unsigned> indices = {  0, 1, 3,   // first triangle
+									   1, 2, 3    // second triangle
+	                                 };
 
 	VertexArray vao;
 	vao.bind();
@@ -104,15 +105,21 @@ void render(GLFWwindow* window)
 	VertexDataLayout layout;
 	layout.push<float>(3);
 	layout.push<float>(3);
+	layout.push<float>(2);
 	vao.AddBuffer(vbo, layout);
 	IndexBuffer ibo{ indices.data(), indices.size() };
 	vao.unbind();
+
+	Texture texture("resource/textures/container.jpg");
 
 	Shader program("shader/triangle/vertex.glsl", "shader/triangle/fragment.glsl");
 
 	vao.bind();
 	ibo.bind();
+	texture.bind();
 	program.bind();
+	
+	program.setUniform1i("sampler", 0);
 	
 	while (!glfwWindowShouldClose(window))
 	{
@@ -123,8 +130,7 @@ void render(GLFWwindow* window)
 		float green = (sin(time) / 2.0) + 0.5;
 		
 		/**-----DRAW CALL-------------------------------**/
-		std::string uniform = "uColor";
-		program.setUniform4f(uniform, 0.0f, green, 1.0f, 1.0f);
+		program.setUniform4f("uColor", 0.0f, green, 1.0f, 1.0f);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		/**-----DRAW CALL END-------------------------------**/
 
