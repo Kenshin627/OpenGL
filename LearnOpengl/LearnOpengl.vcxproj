@@ -173,8 +173,8 @@
     <ClInclude Include="src\VertexDataLayout.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\tirangle\fragment.glsl" />
-    <None Include="shader\tirangle\vertex.glsl" />
+    <None Include="shader\triangle\fragment.glsl" />
+    <None Include="shader\triangle\vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

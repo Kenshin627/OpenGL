@@ -61,7 +61,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\tirangle\fragment.glsl" />
-    <None Include="shader\tirangle\vertex.glsl" />
+    <None Include="shader\triangle\vertex.glsl" />
+    <None Include="shader\triangle\fragment.glsl" />
   </ItemGroup>
 </Project>

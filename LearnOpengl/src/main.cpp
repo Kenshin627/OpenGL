@@ -2,7 +2,6 @@
 #include <glfw3.h>
 #include <iostream>
 #include <array>
-
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "VertexDataLayout.h"
@@ -17,7 +16,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void render(GLFWwindow* window);
 void processInput(GLFWwindow* window);
 VertexArray prepareData();
-unsigned shaderCompile();
+
 void clear();
 
 int main()
@@ -87,72 +86,13 @@ VertexArray prepareData()
 	return vao;
 }
 
-unsigned shaderCompile()
-{
-	//VERTEX
-	const char* vertexShaderSource = "#version 330 core\n"
-		"layout (location = 0) in vec3 aPos;\n"
-		"void main()\n"
-		"{\n"
-		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-		"}\0";
-	unsigned vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
-	glCompileShader(vertexShader);
-	int success;
-	std::array<char, 512> infoLog;
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog.data());
-		cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog.data() << endl;
-	}
-
-	//FRAGMENT
-	const char* fragmentShaderSource = "#version 330 core\n"
-		"out vec4 FragColor;\n"
-		"uniform vec4 color;\n"
-		"void main()\n"
-		"{\n"
-		"FragColor = color;\n"
-		"}\n";
-	unsigned fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
-	glCompileShader(fragmentShader);
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog.data());
-		cout << "ERROR:SHADER::FRAGMENT::COMPLILATION_FAILED\n" << infoLog.data() << endl;
-	}
-
-	//Program
-	unsigned program;
-	program = glCreateProgram();
-	glAttachShader(program, vertexShader);
-	glAttachShader(program, fragmentShader);
-	glLinkProgram(program);
-
-	glGetProgramiv(program, GL_LINK_STATUS, &success);
-	if (!success)
-	{
-		glGetProgramInfoLog(program, 512, nullptr, infoLog.data());
-		cout << "ERROR:PROGRAM:: LINK_FAILED\n" << infoLog.data() << endl;
-	}
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-	return program;
-}
-
 void render(GLFWwindow* window)
 {
 	//VertexArray vao = prepareData();
-	std::array<float, 12> vertices = { 0.5f,  0.5f, 0.0f,  // top right
-									   0.5f, -0.5f, 0.0f,  // bottom right
-									  -0.5f, -0.5f, 0.0f,  // bottom left
-									  -0.5f,  0.5f, 0.0f   // top left 
+	std::array<float, 24> vertices = { 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // top right
+									   0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
+									  -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
+									  -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, // top left 
 	};
 	std::array<unsigned, 6> indices = { 0, 1, 3,   // first triangle
 										1, 2, 3    // second triangle
@@ -163,11 +103,17 @@ void render(GLFWwindow* window)
 	VertexBuffer vbo{ vertices.data(), sizeof(float) * vertices.size() };
 	VertexDataLayout layout;
 	layout.push<float>(3);
+	layout.push<float>(3);
 	vao.AddBuffer(vbo, layout);
 	IndexBuffer ibo{ indices.data(), indices.size() };
 	vao.unbind();
 
 	Shader program("shader/triangle/vertex.glsl", "shader/triangle/fragment.glsl");
+
+	vao.bind();
+	ibo.bind();
+	program.bind();
+	
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
@@ -177,14 +123,10 @@ void render(GLFWwindow* window)
 		float green = (sin(time) / 2.0) + 0.5;
 		
 		/**-----DRAW CALL-------------------------------**/
-		vao.bind();
-		ibo.bind();
-		program.bind();
-		std::string uniform = "color";
+		std::string uniform = "uColor";
 		program.setUniform4f(uniform, 0.0f, green, 1.0f, 1.0f);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		/**-----DRAW CALL END-------------------------------**/
-
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
