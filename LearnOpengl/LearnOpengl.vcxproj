@@ -73,18 +73,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(LibraryPath)</LibraryPath>
     <IncludePath>$(ProjectDir)dependencies\GLFW\include\GLFW;$(ProjectDir)dependencies\GLAD\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(LibraryPath)</LibraryPath>
     <IncludePath>$(ProjectDir)dependencies\GLFW\include\GLFW;$(ProjectDir)dependencies\GLAD\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(LibraryPath)</LibraryPath>
     <IncludePath>$(ProjectDir)dependencies\GLFW\include\GLFW;$(ProjectDir)dependencies\GLAD\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(LibraryPath)</LibraryPath>
     <IncludePath>$(ProjectDir)dependencies\GLFW\include\GLFW;$(ProjectDir)dependencies\GLAD\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -150,6 +158,7 @@
     <ClCompile Include="dependencies\GLAD\src\gl.c" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
     <ClCompile Include="src\VertexDataLayout.cpp" />
@@ -162,6 +171,10 @@
     <ClInclude Include="src\VertexArray.h" />
     <ClInclude Include="src\VertexBuffer.h" />
     <ClInclude Include="src\VertexDataLayout.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\tirangle\fragment.glsl" />
+    <None Include="shader\tirangle\vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

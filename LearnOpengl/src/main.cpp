@@ -7,6 +7,7 @@
 #include "VertexBuffer.h"
 #include "VertexDataLayout.h"
 #include "IndexBuffer.h"
+#include "Shader.h"
 
 using std::cout;
 using std::endl;
@@ -17,6 +18,7 @@ void render(GLFWwindow* window);
 void processInput(GLFWwindow* window);
 VertexArray prepareData();
 unsigned shaderCompile();
+void clear();
 
 int main()
 {
@@ -147,7 +149,6 @@ unsigned shaderCompile()
 void render(GLFWwindow* window)
 {
 	//VertexArray vao = prepareData();
-
 	std::array<float, 12> vertices = { 0.5f,  0.5f, 0.0f,  // top right
 									   0.5f, -0.5f, 0.0f,  // bottom right
 									  -0.5f, -0.5f, 0.0f,  // bottom left
@@ -166,28 +167,34 @@ void render(GLFWwindow* window)
 	IndexBuffer ibo{ indices.data(), indices.size() };
 	vao.unbind();
 
-	unsigned program = shaderCompile();
+	Shader program("shader/triangle/vertex.glsl", "shader/triangle/fragment.glsl");
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
-
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		clear();
+		
 		float time = glfwGetTime();
 		float green = (sin(time) / 2.0) + 0.5;
-		auto colorLocation = glGetUniformLocation(program, "color");
-
-		/**------------**/
-		glUseProgram(program);
-		glUniform4f(colorLocation, 0.0, green, 1.0, 1.0);
+		
+		/**-----DRAW CALL-------------------------------**/
 		vao.bind();
 		ibo.bind();
+		program.bind();
+		std::string uniform = "color";
+		program.setUniform4f(uniform, 0.0f, green, 1.0f, 1.0f);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		/**-----DRAW CALL END-------------------------------**/
 
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
 	glfwTerminate();
+}
+
+void clear()
+{
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

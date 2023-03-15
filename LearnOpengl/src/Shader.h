@@ -5,46 +5,29 @@
 #include <glad/gl.h>
 #include <string>
 #include <sstream>
+#include <array>
+#include <unordered_map>
 
 class Shader
 {
 public:
-	Shader(const std::string& vertexPath, const std::string& fragmentPath) 
-	{
-		compileShader(vertexPath, GL_VERTEX_SHADER);
-		compileShader(fragmentPath, GL_FRAGMENT_SHADER);
-	}
+	Shader(const std::string& vertexPath, const std::string& fragmentPath);
+	~Shader();
+	void bind() const;
+	void unbind() const;
 
-	void use()
-	{
-		glUseProgram(ID);
-	}
-
-
+	void setUniform4f(std::string& name, float v1, float v2, float v3, float v4) const;
+	void setUniform3f(std::string& name, float v1, float v2, float v3) const;
+	void setUniform2f(std::string& name, float v1, float v2) const;
+	void setUniform1i(std::string& name, int v1) const;
 private:
-	unsigned ID;
-	void compileShader(const std::string& path, GLenum shaderType);
+	int getUniformLocation(std::string& name) const;
+	inline void printUniformError(std::string& name) const
+	{
+		std::cout << "[set Uniform]:" << "UNIFORM" << name << "Not found!" << std::endl;
+	}
+private:
+	unsigned m_RendererID;
+	unsigned compileShader(const std::string& path, GLenum shaderType);
+	mutable std::unordered_map<std::string, int> uniformLocationCaches;
 };
-
-void Shader::compileShader(const std::string& path, GLenum shaderType)
-{
-	std::string shaderCode;
-	std::ifstream shaderFile;
-	shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-	try
-	{
-		shaderFile.open(path);
-		std::stringstream shaderStream;
-		shaderStream << shaderFile.rdbuf();
-		shaderFile.close();
-		shaderCode = shaderStream.str();
-		const char* vShaderCode = shaderCode.c_str();
-		unsigned shaderID = glCreateShader(shaderType);
-		glShaderSource(shaderID, 1, &vShaderCode, nullptr);
-		glCompileShader(shaderID);
-	}
-	catch (const std::exception&)
-	{
-		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
-	}
-}
