@@ -3,6 +3,11 @@
 #include <iostream>
 #include <array>
 
+#include "VertexArray.h"
+#include "VertexBuffer.h"
+#include "VertexDataLayout.h"
+#include "IndexBuffer.h"
+
 using std::cout;
 using std::endl;
 
@@ -10,7 +15,7 @@ GLFWwindow* initWindow();
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void render(GLFWwindow* window);
 void processInput(GLFWwindow* window);
-unsigned prepareData();
+VertexArray prepareData();
 unsigned shaderCompile();
 
 int main()
@@ -59,7 +64,7 @@ void processInput(GLFWwindow* window)
 	}
 }
 
-unsigned prepareData()
+VertexArray prepareData()
 {
 	std::array<float, 12> vertices = { 0.5f,  0.5f, 0.0f,  // top right
 									   0.5f, -0.5f, 0.0f,  // bottom right
@@ -70,27 +75,14 @@ unsigned prepareData()
 										1, 2, 3    // second triangle
 	};
 
-	//VAO
-	unsigned VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	//VBO
-	unsigned VBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
-
-	//EBO
-	unsigned EBO;
-	glGenBuffers(1, &EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * indices.size(), indices.data(), GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(0));
-	glEnableVertexAttribArray(0);
-	glBindVertexArray(0);
-	return VAO;
+	VertexArray vao;
+	VertexBuffer vbo{ vertices.data(), sizeof(float) * vertices.size() };
+	VertexDataLayout layout;
+	layout.push<float>(3);
+	vao.AddBuffer(vbo, layout);
+	IndexBuffer ibo{ indices.data(), indices.size() };
+	ibo.bind();
+	return vao;
 }
 
 unsigned shaderCompile()
@@ -154,7 +146,26 @@ unsigned shaderCompile()
 
 void render(GLFWwindow* window)
 {
-	unsigned vao = prepareData();
+	//VertexArray vao = prepareData();
+
+	std::array<float, 12> vertices = { 0.5f,  0.5f, 0.0f,  // top right
+									   0.5f, -0.5f, 0.0f,  // bottom right
+									  -0.5f, -0.5f, 0.0f,  // bottom left
+									  -0.5f,  0.5f, 0.0f   // top left 
+	};
+	std::array<unsigned, 6> indices = { 0, 1, 3,   // first triangle
+										1, 2, 3    // second triangle
+	};
+
+	VertexArray vao;
+	vao.bind();
+	VertexBuffer vbo{ vertices.data(), sizeof(float) * vertices.size() };
+	VertexDataLayout layout;
+	layout.push<float>(3);
+	vao.AddBuffer(vbo, layout);
+	IndexBuffer ibo{ indices.data(), indices.size() };
+	vao.unbind();
+
 	unsigned program = shaderCompile();
 	while (!glfwWindowShouldClose(window))
 	{
@@ -166,10 +177,14 @@ void render(GLFWwindow* window)
 		float time = glfwGetTime();
 		float green = (sin(time) / 2.0) + 0.5;
 		auto colorLocation = glGetUniformLocation(program, "color");
-		glUniform4f(colorLocation, 0.0, green, 1.0, 1.0);
+
+		/**------------**/
 		glUseProgram(program);
-		glBindVertexArray(vao);
+		glUniform4f(colorLocation, 0.0, green, 1.0, 1.0);
+		vao.bind();
+		ibo.bind();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);

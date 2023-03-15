@@ -148,12 +148,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\GLAD\src\gl.c" />
+    <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\VertexArray.cpp" />
+    <ClCompile Include="src\VertexBuffer.cpp" />
+    <ClCompile Include="src\VertexDataLayout.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h" />
     <ClInclude Include="dependencies\GLAD\include\KHR\khrplatform.h" />
+    <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\VertexArray.h" />
+    <ClInclude Include="src\VertexBuffer.h" />
+    <ClInclude Include="src\VertexDataLayout.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
