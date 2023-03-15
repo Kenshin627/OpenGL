@@ -124,7 +124,4 @@ void Shader::setUniform1i(const std::string& name, int v1) const
 		return;
 	}
 	printUniformError(name);
-	{
-
-	}
 }
