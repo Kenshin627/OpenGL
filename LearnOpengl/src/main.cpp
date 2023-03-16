@@ -15,7 +15,6 @@ GLFWwindow* initWindow();
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void render(GLFWwindow* window);
 void processInput(GLFWwindow* window);
-VertexArray prepareData();
 
 void clear();
 
@@ -63,27 +62,6 @@ void processInput(GLFWwindow* window)
 	{
 		glfwSetWindowShouldClose(window, true);
 	}
-}
-
-VertexArray prepareData()
-{
-	std::array<float, 12> vertices = { 0.5f,  0.5f, 0.0f,  // top right
-									   0.5f, -0.5f, 0.0f,  // bottom right
-									  -0.5f, -0.5f, 0.0f,  // bottom left
-									  -0.5f,  0.5f, 0.0f   // top left 
-	};
-	std::array<unsigned, 6> indices = { 0, 1, 3,   // first triangle
-										1, 2, 3    // second triangle
-	};
-
-	VertexArray vao;
-	VertexBuffer vbo{ vertices.data(), sizeof(float) * vertices.size() };
-	VertexDataLayout layout;
-	layout.push<float>(3);
-	vao.AddBuffer(vbo, layout);
-	IndexBuffer ibo{ indices.data(), indices.size() };
-	ibo.bind();
-	return vao;
 }
 
 void render(GLFWwindow* window)
