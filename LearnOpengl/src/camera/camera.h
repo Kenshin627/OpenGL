@@ -19,7 +19,7 @@ class Camera
 {
 	friend std::ostream& operator<<(std::ostream&, const Camera&);
 public:
-	Camera(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up, float aspectRatio, float minZ, float maxZ, float fov, float moveSpeed);
+	Camera(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up, float aspectRatio, float minZ, float maxZ, float fov, float moveSpeed, float sensitivity);
 	~Camera();
 	void lookAt();
 	void perspective();
@@ -53,6 +53,8 @@ public:
 	}
 
 	void move(MoveDirection direction, float deltaTime);
+	void pitchYaw(float xoffset, float yoffset);
+	void updateAxis();
 
 	const glm::mat4& viewMatrix() const { return view; };
 	const glm::mat4& projMatrix() const { return proj; };
@@ -67,7 +69,11 @@ private:
 	float minZ;
 	float maxZ;
 	float fov;
+	float sensitivity;
 	float moveSpeed;
+
+	float yaw;
+	float pitch;
 
 	glm::mat4x4 view;
 	glm::mat4x4 proj;

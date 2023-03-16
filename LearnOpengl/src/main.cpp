@@ -15,17 +15,39 @@
 using std::cout;
 using std::endl;
 
-GLFWwindow* initWindow(int width, int height);
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void render(GLFWwindow* window);
-void processInput(GLFWwindow* window, Camera& camera, float deltaTime);
 
+static int SCR_WIDTH = 800;
+static int SCR_HEIGHT = 600;
+static bool isFirst = true;
+static float last_mouseX = SCR_WIDTH / 2;
+static float last_mouseY = SCR_HEIGHT / 2;
+static bool isHoldRightBtn = false;
+
+GLFWwindow* initWindow(int width, int height);
+//窗口缩放
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+//鼠标移动
+void mouseMove_callback(GLFWwindow* window, double xpos, double ypos);
+//鼠标按键
+void mouseClick_callback(GLFWwindow* window, int button, int action, int modes);
+void render(GLFWwindow* window);
+//键盘
+void processInput(GLFWwindow* window, Camera& camera, float deltaTime);
 void clear();
+
+//camera
+Camera camera(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1),
+	glm::vec3{ 0,1,0 },
+	800.0f / 600.0f,
+	0.1f,
+	100.0f,
+	glm::radians(45.0f),
+	1.0f,
+	0.01
+);
 
 int main()
 {
-	int SCR_WIDTH = 800;
-	int SCR_HEIGHT = 600;
 	GLFWwindow* window = initWindow(SCR_WIDTH, SCR_HEIGHT);
 	render(window);
 }
@@ -52,8 +74,11 @@ GLFWwindow* initWindow(int width, int height)
 		cout << "failed to initialize GLAD!" << endl;
 	}
 
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glViewport(0, 0, height, height);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, mouseMove_callback);
+	glfwSetMouseButtonCallback(window, mouseClick_callback);
 	return window;
 }
 
@@ -79,18 +104,31 @@ void processInput(GLFWwindow* window, Camera& camera, float deltaTime)
 	}
 }
 
+void mouseMove_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (isHoldRightBtn)
+	{
+		if (isFirst)
+		{
+			last_mouseX = xpos;
+			last_mouseY = ypos;
+			isFirst = false;
+		}
+		float xoffset = xpos - last_mouseX;
+		float yoffset = ypos - last_mouseY;
+		last_mouseX = xpos;
+		last_mouseY = ypos;
+		camera.pitchYaw(xoffset, yoffset);
+	}	
+}
+
+void mouseClick_callback(GLFWwindow* window, int button, int action, int modes)
+{
+	isHoldRightBtn = button == 1 && action == 1 ? true : false;
+}
+
 void render(GLFWwindow* window)
 {
-	//camera
-	Camera camera(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1),
-		glm::vec3{ 0,1,0 },
-		800.0f / 600.0f,
-		0.1f,
-		100.0f,
-		glm::radians(45.0f),
-		1.0f
-	);
-
 	std::cout << camera << std::endl;
 	//VertexArray vao = prepareData();
 	std::vector<float> vertices = {    
@@ -136,11 +174,6 @@ void render(GLFWwindow* window)
 										-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
 										-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	                              };
-	std::vector<unsigned> indices = {  
-									   0, 1, 3,   // first triangle
-									   1, 2, 3    // second triangle
-	                                };
-
 	VertexArray vao;
 	vao.bind();
 	VertexBuffer vbo{ vertices.data(), sizeof(float) * vertices.size() };
@@ -148,16 +181,13 @@ void render(GLFWwindow* window)
 	layout.push<float>(3);
 	layout.push<float>(2);
 	vao.AddBuffer(vbo, layout);
-	//IndexBuffer ibo{ indices.data(), indices.size() };
 	vao.unbind();
 
 	Texture texture1("resource/textures/dogface.jpg", 0);
 	Texture texture2("resource/textures/container.jpg", 1);
-
 	Shader program("shader/triangle/vertex.glsl", "shader/triangle/fragment.glsl");
 
 	vao.bind();
-	//ibo.bind();
 
 	texture1.bind();
 	texture2.bind();
