@@ -67,7 +67,7 @@ unsigned Shader::compileShader(const std::string& path, GLenum shaderType)
 	}
 }
 
-int Shader::getUniformLocation(std::string& name) const
+int Shader::getUniformLocation(const std::string& name) const
 {
 	auto cacheLocation = uniformLocationCaches.find(name);
 	if (cacheLocation != uniformLocationCaches.cend())
@@ -82,7 +82,7 @@ int Shader::getUniformLocation(std::string& name) const
 	return location;
 }
 
-void Shader::setUniform4f(std::string& name, float v1, float v2, float v3, float v4) const
+void Shader::setUniform4f(const std::string& name, float v1, float v2, float v3, float v4) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1)
@@ -93,7 +93,7 @@ void Shader::setUniform4f(std::string& name, float v1, float v2, float v3, float
 	printUniformError(name);
 }
 
-void Shader::setUniform3f(std::string& name, float v1, float v2, float v3) const
+void Shader::setUniform3f(const std::string& name, float v1, float v2, float v3) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1)
@@ -104,7 +104,7 @@ void Shader::setUniform3f(std::string& name, float v1, float v2, float v3) const
 	printUniformError(name);
 }
 
-void Shader::setUniform2f(std::string& name, float v1, float v2) const
+void Shader::setUniform2f(const std::string& name, float v1, float v2) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1) 
@@ -115,7 +115,7 @@ void Shader::setUniform2f(std::string& name, float v1, float v2) const
 	printUniformError(name);
 }
 
-void Shader::setUniform1i(std::string& name, int v1) const
+void Shader::setUniform1i(const std::string& name, int v1) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1)
@@ -124,7 +124,4 @@ void Shader::setUniform1i(std::string& name, int v1) const
 		return;
 	}
 	printUniformError(name);
-	{
-
-	}
 }

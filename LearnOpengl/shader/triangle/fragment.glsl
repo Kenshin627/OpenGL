@@ -1,10 +1,16 @@
 #version 330 core
 
 in vec3 vColor;
-uniform vec4 uColor;
+in vec2 vCoord;
+
+uniform sampler2D sampler1;
+uniform sampler2D sampler2;
+
 out vec4 outColor;
 
 void main()
 {
-	outColor = mix(vec4(vColor, 1.0), uColor, 0.5);
+	vec4 cTexture = texture(sampler1, vCoord);
+	vec4 cTexture1 = texture(sampler2, vCoord);
+	outColor = mix(cTexture, cTexture1, .5);	
 }
