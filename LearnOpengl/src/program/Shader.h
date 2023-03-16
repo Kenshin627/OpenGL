@@ -8,6 +8,10 @@
 #include <array>
 #include <unordered_map>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 class Shader
 {
 public:
@@ -20,11 +24,12 @@ public:
 	void setUniform3f(const std::string& name, float v1, float v2, float v3) const;
 	void setUniform2f(const std::string& name, float v1, float v2) const;
 	void setUniform1i(const std::string& name, int v1) const;
+	void setMat4x4(const std::string& name, const glm::mat4x4& mat) const;
 private:
 	int getUniformLocation(const std::string& name) const;
 	inline void printUniformError(const std::string& name) const
 	{
-		std::cout << "[set Uniform]:" << "UNIFORM" << name << "Not found!" << std::endl;
+		std::cout << "[set Uniform]:" << "UNIFORM " << name << " Not found!" << std::endl;
 	}
 private:
 	unsigned m_RendererID;

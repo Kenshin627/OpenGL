@@ -125,3 +125,14 @@ void Shader::setUniform1i(const std::string& name, int v1) const
 	}
 	printUniformError(name);
 }
+
+void Shader::setMat4x4(const std::string& name, const glm::mat4x4& mat) const
+{
+	int location = getUniformLocation(name);
+	if (location != -1)
+	{
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+		return;
+	}
+	printUniformError(name);
+}
