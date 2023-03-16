@@ -1,8 +1,8 @@
 #include "camera.h"
 
-Camera::Camera(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up, float aspectRatio, float minZ, float maxZ, float fov, float moveSpeed) :position(position), direction(direction), up(up),right(glm::vec3(1, 0, 0)), aspectRatio(aspectRatio), minZ(minZ), maxZ(maxZ), fov(fov), moveSpeed(moveSpeed), view(glm::identity<glm::mat4x4>()), proj(glm::identity<glm::mat4x4>())
+Camera::Camera(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up, float aspectRatio, float minZ, float maxZ, float fov, float moveSpeed) :position(position), direction(glm::normalize(direction)), up(up),right(glm::vec3(1, 0, 0)), aspectRatio(aspectRatio), minZ(minZ), maxZ(maxZ), fov(fov), moveSpeed(moveSpeed), view(glm::identity<glm::mat4x4>()), proj(glm::identity<glm::mat4x4>())
 {
-	right = glm::cross(up, direction);
+	right = glm::normalize(glm::cross(up, direction));
 	lookAt();
 	perspective();
 	keyConfig = {
@@ -28,15 +28,15 @@ void Camera::perspective()
 	proj = glm::perspective(fov, aspectRatio, minZ, maxZ);
 }
 
-void Camera::move(MoveDirection where)
+void Camera::move(MoveDirection where, float deltaTime)
 {
 	switch (where)
 	{
-		case Forward: position += direction * moveSpeed; break;
-		case Back:    position -= direction * moveSpeed; break;
-		case Left:	  position -= right * moveSpeed;     break;
-		case Right:   position += right * moveSpeed;     break;
-		default:                             break;		
+		case Forward: position += direction * moveSpeed * deltaTime; break;
+		case Back:    position -= direction * moveSpeed * deltaTime; break;
+		case Left:	  position -= right		* moveSpeed * deltaTime; break;
+		case Right:   position += right		* moveSpeed * deltaTime; break;
+		default:													 break;		
 	}
 	lookAt();
 }

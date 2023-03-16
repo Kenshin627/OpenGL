@@ -18,7 +18,7 @@ using std::endl;
 GLFWwindow* initWindow(int width, int height);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void render(GLFWwindow* window);
-void processInput(GLFWwindow* window, Camera& camera);
+void processInput(GLFWwindow* window, Camera& camera, float deltaTime);
 
 void clear();
 
@@ -62,9 +62,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-void processInput(GLFWwindow* window, Camera& camera)
+void processInput(GLFWwindow* window, Camera& camera, float deltaTime)
 {
-
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
@@ -75,7 +74,7 @@ void processInput(GLFWwindow* window, Camera& camera)
 	{
 		if (glfwGetKey(window, keyV.first) == GLFW_PRESS)
 		{
-			camera.move(keyV.second);
+			camera.move(keyV.second, deltaTime);
 		}
 	}
 }
@@ -89,7 +88,7 @@ void render(GLFWwindow* window)
 		0.1f,
 		100.0f,
 		glm::radians(45.0f),
-		0.01f
+		1.0f
 	);
 
 	std::cout << camera << std::endl;
@@ -176,10 +175,15 @@ void render(GLFWwindow* window)
 	/**test---------------------------------------------*/
 
 	/**-------------------------------------------------*/
-
+	float currentTime = 0.0f;
+	float lastTime	  = 0.0f;
+	float deltaTime	  = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
-		processInput(window, camera);
+		currentTime = glfwGetTime();
+		deltaTime   = currentTime - lastTime;
+		lastTime    = currentTime;
+		processInput(window, camera, deltaTime);
 		clear();
 		
 		/**-----DRAW CALL-------------------------------**/

@@ -47,7 +47,12 @@ public:
 		perspective();
 	}
 
-	void move(MoveDirection direction);
+	void setMoveSpeed(float s)
+	{
+		moveSpeed = s;
+	}
+
+	void move(MoveDirection direction, float deltaTime);
 
 	const glm::mat4& viewMatrix() const { return view; };
 	const glm::mat4& projMatrix() const { return proj; };
