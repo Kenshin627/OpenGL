@@ -938,6 +938,9 @@
     <ClInclude Include="src\material\BlinnPhongMaterial.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\light\spotLight.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\triangle\vertex.glsl" />

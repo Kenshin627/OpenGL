@@ -458,6 +458,7 @@
     <ClInclude Include="src\light\baseLight.h" />
     <ClInclude Include="src\light\directionLight.h" />
     <ClInclude Include="src\light\pointLight.h" />
+    <ClInclude Include="src\light\spotLight.h" />
     <ClInclude Include="src\material\BlinnPhongMaterial.h" />
     <ClInclude Include="src\program\Shader.h" />
     <ClInclude Include="src\Texture\Texture.h" />
