@@ -27,6 +27,12 @@ public:
 	{
 		return position;
 	}
+
+	const glm::vec3& getForward() const
+	{
+		return direction;
+	}
+
 	void setPosition(const glm::vec3& p)
 	{
 		position = p;

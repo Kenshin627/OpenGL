@@ -15,6 +15,15 @@ struct PointLight
 	float kd;
 };
 
+struct SpotLight
+{
+	vec3 color;
+	vec3 position;
+	vec3 direction;
+	float innerCutOff;
+	float outterCutOff;
+};
+
 struct Material
 {
 	vec3 diffuseColor;

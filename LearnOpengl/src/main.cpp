@@ -14,6 +14,7 @@
 #include "light/directionLight.h"
 #include "material/BlinnPhongMaterial.h"
 #include "light/pointLight.h"
+#include "light/spotLight.h"
 
 using std::cout;
 using std::endl;
@@ -49,16 +50,15 @@ Camera camera(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1),
 	0.01
 );
 
+//Lights
 DirectionLight dl{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.0f) };
-
 PointLight pl{ glm::vec3(1.2f, 1.0f, 2.0f), glm::vec3(1.0f), 50 };
+SpotLight sl{ camera.getPosition(), camera.getForward(), glm::vec3(1.0f), 15.5f, 18.0f };
 
+//Materials
 BlinnPhongMaterial gold{ glm::vec3(0.75164, 0.60648, 0.22648), glm::vec3(0.628281, 0.555802, 0.366065), glm::vec3(0.24725,0.1995,0.0745), 0.4f };
 BlinnPhongMaterial silver{ glm::vec3(0.50754f, 0.50754f, 0.50754f), glm::vec3(0.508273f, 0.508273f, 0.508273f), glm::vec3(0.19225f, 0.19225f, 0.19225f), 51.2f };
-//float[] mat_ambient = { 0.19225f, 0.19225f, 0.19225f, 1.0f };
-//float[] mat_diffuse = { 0.50754f, 0.50754f, 0.50754f, 1.0f };
-//float[] mat_specular = { 0.508273f, 0.508273f, 0.508273f, 1.0f };
-//float shine = 51.2f;
+
 int main()
 {
 	GLFWwindow* window = initWindow(SCR_WIDTH, SCR_HEIGHT);
