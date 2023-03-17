@@ -53,7 +53,7 @@ Camera camera(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1),
 //Lights
 DirectionLight dl{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.0f) };
 PointLight pl{ glm::vec3(1.2f, 1.0f, 2.0f), glm::vec3(1.0f), 50 };
-SpotLight sl{ camera.getPosition(), camera.getForward(), glm::vec3(1.0f), 15.5f, 18.0f };
+SpotLight sl{ camera.getPosition(), camera.getForward(), glm::vec3(1.0f), 50.0f, 2.5f, 3.0f };
 
 //Materials
 BlinnPhongMaterial gold{ glm::vec3(0.75164, 0.60648, 0.22648), glm::vec3(0.628281, 0.555802, 0.366065), glm::vec3(0.24725,0.1995,0.0745), 0.4f };
@@ -126,6 +126,7 @@ void mouseMove_callback(GLFWwindow* window, double xpos, double ypos)
 			last_mouseX = xpos;
 			last_mouseY = ypos;
 			isFirst = false;
+			return;
 		}
 		float xoffset = xpos - last_mouseX;
 		float yoffset = ypos - last_mouseY;
@@ -218,6 +219,15 @@ void render(GLFWwindow* window)
 	program.setFloat("pointLight.kc", pl.getAttenuation().kc);
 	program.setFloat("pointLight.kl", pl.getAttenuation().kl);
 	program.setFloat("pointLight.kd", pl.getAttenuation().kd);
+
+	program.setVec3("spotLight.color", sl.getColor());
+	program.setVec3("spotLight.position", sl.getPosition());
+	program.setVec3("spotLight.direction", sl.getDirection());
+	program.setFloat("spotLight.kc", sl.getAttenuation().kc);
+	program.setFloat("spotLight.kl", sl.getAttenuation().kl);
+	program.setFloat("spotLight.kd", sl.getAttenuation().kd);
+	program.setFloat("spotLight.innerCutOff", glm::cos(glm::radians(sl.getInnerCutOff())));
+	program.setFloat("spotLight.outterCutOff", glm::cos(glm::radians(sl.getOutterCutOff())));
 
 	program.setVec3("material.diffuseColor", gold.getDiffuseColor());
 	program.setVec3("material.specularColor", gold.getSpecularColor());
