@@ -53,7 +53,7 @@ Camera camera(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1),
 //Lights
 DirectionLight dl{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.0f) };
 PointLight pl{ glm::vec3(1.2f, 1.0f, 2.0f), glm::vec3(1.0f), 50 };
-SpotLight sl{ camera.getPosition(), camera.getForward(), glm::vec3(1.0f), 50.0f, 2.5f, 3.0f };
+SpotLight sl{ camera.getPosition(), camera.getForward(), glm::vec3(1.0f), 20.0f, 2.5f, 6.0f };
 
 //Materials
 BlinnPhongMaterial gold{ glm::vec3(0.75164, 0.60648, 0.22648), glm::vec3(0.628281, 0.555802, 0.366065), glm::vec3(0.24725,0.1995,0.0745), 0.4f };
