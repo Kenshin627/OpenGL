@@ -53,8 +53,12 @@ DirectionLight dl{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.0f) };
 
 PointLight pl{ glm::vec3(1.2f, 1.0f, 2.0f), glm::vec3(1.0f), 50 };
 
-BlinnPhongMaterial mat{ glm::vec3(0.75164, 0.60648, 0.22648), glm::vec3(0.628281, 0.555802, 0.366065), glm::vec3(0.24725,0.1995,0.0745), 0.4f };
-
+BlinnPhongMaterial gold{ glm::vec3(0.75164, 0.60648, 0.22648), glm::vec3(0.628281, 0.555802, 0.366065), glm::vec3(0.24725,0.1995,0.0745), 0.4f };
+BlinnPhongMaterial silver{ glm::vec3(0.50754f, 0.50754f, 0.50754f), glm::vec3(0.508273f, 0.508273f, 0.508273f), glm::vec3(0.19225f, 0.19225f, 0.19225f), 51.2f };
+//float[] mat_ambient = { 0.19225f, 0.19225f, 0.19225f, 1.0f };
+//float[] mat_diffuse = { 0.50754f, 0.50754f, 0.50754f, 1.0f };
+//float[] mat_specular = { 0.508273f, 0.508273f, 0.508273f, 1.0f };
+//float shine = 51.2f;
 int main()
 {
 	GLFWwindow* window = initWindow(SCR_WIDTH, SCR_HEIGHT);
@@ -215,10 +219,10 @@ void render(GLFWwindow* window)
 	program.setFloat("pointLight.kl", pl.getAttenuation().kl);
 	program.setFloat("pointLight.kd", pl.getAttenuation().kd);
 
-	program.setVec3("material.diffuseColor", mat.getDiffuseColor());
-	program.setVec3("material.specularColor", mat.getSpecularColor());
-	program.setVec3("material.ambientColor", mat.getAmbientColor());
-	program.setFloat("material.shininess", mat.getShininess());	
+	program.setVec3("material.diffuseColor", gold.getDiffuseColor());
+	program.setVec3("material.specularColor", gold.getSpecularColor());
+	program.setVec3("material.ambientColor", gold.getAmbientColor());
+	program.setFloat("material.shininess", gold.getShininess());	
 	
 	/**enable-------------------------------------------*/
 	glEnable(GL_DEPTH_TEST);
