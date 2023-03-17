@@ -23,6 +23,10 @@ public:
 	~Camera();
 	void lookAt();
 	void perspective();
+	const glm::vec3& getPosition() const
+	{
+		return position;
+	}
 	void setPosition(const glm::vec3& p)
 	{
 		position = p;

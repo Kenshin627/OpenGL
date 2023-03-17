@@ -136,3 +136,36 @@ void Shader::setMat4x4(const std::string& name, const glm::mat4x4& mat) const
 	}
 	printUniformError(name);
 }
+
+void Shader::setMat3x3(const std::string& name, const glm::mat3x3& mat) const
+{
+	int location = getUniformLocation(name);
+	if (location != -1)
+	{
+		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+		return;
+	}
+	printUniformError(name);
+}
+
+void Shader::setVec3(const std::string& name, const glm::vec3& vec3) const
+{
+	int location = getUniformLocation(name);
+	if (location != -1)
+	{
+		glUniform3fv(location, 1, glm::value_ptr(vec3));
+		return;
+	}
+	printUniformError(name);
+}
+
+void Shader::setFloat(const std::string& name, float v1) const
+{
+	int location = getUniformLocation(name);
+	if (location != -1)
+	{
+		glUniform1f(location, v1);
+		return;
+	}
+	printUniformError(name);
+}

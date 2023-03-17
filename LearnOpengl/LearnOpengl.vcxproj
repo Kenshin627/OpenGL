@@ -159,6 +159,7 @@
     <ClCompile Include="dependencies\GLM\glm\detail\glm.cpp" />
     <ClCompile Include="src\Buffer\IndexBuffer.cpp" />
     <ClCompile Include="src\camera\camera.cpp" />
+    <ClCompile Include="src\light\pointLight.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\program\Shader.cpp" />
     <ClCompile Include="src\Texture\Texture.cpp" />
@@ -454,6 +455,10 @@
     <ClInclude Include="dependencies\STB_IMAGE\includes\stb_image.h" />
     <ClInclude Include="src\Buffer\IndexBuffer.h" />
     <ClInclude Include="src\camera\camera.h" />
+    <ClInclude Include="src\light\baseLight.h" />
+    <ClInclude Include="src\light\directionLight.h" />
+    <ClInclude Include="src\light\pointLight.h" />
+    <ClInclude Include="src\material\BlinnPhongMaterial.h" />
     <ClInclude Include="src\program\Shader.h" />
     <ClInclude Include="src\Texture\Texture.h" />
     <ClInclude Include="src\Buffer\VertexArray.h" />
@@ -597,6 +602,8 @@
     <None Include="dependencies\GLM\glm\gtx\vector_angle.inl" />
     <None Include="dependencies\GLM\glm\gtx\vector_query.inl" />
     <None Include="dependencies\GLM\glm\gtx\wrap.inl" />
+    <None Include="shader\blinnPhong\fragment.glsl" />
+    <None Include="shader\blinnPhong\vertex.glsl" />
     <None Include="shader\triangle\fragment.glsl" />
     <None Include="shader\triangle\vertex.glsl" />
   </ItemGroup>

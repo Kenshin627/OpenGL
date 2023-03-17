@@ -11,6 +11,9 @@
 #include "program/Shader.h"
 #include "Texture/Texture.h"
 #include "camera/camera.h"
+#include "light/directionLight.h"
+#include "material/BlinnPhongMaterial.h"
+#include "light/pointLight.h"
 
 using std::cout;
 using std::endl;
@@ -46,6 +49,12 @@ Camera camera(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1),
 	0.01
 );
 
+DirectionLight dl{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.0f) };
+
+PointLight pl{ glm::vec3(1.2f, 1.0f, 2.0f), glm::vec3(1.0f), 50 };
+
+BlinnPhongMaterial mat{ glm::vec3(0.75164, 0.60648, 0.22648), glm::vec3(0.628281, 0.555802, 0.366065), glm::vec3(0.24725,0.1995,0.0745), 0.4f };
+
 int main()
 {
 	GLFWwindow* window = initWindow(SCR_WIDTH, SCR_HEIGHT);
@@ -74,7 +83,7 @@ GLFWwindow* initWindow(int width, int height)
 		cout << "failed to initialize GLAD!" << endl;
 	}
 
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glViewport(0, 0, height, height);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouseMove_callback);
@@ -131,53 +140,55 @@ void render(GLFWwindow* window)
 {
 	std::cout << camera << std::endl;
 	//VertexArray vao = prepareData();
-	std::vector<float> vertices = {    
-										-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-										 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-										 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-										 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-										-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-										-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	std::vector<float> vertices = {
+			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
 
-										-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-										 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-										 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-										 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-										-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-										-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f,
+			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f,
 
-										-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-										-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-										-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-										-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-										-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-										-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
 
-										 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-										 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-										 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-										 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-										 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-										 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
+			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+			 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
 
-										-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-										 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-										 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-										 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-										-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-										-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
+			 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f,
+			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
+			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
+			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
+			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
 
-										-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-										 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-										 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-										 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-										-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-										-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	                              };
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
+			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f
+	};
+
 	VertexArray vao;
 	vao.bind();
 	VertexBuffer vbo{ vertices.data(), sizeof(float) * vertices.size() };
 	VertexDataLayout layout;
+	layout.push<float>(3);
 	layout.push<float>(3);
 	layout.push<float>(2);
 	vao.AddBuffer(vbo, layout);
@@ -185,7 +196,7 @@ void render(GLFWwindow* window)
 
 	Texture texture1("resource/textures/dogface.jpg", 0);
 	Texture texture2("resource/textures/container.jpg", 1);
-	Shader program("shader/triangle/vertex.glsl", "shader/triangle/fragment.glsl");
+	Shader program("shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl");
 
 	vao.bind();
 
@@ -194,8 +205,20 @@ void render(GLFWwindow* window)
 
 	program.bind();
 	
-	program.setUniform1i("sampler1", 0);
-	program.setUniform1i("sampler2", 1);
+	//uniforms
+	program.setVec3("directionLight.color", dl.getColor());
+	program.setVec3("directionLight.direction", dl.getDirection());
+
+	program.setVec3("pointLight.color", pl.getColor());
+	program.setVec3("pointLight.position", pl.getPosition());
+	program.setFloat("pointLight.kc", pl.getAttenuation().kc);
+	program.setFloat("pointLight.kl", pl.getAttenuation().kl);
+	program.setFloat("pointLight.kd", pl.getAttenuation().kd);
+
+	program.setVec3("material.diffuseColor", mat.getDiffuseColor());
+	program.setVec3("material.specularColor", mat.getSpecularColor());
+	program.setVec3("material.ambientColor", mat.getAmbientColor());
+	program.setFloat("material.shininess", mat.getShininess());	
 	
 	/**enable-------------------------------------------*/
 	glEnable(GL_DEPTH_TEST);
@@ -208,8 +231,10 @@ void render(GLFWwindow* window)
 	float currentTime = 0.0f;
 	float lastTime	  = 0.0f;
 	float deltaTime	  = 0.0f;
+	float rotateangle = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
+		rotateangle += 0.1;
 		currentTime = glfwGetTime();
 		deltaTime   = currentTime - lastTime;
 		lastTime    = currentTime;
@@ -217,7 +242,14 @@ void render(GLFWwindow* window)
 		clear();
 		
 		/**-----DRAW CALL-------------------------------**/
-		program.setMat4x4("modelViewProjection", camera.projMatrix() * camera.viewMatrix());
+		glm::mat4x4 modelMatrix;
+		modelMatrix = glm::rotate(glm::identity<glm::mat4x4>(), glm::radians(rotateangle), glm::vec3(0, 1, 0));
+		//glm::rotate(modelMatrix, glm::radians(45), glm::vec3(1, 0, 0));
+		glm::mat3x3 modelInverseTranspose = glm::mat3x3(glm::transpose(glm::inverse(modelMatrix)));
+		program.setVec3("cameraPosition", camera.getPosition());
+		program.setMat4x4("modelViewProjection", camera.projMatrix() * camera.viewMatrix() * modelMatrix);
+		program.setMat4x4("model", modelMatrix);
+		program.setMat3x3("modelInverseTranspose", modelInverseTranspose);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		/**-----DRAW CALL END---------------------------- */
 
@@ -229,6 +261,6 @@ void render(GLFWwindow* window)
 
 void clear()
 {	
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
