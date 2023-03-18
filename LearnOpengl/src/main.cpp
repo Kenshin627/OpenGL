@@ -15,6 +15,7 @@
 #include "material/BlinnPhongMaterial.h"
 #include "light/pointLight.h"
 #include "light/spotLight.h"
+#include "sceneLoader/sceneLoader.h"
 
 using std::cout;
 using std::endl;
@@ -39,16 +40,10 @@ void render(GLFWwindow* window);
 void processInput(GLFWwindow* window, Camera& camera, float deltaTime);
 void clear();
 
+SceneLoader loader;
+
 //camera
-Camera camera(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1),
-	glm::vec3{ 0,1,0 },
-	800.0f / 600.0f,
-	0.1f,
-	100.0f,
-	glm::radians(45.0f),
-	1.0f,
-	0.01
-);
+Camera camera(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 1.0f, 0.01);
 
 //Lights
 DirectionLight dl{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.0f) };
@@ -61,6 +56,7 @@ BlinnPhongMaterial silver{ glm::vec3(0.50754f, 0.50754f, 0.50754f), glm::vec3(0.
 
 int main()
 {
+	loader.loadModel("resource/models/nanosuit/nanosuit.obj");
 	GLFWwindow* window = initWindow(SCR_WIDTH, SCR_HEIGHT);
 	render(window);
 }
