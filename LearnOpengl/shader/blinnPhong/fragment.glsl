@@ -85,8 +85,7 @@ void main()
 	
 	vec3 spotColor = (coffient.ambient + coffient.diffuse * intensity + coffient.specular*intensity) * spotLight.color * attenuation;
 
-
-	outColor = vec4(spotColor + directionColor + pointColor, 1.0);
+	outColor = vec4(normalize(vNormal), 1.0);
 }
 
 blinnPhongCoffient calcBlinnphong(vec3 lightDirection)

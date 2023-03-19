@@ -44,7 +44,7 @@ void setLight(const Shader& program);
 SceneLoader loader;
 
 //camera
-Camera camera(glm::vec3(0, 0, 3), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 1.0f, 0.01);
+Camera camera(glm::vec3(0, 10, 30), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 2.0f, 0.01);
 
 //Lights
 DirectionLight dl{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.0f) };
@@ -256,21 +256,21 @@ void Recursivedraw(const std::shared_ptr<Node>& node, const Shader& p)
 		{
 			mesh->bind();
 			auto mat = mesh->getMaterial();
-			/*if (!mat->ambientTextures.empty())
+			if (!mat->ambientTextures.empty())
 			{
 				mat->ambientTextures[0]->bind(0);
 				p.setUniform1i("material.ambientTexture", 0);
-			}*/
+			}
 			if (!mat->diffuseTextures.empty())
 			{
 				mat->diffuseTextures[0]->bind(0);
-				p.setUniform1i("diffuseTexture", 0);
+				p.setUniform1i("material.diffuseTexture", 0);
 			}
-			/*if (!mat->specularTextures.empty())
+			if (!mat->specularTextures.empty())
 			{
 				mat->specularTextures[0]->bind(2);
 				p.setUniform1i("material.specularTexture", 2);
-			}*/
+			}
 			std::cout << mesh->indicesCount() << std::endl;
 			glDrawElements(GL_TRIANGLES, mesh->indicesCount(), GL_UNSIGNED_INT, (const void*)0);
 			mesh->unbind();
@@ -288,10 +288,10 @@ void Recursivedraw(const std::shared_ptr<Node>& node, const Shader& p)
 void render(GLFWwindow* window, const SceneGraph& sceneGraph)
 {
 	std::cout << camera << std::endl;
-	Shader program("shader/modelLoading/vertex.glsl", "shader/modelLoading/fragment.glsl");
+	Shader program("shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl");
 	program.bind();
 
-	//setLight(program);
+	setLight(program);
 	
 	/**enable-------------------------------------------*/
 	glEnable(GL_DEPTH_TEST);
@@ -304,13 +304,14 @@ void render(GLFWwindow* window, const SceneGraph& sceneGraph)
 	while (!glfwWindowShouldClose(window))
 	{
 		currentTime = glfwGetTime();
-		deltaTime   = currentTime - lastTime;
+		deltaTime   = currentTime - lastTime; 
 		lastTime    = currentTime;
 		processInput(window, camera, deltaTime);
 		clear();
 		
 		/**-----DRAW CALL-------------------------------**/
 		glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
+		modelMatrix = glm::rotate(modelMatrix, glm::radians(45.0f), glm::vec3(0, 1, 0));
 		glm::mat3x3 modelInverseTranspose = glm::mat3x3(glm::transpose(glm::inverse(modelMatrix)));
 		program.setMat4x4("modelViewProjection", camera.projMatrix() * camera.viewMatrix() * modelMatrix);
 		//program.setVec3("cameraPosition", camera.getPosition());
