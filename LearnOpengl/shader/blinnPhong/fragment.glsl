@@ -33,6 +33,9 @@ struct Material
 	vec3 specularColor;
 	vec3 ambientColor;
 	float shininess;
+	sampler2D ambientTexture;
+	sampler2D diffuseTexture;
+	sampler2D specularTexture;
 };
 
 struct blinnPhongCoffient
@@ -83,7 +86,7 @@ void main()
 	vec3 spotColor = (coffient.ambient + coffient.diffuse * intensity + coffient.specular*intensity) * spotLight.color * attenuation;
 
 
-	outColor = vec4(spotColor, 1.0);
+	outColor = vec4(spotColor + directionColor + pointColor, 1.0);
 }
 
 blinnPhongCoffient calcBlinnphong(vec3 lightDirection)
@@ -93,13 +96,18 @@ blinnPhongCoffient calcBlinnphong(vec3 lightDirection)
 	vec3 lightDirectionReverse = -lightDirection;
 	vec3 lightDirectionReflect = reflect(lightDirection, normal);
 	//1. ambient
-	vec3 ambient = material.ambientColor;
+
+	vec3 ambient = vec3(texture(material.ambientTexture, vUv));
+	//vec3 ambient = material.ambientColor;
 
 	//2. diffuse
-	vec3 diffuse = max(dot(lightDirectionReverse, normal), 0.0) * material.diffuseColor;
+
+	vec3 diffuseC = vec3(texture(material.diffuseTexture, vUv));
+	vec3 diffuse = max(dot(lightDirectionReverse, normal), 0.0) * diffuseC;
 
 	//3. specular
-	vec3 specular = pow(max(dot(lightDirectionReflect, eyeDirection), 0.0), material.shininess) * material.specularColor;
+	vec3 specularC = vec3(texture(material.specularTexture, vUv));
+	vec3 specular  = pow(max(dot(lightDirectionReflect, eyeDirection), 0.0), material.shininess) * specularC;
 
 	return blinnPhongCoffient(ambient, diffuse, specular);
 }

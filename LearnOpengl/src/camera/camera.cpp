@@ -48,8 +48,8 @@ void Camera::move(MoveDirection where, float deltaTime)
 	{
 		case Forward: position += direction * moveSpeed * deltaTime; break;
 		case Back:    position -= direction * moveSpeed * deltaTime; break;
-		case Left:	  position += right		* moveSpeed * deltaTime; break;
-		case Right:   position -= right		* moveSpeed * deltaTime; break;
+		case Left:	  position -= right		* moveSpeed * deltaTime; break;
+		case Right:   position += right		* moveSpeed * deltaTime; break;
 		default:													 break;		
 	}
 	lookAt();

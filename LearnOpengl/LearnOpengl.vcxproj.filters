@@ -1651,6 +1651,8 @@
     </None>
     <None Include="dependencies\ASSIMP\lib\assimp-vc143-mt.dll" />
     <None Include="assimp-vc143-mt.dll" />
+    <None Include="shader\modelLoading\vertex.glsl" />
+    <None Include="shader\modelLoading\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">

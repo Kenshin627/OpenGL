@@ -1,7 +1,7 @@
 #include <glad/gl.h>
 #include "IndexBuffer.h"
 
-IndexBuffer::IndexBuffer(const void* data, size_t count):m_RendererID(0), count(0)
+IndexBuffer::IndexBuffer(const void* data, size_t count):m_RendererID(0), count(count)
 {
 	glGenBuffers(1, &m_RendererID);
 	bind();

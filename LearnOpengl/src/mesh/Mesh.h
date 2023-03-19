@@ -14,7 +14,8 @@ struct Vertex
 	glm::vec3 position;
 	glm::vec3 normal;
 	//uvs支持 vec1 vec2 vec3,最多8个通道
-	std::vector<glm::vec3> uvs;
+	//std::vector<glm::vec3> uvs;
+	glm::vec2 uv;
 };
 
 class Mesh
@@ -37,6 +38,19 @@ public:
 		vao.AddBuffer(vbo, layout);
 		vao.unbind();
 	}
+	void bind() const
+	{
+		vao.bind();
+		ibo.bind();
+	}
+
+	void unbind() const 
+	{ 
+		//ibo.unbind();
+		vao.unbind();
+	}
+	const std::shared_ptr<Material>& getMaterial() const { return material; };
+	const unsigned indicesCount() const { return ibo.indicesCount(); };
 	~Mesh() {}
 private:
 	std::string name;

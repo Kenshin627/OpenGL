@@ -705,6 +705,8 @@
     <None Include="dependencies\GLM\glm\gtx\wrap.inl" />
     <None Include="shader\blinnPhong\fragment.glsl" />
     <None Include="shader\blinnPhong\vertex.glsl" />
+    <None Include="shader\modelLoading\fragment.glsl" />
+    <None Include="shader\modelLoading\vertex.glsl" />
     <None Include="shader\triangle\fragment.glsl" />
     <None Include="shader\triangle\vertex.glsl" />
   </ItemGroup>

@@ -57,13 +57,14 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 			vertex.normal = glm::vec3(n.x, n.y, n.z);
 		}
 		unsigned uvChannels = mesh->GetNumUVChannels();
-		for (size_t j = 0; j < uvChannels; j++)
-		{
-			auto uvs = mesh->mTextureCoords[j][i];
-			vertex.uvs.emplace_back(uvs.x, uvs.y, uvs.z);
-		}
+		//for (size_t j = 0; j < uvChannels; j++)
+		//{
+			auto uvs = mesh->mTextureCoords[0][i];
+			//vertex.uvs.emplace_back(uvs.x, uvs.y, uvs.z);
+			vertex.uv = glm::vec3(uvs.x, uvs.y, uvs.z);
+		//}
 		vertices.push_back(vertex);
-		vertex.uvs.clear();
+		//vertex.uvs.clear();
 	}
 
 	if (mesh->HasFaces())

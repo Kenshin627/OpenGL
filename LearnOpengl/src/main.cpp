@@ -23,9 +23,9 @@ using std::endl;
 
 static int SCR_WIDTH = 800;
 static int SCR_HEIGHT = 600;
-static bool isFirst = true;
 static float last_mouseX = SCR_WIDTH / 2;
 static float last_mouseY = SCR_HEIGHT / 2;
+static bool isFirst = true;
 static bool isHoldRightBtn = false;
 
 GLFWwindow* initWindow(int width, int height);
@@ -39,11 +39,12 @@ void render(GLFWwindow* window, const SceneGraph& sceneGraph);
 //¼üÅÌ
 void processInput(GLFWwindow* window, Camera& camera, float deltaTime);
 void clear();
+void setLight(const Shader& program);
 
 SceneLoader loader;
 
 //camera
-Camera camera(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 1.0f, 0.01);
+Camera camera(glm::vec3(0, 0, 3), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 1.0f, 0.01);
 
 //Lights
 DirectionLight dl{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.0f) };
@@ -139,13 +140,39 @@ void mouseMove_callback(GLFWwindow* window, double xpos, double ypos)
 
 void mouseClick_callback(GLFWwindow* window, int button, int action, int modes)
 {
-	isHoldRightBtn = button == 1 && action == 1 ? true : false;
+	if (button ==1 && action == 1)
+	{
+		isHoldRightBtn = true;
+	}
+	else {
+		isHoldRightBtn = false;
+		isFirst = true;
+	}
 }
 
-void render(GLFWwindow* window, const SceneGraph& sceneGraph)
+void setLight(const Shader& program)
 {
-	std::cout << camera << std::endl;
-	//VertexArray vao = prepareData();
+	program.setVec3("directionLight.color", dl.getColor());
+	program.setVec3("directionLight.direction", dl.getDirection());
+
+	program.setVec3("pointLight.color", pl.getColor());
+	program.setVec3("pointLight.position", pl.getPosition());
+	program.setFloat("pointLight.kc", pl.getAttenuation().kc);
+	program.setFloat("pointLight.kl", pl.getAttenuation().kl);
+	program.setFloat("pointLight.kd", pl.getAttenuation().kd);
+
+	program.setVec3("spotLight.color", sl.getColor());
+	program.setVec3("spotLight.position", sl.getPosition());
+	program.setVec3("spotLight.direction", sl.getDirection());
+	program.setFloat("spotLight.kc", sl.getAttenuation().kc);
+	program.setFloat("spotLight.kl", sl.getAttenuation().kl);
+	program.setFloat("spotLight.kd", sl.getAttenuation().kd);
+	program.setFloat("spotLight.innerCutOff", glm::cos(glm::radians(sl.getInnerCutOff())));
+	program.setFloat("spotLight.outterCutOff", glm::cos(glm::radians(sl.getOutterCutOff())));
+}
+
+void TestBox(const Shader& program)
+{
 	std::vector<float> vertices = {
 			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
 			 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
@@ -200,9 +227,10 @@ void render(GLFWwindow* window, const SceneGraph& sceneGraph)
 	vao.AddBuffer(vbo, layout);
 	vao.unbind();
 
+	setLight(program);
+
 	Texture texture1("resource/textures/dogface.jpg", TEXTURE_TYPE::DIFFUSE);
 	Texture texture2("resource/textures/container.jpg", TEXTURE_TYPE::DIFFUSE);
-	Shader program("shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl");
 
 	vao.bind();
 
@@ -210,46 +238,71 @@ void render(GLFWwindow* window, const SceneGraph& sceneGraph)
 	texture2.bind();
 
 	program.bind();
-	
+
 	//uniforms
-	program.setVec3("directionLight.color", dl.getColor());
-	program.setVec3("directionLight.direction", dl.getDirection());
-
-	program.setVec3("pointLight.color", pl.getColor());
-	program.setVec3("pointLight.position", pl.getPosition());
-	program.setFloat("pointLight.kc", pl.getAttenuation().kc);
-	program.setFloat("pointLight.kl", pl.getAttenuation().kl);
-	program.setFloat("pointLight.kd", pl.getAttenuation().kd);
-
-	program.setVec3("spotLight.color", sl.getColor());
-	program.setVec3("spotLight.position", sl.getPosition());
-	program.setVec3("spotLight.direction", sl.getDirection());
-	program.setFloat("spotLight.kc", sl.getAttenuation().kc);
-	program.setFloat("spotLight.kl", sl.getAttenuation().kl);
-	program.setFloat("spotLight.kd", sl.getAttenuation().kd);
-	program.setFloat("spotLight.innerCutOff", glm::cos(glm::radians(sl.getInnerCutOff())));
-	program.setFloat("spotLight.outterCutOff", glm::cos(glm::radians(sl.getOutterCutOff())));
+	
 
 	program.setVec3("material.diffuseColor", gold.getDiffuseColor());
 	program.setVec3("material.specularColor", gold.getSpecularColor());
 	program.setVec3("material.ambientColor", gold.getAmbientColor());
-	program.setFloat("material.shininess", gold.getShininess());	
+	program.setFloat("material.shininess", gold.getShininess());
+}
+
+void Recursivedraw(const std::shared_ptr<Node>& node, const Shader& p)
+{
+	if (!node->meshes.empty())
+	{
+		for (const std::shared_ptr<Mesh>& mesh : node->meshes)
+		{
+			mesh->bind();
+			auto mat = mesh->getMaterial();
+			/*if (!mat->ambientTextures.empty())
+			{
+				mat->ambientTextures[0]->bind(0);
+				p.setUniform1i("material.ambientTexture", 0);
+			}*/
+			if (!mat->diffuseTextures.empty())
+			{
+				mat->diffuseTextures[0]->bind(0);
+				p.setUniform1i("diffuseTexture", 0);
+			}
+			/*if (!mat->specularTextures.empty())
+			{
+				mat->specularTextures[0]->bind(2);
+				p.setUniform1i("material.specularTexture", 2);
+			}*/
+			std::cout << mesh->indicesCount() << std::endl;
+			glDrawElements(GL_TRIANGLES, mesh->indicesCount(), GL_UNSIGNED_INT, (const void*)0);
+			mesh->unbind();
+		}
+	}
+	if (!node->children.empty())
+	{
+		for (auto& node : node->children)
+		{
+			Recursivedraw(node, p);
+		}
+	}	
+}
+
+void render(GLFWwindow* window, const SceneGraph& sceneGraph)
+{
+	std::cout << camera << std::endl;
+	Shader program("shader/modelLoading/vertex.glsl", "shader/modelLoading/fragment.glsl");
+	program.bind();
+
+	//setLight(program);
 	
 	/**enable-------------------------------------------*/
 	glEnable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	/**-------------------------------------------------*/
 
-	/**test---------------------------------------------*/
-
-	/**-------------------------------------------------*/
 	float currentTime = 0.0f;
 	float lastTime	  = 0.0f;
 	float deltaTime	  = 0.0f;
-	float rotateangle = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
-		rotateangle += 0.1;
 		currentTime = glfwGetTime();
 		deltaTime   = currentTime - lastTime;
 		lastTime    = currentTime;
@@ -257,15 +310,17 @@ void render(GLFWwindow* window, const SceneGraph& sceneGraph)
 		clear();
 		
 		/**-----DRAW CALL-------------------------------**/
-		glm::mat4x4 modelMatrix;
-		modelMatrix = glm::rotate(glm::identity<glm::mat4x4>(), glm::radians(rotateangle), glm::vec3(0, 1, 0));
-		//glm::rotate(modelMatrix, glm::radians(45), glm::vec3(1, 0, 0));
+		glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
 		glm::mat3x3 modelInverseTranspose = glm::mat3x3(glm::transpose(glm::inverse(modelMatrix)));
-		program.setVec3("cameraPosition", camera.getPosition());
 		program.setMat4x4("modelViewProjection", camera.projMatrix() * camera.viewMatrix() * modelMatrix);
-		program.setMat4x4("model", modelMatrix);
-		program.setMat3x3("modelInverseTranspose", modelInverseTranspose);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//program.setVec3("cameraPosition", camera.getPosition());
+		//program.setMat4x4("model", modelMatrix);
+		//program.setMat3x3("modelInverseTranspose", modelInverseTranspose);
+
+		for (const std::shared_ptr<Node>& node : sceneGraph.roots)
+		{
+			Recursivedraw(node, program);
+		}
 		/**-----DRAW CALL END---------------------------- */
 
 		glfwPollEvents();
