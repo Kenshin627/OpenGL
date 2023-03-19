@@ -35,7 +35,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouseMove_callback(GLFWwindow* window, double xpos, double ypos);
 //Êó±ê°´¼ü
 void mouseClick_callback(GLFWwindow* window, int button, int action, int modes);
-void render(GLFWwindow* window);
+void render(GLFWwindow* window, const SceneGraph& sceneGraph);
 //¼üÅÌ
 void processInput(GLFWwindow* window, Camera& camera, float deltaTime);
 void clear();
@@ -56,9 +56,15 @@ BlinnPhongMaterial silver{ glm::vec3(0.50754f, 0.50754f, 0.50754f), glm::vec3(0.
 
 int main()
 {
-	loader.loadModel("resource/models/nanosuit/nanosuit.obj");
 	GLFWwindow* window = initWindow(SCR_WIDTH, SCR_HEIGHT);
-	render(window);
+
+	SceneGraph sceneGraph;	
+	auto root = loader.loadModel("resource/models/nanosuit/nanosuit.obj");
+	if (root)
+	{
+		sceneGraph.roots.push_back(root);
+	}
+	render(window, sceneGraph);
 }
 
 GLFWwindow* initWindow(int width, int height)
@@ -122,7 +128,6 @@ void mouseMove_callback(GLFWwindow* window, double xpos, double ypos)
 			last_mouseX = xpos;
 			last_mouseY = ypos;
 			isFirst = false;
-			return;
 		}
 		float xoffset = xpos - last_mouseX;
 		float yoffset = ypos - last_mouseY;
@@ -137,7 +142,7 @@ void mouseClick_callback(GLFWwindow* window, int button, int action, int modes)
 	isHoldRightBtn = button == 1 && action == 1 ? true : false;
 }
 
-void render(GLFWwindow* window)
+void render(GLFWwindow* window, const SceneGraph& sceneGraph)
 {
 	std::cout << camera << std::endl;
 	//VertexArray vao = prepareData();
@@ -195,8 +200,8 @@ void render(GLFWwindow* window)
 	vao.AddBuffer(vbo, layout);
 	vao.unbind();
 
-	Texture texture1("resource/textures/dogface.jpg", 0);
-	Texture texture2("resource/textures/container.jpg", 1);
+	Texture texture1("resource/textures/dogface.jpg", TEXTURE_TYPE::DIFFUSE);
+	Texture texture2("resource/textures/container.jpg", TEXTURE_TYPE::DIFFUSE);
 	Shader program("shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl");
 
 	vao.bind();

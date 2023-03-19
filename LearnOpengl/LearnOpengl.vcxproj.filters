@@ -51,6 +51,9 @@
     <ClCompile Include="src\sceneLoader\SceneLoader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\vendor\stb_image\stb_image.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -75,9 +78,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Texture\Texture.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="dependencies\STB_IMAGE\includes\stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\camera\camera.h">
@@ -1200,6 +1200,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\material\Material.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\GLFW\include\GLFW\glfw3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\GLFW\include\GLFW\glfw3native.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\stb_image\stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

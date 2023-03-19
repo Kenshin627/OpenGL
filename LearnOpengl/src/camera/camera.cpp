@@ -69,10 +69,8 @@ void Camera::updateAxis()
 
 void Camera::pitchYaw(float xoffset, float yoffset)
 {
-	xoffset *= sensitivity;
-	yoffset *= sensitivity;
-	yaw += xoffset;
-	pitch+= yoffset;
+	yaw += xoffset * sensitivity;
+	pitch+= yoffset * sensitivity;
 	
 	updateAxis();
 }

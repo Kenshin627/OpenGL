@@ -17,12 +17,6 @@ struct Vertex
 	std::vector<glm::vec3> uvs;
 };
 
-struct Texture1
-{
-	unsigned int id;
-	std::string type;
-};
-
 class Mesh
 {
 public:
@@ -30,7 +24,6 @@ public:
 		name(name),
 		vertices(vertices), 
 		indices(indices),
-		textures(textures),
 		vao(VertexArray()), 
 		vbo(VertexBuffer(vertices.data(), sizeof(Vertex)* vertices.size())), 
 		ibo(indices.data(), indices.size()), 
@@ -49,7 +42,7 @@ private:
 	std::string name;
 	std::vector<Vertex> vertices;
 	std::vector<unsigned> indices;
-	std::vector<Texture1> textures;
+
 	VertexArray vao;
 	VertexBuffer vbo;
 	IndexBuffer ibo;
