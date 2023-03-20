@@ -28,6 +28,13 @@ static bool isFirst = true;
 static bool isHoldRightBtn = false;
 
 GLFWwindow* initWindow(int width, int height);
+SceneLoader loader;
+
+//camera
+Camera camera(glm::vec3(0, 10, 30), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 1000.0f, glm::radians(45.0f), 10.0f, 0.2);
+
+#pragma region 函数声明
+
 //窗口缩放
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 //鼠标移动
@@ -41,9 +48,7 @@ void clear();
 void setLight(const Shader& program);
 void TestBox(const Shader& program);
 
-SceneLoader loader;
-//camera
-Camera camera(glm::vec3(0, 10, 30), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 10.0f, 0.2);
+#pragma endregion
 
 int main()
 {
@@ -86,59 +91,6 @@ GLFWwindow* initWindow(int width, int height)
 	glfwSetCursorPosCallback(window, mouseMove_callback);
 	glfwSetMouseButtonCallback(window, mouseClick_callback);
 	return window;
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	camera.setRatio(width * 1.0f / height);
-	glViewport(0, 0, width, height);
-}
-
-void processInput(GLFWwindow* window, Camera& camera, float deltaTime)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-	{
-		glfwSetWindowShouldClose(window, true);
-	}
-
-	const auto keyConfig = camera.getKeybordConfig();
-	for (auto& keyV : keyConfig)
-	{
-		if (glfwGetKey(window, keyV.first) == GLFW_PRESS)
-		{
-			camera.move(keyV.second, deltaTime);
-		}
-	}
-}
-
-void mouseMove_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	if (isHoldRightBtn)
-	{
-		if (isFirst)
-		{
-			last_mouseX = xpos;
-			last_mouseY = ypos;
-			isFirst = false;
-		}
-		float xoffset = xpos - last_mouseX;
-		float yoffset = ypos - last_mouseY;
-		last_mouseX = xpos;
-		last_mouseY = ypos;
-		camera.pitchYaw(xoffset, yoffset);
-	}	
-}
-
-void mouseClick_callback(GLFWwindow* window, int button, int action, int modes)
-{
-	if (button ==1 && action == 1)
-	{
-		isHoldRightBtn = true;
-	}
-	else {
-		isHoldRightBtn = false;
-		isFirst = true;
-	}
 }
 
 void setLight(const Shader& program)
@@ -254,6 +206,63 @@ void clear()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
+
+#pragma region callbacks
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	camera.setRatio(width * 1.0f / height);
+	glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow* window, Camera& camera, float deltaTime)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, true);
+	}
+
+	const auto keyConfig = camera.getKeybordConfig();
+	for (auto& keyV : keyConfig)
+	{
+		if (glfwGetKey(window, keyV.first) == GLFW_PRESS)
+		{
+			camera.move(keyV.second, deltaTime);
+		}
+	}
+}
+
+void mouseMove_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (isHoldRightBtn)
+	{
+		if (isFirst)
+		{
+			last_mouseX = xpos;
+			last_mouseY = ypos;
+			isFirst = false;
+		}
+		float xoffset = xpos - last_mouseX;
+		float yoffset = ypos - last_mouseY;
+		last_mouseX = xpos;
+		last_mouseY = ypos;
+		camera.pitchYaw(xoffset, yoffset);
+	}
+}
+
+void mouseClick_callback(GLFWwindow* window, int button, int action, int modes)
+{
+	if (button == 1 && action == 1)
+	{
+		isHoldRightBtn = true;
+	}
+	else {
+		isHoldRightBtn = false;
+		isFirst = true;
+	}
+}
+
+#pragma endregion
 
 #pragma region TEST
 void TestBox(const Shader& program)

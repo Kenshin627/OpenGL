@@ -51,12 +51,6 @@ public:
 		lookAt();
 	}
 
-	void setFov(float f)
-	{
-		fov = f;
-		perspective();
-	}
-
 	void setMoveSpeed(float s)
 	{
 		moveSpeed = s;
@@ -70,6 +64,7 @@ public:
 	const glm::mat4& projMatrix() const { return proj; };
 	const std::unordered_map<unsigned, MoveDirection>& getKeybordConfig() const { return keyConfig; };
 	void setRatio(float ratio);
+	void setFov(float fov);
 private:
 	glm::vec3 position;
 	glm::vec3 direction;

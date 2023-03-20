@@ -81,6 +81,12 @@ void Camera::setRatio(float ratio)
 	perspective();
 }
 
+void Camera::setFov(float v)
+{
+	fov = v;
+	perspective();
+}
+
 std::ostream& operator<<(std::ostream& out, const Camera& camera)
 {
 	std::cout << "[POSITION]:\t" << "(" << camera.position.x
