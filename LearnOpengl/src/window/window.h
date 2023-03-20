@@ -12,6 +12,10 @@ public:
 	void clear();
 	float getDeltaTime() const { return deltaTime; };
 	GLFWwindow* getWindowInstance()const { return mWindow; };
+	const std::shared_ptr<X_Renderer>& getRenderer() const { return renderer; };
+	void framebuffer_size_callback(int width, int height);
+	void mouseMove_callback(double xpos, double ypos);
+	void mouseClick_callback(int button, int action);
 private:
 private:
 	int screen_width;

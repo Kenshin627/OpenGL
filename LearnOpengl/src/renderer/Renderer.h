@@ -23,6 +23,7 @@ public:
 	~X_Renderer();
 	void Render(const SceneGraph& sceneGraph, RenderMode mode);
 	void Recursivedraw(const std::shared_ptr<Node>& node, const Shader& p);
+	std::shared_ptr<Camera> getCamera() { return camera; };
 private:
 	std::shared_ptr<Camera> camera;
 	std::vector<DirectionLight> lights;
