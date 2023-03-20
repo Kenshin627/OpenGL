@@ -1,3 +1,7 @@
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
 #include "window.h"
 #include <iostream>
 #include <functional>
@@ -20,6 +24,17 @@ Window::Window(unsigned width, unsigned height, const std::shared_ptr<X_Renderer
 		glfwTerminate();
 	}
 	glfwMakeContextCurrent(mWindow);
+
+	//imGui
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(mWindow, true);
+	ImGui_ImplOpenGL3_Init("#version 460");
+
 
 	if (!gladLoadGL((GLADloadfunc)glfwGetProcAddress))
 	{
@@ -51,6 +66,20 @@ void Window::renderLoop(const SceneGraph& sceneGraph, RenderMode mode)
 
 	while (!glfwWindowShouldClose(mWindow))
 	{
+		glfwPollEvents();
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+
+		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+		ImGui::End();
+
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 		double currentTime = glfwGetTime();
 		deltaTime = currentTime - lastTime;		
 		lastTime = currentTime;
@@ -60,9 +89,14 @@ void Window::renderLoop(const SceneGraph& sceneGraph, RenderMode mode)
 		//render->render
 		renderer->Render(sceneGraph, mode);
 
-		glfwPollEvents();
 		glfwSwapBuffers(mWindow);
 	}
+
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
+
+	glfwDestroyWindow(mWindow);
 	glfwTerminate();
 }
 

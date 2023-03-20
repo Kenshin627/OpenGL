@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
-#include <glfw3.h>
+#include <GLFW/glfw3.h>
 
 enum MoveDirection
 {

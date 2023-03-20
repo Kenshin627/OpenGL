@@ -84,13 +84,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(ProjectDir)dependencies\ASSIMP\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(ProjectDir)dependencies\GLFW\include\GLFW;$(ProjectDir)dependencies\GLAD\include;$(ProjectDir)dependencies\STB_IMAGE\includes;$(IncludePath);$(ProjectDir)dependencies\GLM;$(ProjectDir)dependencies\ASSIMP\include</IncludePath>
+    <IncludePath>$(ProjectDir)dependencies\GLFW\include;$(ProjectDir)dependencies\GLAD\include;$(ProjectDir)dependencies\STB_IMAGE\includes;$(IncludePath);$(ProjectDir)dependencies\GLM;$(ProjectDir)dependencies\ASSIMP\include</IncludePath>
     <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(ProjectDir)dependencies\ASSIMP\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(ProjectDir)dependencies\GLFW\include\GLFW;$(ProjectDir)dependencies\GLAD\include;$(ProjectDir)dependencies\STB_IMAGE\includes;$(IncludePath);$(ProjectDir)dependencies\GLM;$(ProjectDir)dependencies\ASSIMP\include</IncludePath>
+    <IncludePath>$(ProjectDir)dependencies\GLFW\include;$(ProjectDir)dependencies\GLAD\include;$(ProjectDir)dependencies\STB_IMAGE\includes;$(IncludePath);$(ProjectDir)dependencies\GLM;$(ProjectDir)dependencies\ASSIMP\include</IncludePath>
     <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)</IntDir>
   </PropertyGroup>
@@ -169,6 +169,12 @@
     <ClCompile Include="src\Buffer\VertexBuffer.cpp" />
     <ClCompile Include="src\Buffer\VertexDataLayout.cpp" />
     <ClCompile Include="src\vendor\stb_image\stb_image.cpp" />
+    <ClCompile Include="src\window\imgui.cpp" />
+    <ClCompile Include="src\window\imgui_draw.cpp" />
+    <ClCompile Include="src\window\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\window\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\window\imgui_tables.cpp" />
+    <ClCompile Include="src\window\imgui_widgets.cpp" />
     <ClCompile Include="src\window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -558,6 +564,15 @@
     <ClInclude Include="src\Buffer\VertexBuffer.h" />
     <ClInclude Include="src\Buffer\VertexDataLayout.h" />
     <ClInclude Include="src\vendor\stb_image\stb_image.h" />
+    <ClInclude Include="src\window\imconfig.h" />
+    <ClInclude Include="src\window\imgui.h" />
+    <ClInclude Include="src\window\imgui_impl_glfw.h" />
+    <ClInclude Include="src\window\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\window\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="src\window\imgui_internal.h" />
+    <ClInclude Include="src\window\imstb_rectpack.h" />
+    <ClInclude Include="src\window\imstb_textedit.h" />
+    <ClInclude Include="src\window\imstb_truetype.h" />
     <ClInclude Include="src\window\window.h" />
   </ItemGroup>
   <ItemGroup>
