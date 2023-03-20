@@ -31,7 +31,7 @@ GLFWwindow* initWindow(int width, int height);
 SceneLoader loader;
 
 //camera
-Camera camera(glm::vec3(0, 10, 30), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 1000.0f, glm::radians(45.0f), 10.0f, 0.2);
+Camera camera(glm::vec3(0, 10, 20), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 1000.0f, glm::radians(45.0f), 10.0f, 0.2);
 
 #pragma region º¯ÊýÉùÃ÷
 
@@ -72,7 +72,7 @@ GLFWwindow* initWindow(int width, int height)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	//create window
-	GLFWwindow* window = glfwCreateWindow(width, height, "openGL", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(width, height, "X-Renderer", nullptr, nullptr);
 	if (window == nullptr)
 	{
 		cout << "create glfw window failed" << endl;
@@ -130,18 +130,19 @@ void Recursivedraw(const std::shared_ptr<Node>& node, const Shader& p)
 			if (!mat->ambientTextures.empty())
 			{
 				mat->ambientTextures[0]->bind(0);
-				p.setUniform1i("material.ambientTexture", 0);
+				p.setInt("material.ambientTexture", 0);
 			}
 			if (!mat->diffuseTextures.empty())
 			{
 				mat->diffuseTextures[0]->bind(0);
-				p.setUniform1i("material.diffuseTexture", 0);
+				p.setInt("material.diffuseTexture", 0);
 			}
 			if (!mat->specularTextures.empty())
 			{
 				mat->specularTextures[0]->bind(2);
-				p.setUniform1i("material.specularTexture", 2);
+				p.setInt("material.specularTexture", 2);
 			}
+			p.setFloat("material.shininess", mat->shininess ? mat->shininess : 32.0);
 			std::cout << mesh->indicesCount() << std::endl;
 			glDrawElements(GL_TRIANGLES, mesh->indicesCount(), GL_UNSIGNED_INT, (const void*)0);
 			mesh->unbind();
@@ -172,8 +173,10 @@ void render(GLFWwindow* window, const SceneGraph& sceneGraph)
 	float currentTime = 0.0f;
 	float lastTime	  = 0.0f;
 	float deltaTime	  = 0.0f;
+	float angle = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
+		angle += 0.1;
 		currentTime = glfwGetTime();
 		deltaTime   = currentTime - lastTime; 
 		lastTime    = currentTime;
@@ -182,12 +185,12 @@ void render(GLFWwindow* window, const SceneGraph& sceneGraph)
 		
 		/**-----DRAW CALL-------------------------------**/
 		glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
-		modelMatrix = glm::rotate(modelMatrix, glm::radians(45.0f), glm::vec3(0, 1, 0));
+		modelMatrix = glm::rotate(modelMatrix, glm::radians(angle), glm::vec3(0, 1, 0));
 		glm::mat3x3 modelInverseTranspose = glm::mat3x3(glm::transpose(glm::inverse(modelMatrix)));
-		program.setMat4x4("modelViewProjection", camera.projMatrix() * camera.viewMatrix() * modelMatrix);
+		program.setMatrix44("modelViewProjection", camera.projMatrix() * camera.viewMatrix() * modelMatrix);
 		program.setVec3("cameraPosition", camera.getPosition());
-		program.setMat4x4("model", modelMatrix);
-		program.setMat3x3("modelInverseTranspose", modelInverseTranspose);
+		program.setMatrix44("model", modelMatrix);
+		program.setMatrix33("modelInverseTranspose", modelInverseTranspose);
 
 		for (const std::shared_ptr<Node>& node : sceneGraph.roots)
 		{

@@ -20,12 +20,12 @@ public:
 	void bind() const;
 	void unbind() const;
 
-	void setUniform4f(const std::string& name, float v1, float v2, float v3, float v4) const;
-	void setUniform3f(const std::string& name, float v1, float v2, float v3) const;
-	void setUniform2f(const std::string& name, float v1, float v2) const;
-	void setUniform1i(const std::string& name, int v1) const;
-	void setMat4x4(const std::string& name, const glm::mat4x4& mat) const;
-	void setMat3x3(const std::string& name, const glm::mat3x3& mat) const;
+	void setVec4(const std::string& name, float v1, float v2, float v3, float v4) const;
+	void setVec3(const std::string& name, float v1, float v2, float v3) const;
+	void setVec2(const std::string& name, float v1, float v2) const;
+	void setInt(const std::string& name, int v1) const;
+	void setMatrix44(const std::string& name, const glm::mat4x4& mat) const;
+	void setMatrix33(const std::string& name, const glm::mat3x3& mat) const;
 	void setVec3(const std::string& name, const glm::vec3& vec3) const;
 	void setFloat(const std::string& name, float v1) const;
 private:

@@ -82,7 +82,7 @@ int Shader::getUniformLocation(const std::string& name) const
 	return location;
 }
 
-void Shader::setUniform4f(const std::string& name, float v1, float v2, float v3, float v4) const
+void Shader::setVec4(const std::string& name, float v1, float v2, float v3, float v4) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1)
@@ -93,7 +93,7 @@ void Shader::setUniform4f(const std::string& name, float v1, float v2, float v3,
 	printUniformError(name);
 }
 
-void Shader::setUniform3f(const std::string& name, float v1, float v2, float v3) const
+void Shader::setVec3(const std::string& name, float v1, float v2, float v3) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1)
@@ -104,7 +104,7 @@ void Shader::setUniform3f(const std::string& name, float v1, float v2, float v3)
 	printUniformError(name);
 }
 
-void Shader::setUniform2f(const std::string& name, float v1, float v2) const
+void Shader::setVec2(const std::string& name, float v1, float v2) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1) 
@@ -115,7 +115,7 @@ void Shader::setUniform2f(const std::string& name, float v1, float v2) const
 	printUniformError(name);
 }
 
-void Shader::setUniform1i(const std::string& name, int v1) const
+void Shader::setInt(const std::string& name, int v1) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1)
@@ -126,7 +126,7 @@ void Shader::setUniform1i(const std::string& name, int v1) const
 	printUniformError(name);
 }
 
-void Shader::setMat4x4(const std::string& name, const glm::mat4x4& mat) const
+void Shader::setMatrix44(const std::string& name, const glm::mat4x4& mat) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1)
@@ -137,7 +137,7 @@ void Shader::setMat4x4(const std::string& name, const glm::mat4x4& mat) const
 	printUniformError(name);
 }
 
-void Shader::setMat3x3(const std::string& name, const glm::mat3x3& mat) const
+void Shader::setMatrix33(const std::string& name, const glm::mat3x3& mat) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1)
