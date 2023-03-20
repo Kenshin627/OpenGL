@@ -69,7 +69,7 @@ public:
 	const glm::mat4& viewMatrix() const { return view; };
 	const glm::mat4& projMatrix() const { return proj; };
 	const std::unordered_map<unsigned, MoveDirection>& getKeybordConfig() const { return keyConfig; };
-
+	void setRatio(float ratio);
 private:
 	glm::vec3 position;
 	glm::vec3 direction;

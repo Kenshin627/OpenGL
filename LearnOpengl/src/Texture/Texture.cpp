@@ -4,7 +4,7 @@
 
 #include "Texture.h"
 
-Texture::Texture(const std::string& image, TEXTURE_TYPE type):width(0), height(0), nrChannels(0),m_RendererID(0), path(image), type(type)
+Texture::Texture(const std::string& image, TEXTURE_TYPE type, bool flip_vertically):width(0), height(0), nrChannels(0),m_RendererID(0), path(image), type(type)
 {
 	glGenTextures(1, &m_RendererID);
 	glBindTexture(GL_TEXTURE_2D, m_RendererID);
@@ -13,7 +13,7 @@ Texture::Texture(const std::string& image, TEXTURE_TYPE type):width(0), height(0
 	glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	stbi_set_flip_vertically_on_load(true);
+	stbi_set_flip_vertically_on_load(flip_vertically);
 	unsigned char* data = stbi_load(image.c_str(), &width, &height, &nrChannels, 0);
 	if (data)
 	{

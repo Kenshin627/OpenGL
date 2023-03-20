@@ -41,10 +41,11 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 	std::vector<Vertex> vertices;
 	std::vector<unsigned> indices;
 	std::vector<Texture> textures;
-	Vertex vertex;
+	
 
 	for (size_t i = 0; i < mesh->mNumVertices; i++)
-	{	
+	{
+		Vertex vertex;
 		if (mesh->HasPositions())
 		{
 			auto p = mesh->mVertices[i];

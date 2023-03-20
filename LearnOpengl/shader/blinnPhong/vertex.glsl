@@ -15,7 +15,7 @@ uniform mat3 modelInverseTranspose;
 void main()
 {
 	vPos = vec3(model * vec4(aPosition, 1.0));
-	vNormal = modelInverseTranspose * aNormal;
+	vNormal =  modelInverseTranspose * aNormal;
 	vUv = aUv;
 	gl_Position = modelViewProjection * vec4(aPosition, 1.0);
 }

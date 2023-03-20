@@ -75,6 +75,12 @@ void Camera::pitchYaw(float xoffset, float yoffset)
 	updateAxis();
 }
 
+void Camera::setRatio(float ratio)
+{
+	aspectRatio = ratio;
+	perspective();
+}
+
 std::ostream& operator<<(std::ostream& out, const Camera& camera)
 {
 	std::cout << "[POSITION]:\t" << "(" << camera.position.x

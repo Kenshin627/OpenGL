@@ -12,7 +12,7 @@ enum TEXTURE_TYPE
 class Texture
 {
 public:
-	Texture(const std::string& image, TEXTURE_TYPE type);
+	Texture(const std::string& image, TEXTURE_TYPE type, bool flip_vertically = false);
 	~Texture();
 	void bind(unsigned slot = 0) const;
 	void unbind() const;
