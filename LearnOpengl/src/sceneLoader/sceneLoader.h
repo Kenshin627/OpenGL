@@ -11,7 +11,6 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "../mesh/Mesh.h"
-#include "../material/Material.h"
 
 struct Node
 {

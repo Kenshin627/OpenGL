@@ -15,7 +15,7 @@ void VertexArray::AddBuffer(const VertexBuffer& buffer, const VertexDataLayout& 
 {
 	buffer.bind();
 	const VertexDataLayout::Layout_Container_Type elements = layout.getElements();
-	for (size_t i = 0; i < elements.size(); i++)
+	for (unsigned i = 0; i < elements.size(); i++)
 	{
 		const Attribute& element = elements[i];
 		glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), (const void*)element.offset);

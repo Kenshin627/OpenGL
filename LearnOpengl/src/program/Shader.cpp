@@ -1,3 +1,4 @@
+#include <glad/gl.h>
 #include "Shader.h"
 
 Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath):m_RendererID(0)

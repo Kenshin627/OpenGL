@@ -12,9 +12,9 @@ struct Attribute
 	{
 		switch (type)
 		{
-			case GL_FLOAT:         return 4;
-			case GL_INT:           return 4;
-			case GL_UNSIGNED_BYTE: return 1;
+		case GL_FLOAT:         return 4;
+		case GL_INT:           return 4;
+		case GL_UNSIGNED_BYTE: return 1;
 		}
 		return 0;
 	}
@@ -53,10 +53,7 @@ public:
 		calcOffset(count, GL_UNSIGNED_BYTE);
 	}
 private:
-	void calcOffset(unsigned int count, unsigned int type)
-	{
-		m_Stride += count * Attribute::getTypeSize(type);
-	}
+	void calcOffset(unsigned int count, unsigned int type);
 	Layout_Container_Type m_Elements;
 	unsigned int m_Stride;
 };

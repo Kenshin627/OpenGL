@@ -1,8 +1,6 @@
 #pragma once
-
 #include <iostream>
 #include <fstream>
-#include <glad/gl.h>
 #include <string>
 #include <sstream>
 #include <array>

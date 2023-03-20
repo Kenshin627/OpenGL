@@ -121,7 +121,7 @@ std::vector<std::shared_ptr<Texture>> SceneLoader::loadMaterialTextures(aiMateri
 	aiString str;
 	std::vector<std::shared_ptr<Texture>> ret;
 	unsigned textureCount = mat->GetTextureCount(type);
-	for (size_t i = 0; i < textureCount; i++)
+	for (unsigned i = 0; i < textureCount; i++)
 	{		
 		mat->GetTexture(type, i, &str);
 		auto cacheIter = textureCache.find(str.C_Str());
