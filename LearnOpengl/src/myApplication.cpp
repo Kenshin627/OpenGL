@@ -19,8 +19,8 @@ public:
 
 	void onUIRender() override
 	{
-		//ImGui::ShowDemoWindow();		
-		renderer.Render(sceneGraph, RenderMode::BlinnPhong);
+		ImGui::ShowDemoWindow();		
+		//renderer.Render(sceneGraph, RenderMode::BlinnPhong);
 	}
 private:
 	X_Renderer renderer;

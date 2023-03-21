@@ -133,15 +133,9 @@ namespace Kenshin
 		colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
 		colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
 
-
-
 		ImGui_ImplGlfw_InitForOpenGL(m_windowHandle, true);
 		ImGui_ImplOpenGL3_Init("#version 460");
-
 		//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-		
-	
 		#pragma region old events
 		//auto size_callback = [](GLFWwindow* w, int width, int height) { static_cast<Application*>(glfwGetWindowUserPointer(w))->framebuffer_size_callback(width, height); };
 
@@ -153,7 +147,6 @@ namespace Kenshin
 		//glfwSetCursorPosCallback(m_windowHandle, move_callback);
 		//glfwSetMouseButtonCallback(m_windowHandle, click_callback);
 		#pragma endregion
-
 	}
 
 	void Application::shutdown()
@@ -252,31 +245,28 @@ namespace Kenshin
 
 			ImGui::EndChild();
 			ImGui::End();
-			ImGui::ShowDemoWindow();
+			//ImGui::ShowDemoWindow(); 
 
-			//ImGui::Begin("X_Renderer");       
-
-			/*for (auto& layer : m_LayerSatack)
+			for (auto& layer : m_LayerSatack)
 			{
 				layer->onUIRender();
-			}*/
+			}
 
-			//ImGui::End();
 			ImGui::End();
 			ImGui::Render();
 
-			/*for (auto& layer : m_LayerSatack)
+			for (auto& layer : m_LayerSatack)
 			{
 				layer->onUpdate(m_TimeStep);
-			}*/
+			}
 
 			//renderer->Render(sceneGraph, mode);
 			
-	/*		int display_w, display_h;
+			int display_w, display_h;
 			glfwGetFramebufferSize(m_windowHandle, &display_w, &display_h);			
 			glViewport(0, 0, display_w, display_h);
 			glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());			
 			glfwSwapBuffers(m_windowHandle);
 
