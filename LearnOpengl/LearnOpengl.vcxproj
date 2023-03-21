@@ -159,6 +159,7 @@
     <ClCompile Include="dependencies\GLM\glm\detail\glm.cpp" />
     <ClCompile Include="src\application\application.cpp" />
     <ClCompile Include="src\application\vendor\imGui\imgui_dmeo.cpp" />
+    <ClCompile Include="src\Buffer\FrameBuffer.cpp" />
     <ClCompile Include="src\Buffer\IndexBuffer.cpp" />
     <ClCompile Include="src\camera\camera.cpp" />
     <ClCompile Include="src\light\pointLight.cpp" />
@@ -551,6 +552,7 @@
     <ClInclude Include="src\application\application.h" />
     <ClInclude Include="src\application\entityPoint.h" />
     <ClInclude Include="src\application\layer.h" />
+    <ClInclude Include="src\Buffer\FrameBuffer.h" />
     <ClInclude Include="src\Buffer\IndexBuffer.h" />
     <ClInclude Include="src\camera\camera.h" />
     <ClInclude Include="src\light\baseLight.h" />

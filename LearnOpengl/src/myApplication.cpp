@@ -1,26 +1,29 @@
 #include "application/application.h"
 #include "application/entityPoint.h"
 #include "renderer/Renderer.h"
-//#include "application/vendor/imGui/imgui.h"
 
 class ExampleLayer : public Kenshin::Layer
 {
 public:
-	void onUpdate(double timestep) override
+	void onAttach() override
 	{
-		renderer = X_Renderer();
-		sceneGraph = SceneGraph();
 		auto root = sceneLoader.loadModel("resource/models/nanosuit/nanosuit.obj");
 		if (root)
 		{
 			sceneGraph.roots.push_back(root);
 		}
+	}
+	void onUpdate(const glm::vec2& viewport, double timestep) override
+	{
+		
+		renderer.Render(sceneGraph, RenderMode::BlinnPhong, viewport);
+
+		ImGui::Image((void*)(intptr_t)(renderer.getFrameBufferTextureID()), ImVec2(viewport.x, viewport.y), ImVec2(0, 1), ImVec2(1, 0));
 	};
 
 	void onUIRender() override
 	{
 		ImGui::ShowDemoWindow();		
-		//renderer.Render(sceneGraph, RenderMode::BlinnPhong);
 	}
 private:
 	X_Renderer renderer;

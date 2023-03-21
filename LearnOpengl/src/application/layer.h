@@ -1,4 +1,5 @@
 #pragma once
+#include <glm/glm.hpp>
 
 namespace Kenshin
 {
@@ -8,7 +9,7 @@ namespace Kenshin
 		virtual ~Layer() = default;
 		virtual void onAttach() { };
 		virtual void onDetach() { };
-		virtual void onUpdate(double ts) { };
+		virtual void onUpdate(const glm::vec2& viewport, double ts) { };
 		virtual void onUIRender() { };
 	};
 }

@@ -81,6 +81,9 @@
     <ClCompile Include="src\application\vendor\imGui\imgui_dmeo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Buffer\FrameBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1275,6 +1278,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\application\entityPoint.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Buffer\FrameBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

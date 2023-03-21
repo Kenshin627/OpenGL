@@ -243,9 +243,14 @@ namespace Kenshin
 			ImGui::BeginChild("Game Renderer");
 			ImVec2 viewport = ImGui::GetWindowSize();
 
+			//graphic render
+			for (auto& layer : m_LayerSatack)
+			{
+				layer->onUpdate(glm::vec2(viewport.x, viewport.y), m_TimeStep);
+			}
+
 			ImGui::EndChild();
 			ImGui::End();
-			//ImGui::ShowDemoWindow(); 
 
 			for (auto& layer : m_LayerSatack)
 			{
@@ -255,18 +260,12 @@ namespace Kenshin
 			ImGui::End();
 			ImGui::Render();
 
-			for (auto& layer : m_LayerSatack)
-			{
-				layer->onUpdate(m_TimeStep);
-			}
-
+			
 			//renderer->Render(sceneGraph, mode);
 			
-			int display_w, display_h;
-			glfwGetFramebufferSize(m_windowHandle, &display_w, &display_h);			
-			glViewport(0, 0, display_w, display_h);
-			glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	/*		int display_w, display_h;
+			glfwGetFramebufferSize(m_windowHandle, &display_w, &display_h);		*/	
+			
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());			
 			glfwSwapBuffers(m_windowHandle);
 
