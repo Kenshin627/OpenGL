@@ -16,15 +16,7 @@ public:
 	~Texture();
 	void bind(unsigned slot = 0) const;
 	void unbind() const;
-	inline unsigned int getFormat() const
-	{
-		switch (nrChannels)
-		{
-			case 3: return GL_RGB;
-			case 4: return GL_RGBA;		
-		}
-		return 0;
-	}
+	inline unsigned int getFormat() const;
 	inline unsigned ID() const
 	{
 		return m_RendererID;

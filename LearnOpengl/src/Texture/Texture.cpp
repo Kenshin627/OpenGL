@@ -44,3 +44,13 @@ void Texture::unbind() const
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+unsigned Texture::getFormat() const
+{
+	switch (nrChannels)
+	{
+	case 3: return GL_RGB;
+	case 4: return GL_RGBA;
+	}
+	return 0;
+}

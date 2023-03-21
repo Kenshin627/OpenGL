@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="dependencies\GLAD\src\gl.c">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -57,25 +54,31 @@
     <ClCompile Include="src\renderer\Renderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\window\window.cpp">
+    <ClCompile Include="src\application\vendor\imGui\imgui.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\window\imgui.cpp">
+    <ClCompile Include="src\application\vendor\imGui\imgui_impl_glfw.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\window\imgui_impl_glfw.cpp">
+    <ClCompile Include="src\application\vendor\imGui\imgui_impl_opengl3.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\window\imgui_impl_opengl3.cpp">
+    <ClCompile Include="src\application\vendor\imGui\imgui_tables.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\window\imgui_tables.cpp">
+    <ClCompile Include="src\application\vendor\imGui\imgui_widgets.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\window\imgui_widgets.cpp">
+    <ClCompile Include="src\application\vendor\imGui\imgui_draw.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\window\imgui_draw.cpp">
+    <ClCompile Include="src\application\application.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\myApplication.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\vendor\imGui\imgui_dmeo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1238,34 +1241,40 @@
     <ClInclude Include="src\renderer\Renderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\window\window.h">
+    <ClInclude Include="src\application\vendor\imGui\imconfig.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\window\imconfig.h">
+    <ClInclude Include="src\application\vendor\imGui\imgui.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\window\imgui.h">
+    <ClInclude Include="src\application\vendor\imGui\imgui_impl_glfw.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\window\imgui_impl_glfw.h">
+    <ClInclude Include="src\application\vendor\imGui\imgui_impl_opengl3.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\window\imgui_impl_opengl3.h">
+    <ClInclude Include="src\application\vendor\imGui\imgui_internal.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\window\imgui_internal.h">
+    <ClInclude Include="src\application\vendor\imGui\imgui_impl_opengl3_loader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\window\imgui_impl_opengl3_loader.h">
+    <ClInclude Include="src\application\vendor\imGui\imstb_rectpack.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\window\imstb_rectpack.h">
+    <ClInclude Include="src\application\vendor\imGui\imstb_textedit.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\window\imstb_textedit.h">
+    <ClInclude Include="src\application\vendor\imGui\imstb_truetype.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\window\imstb_truetype.h">
+    <ClInclude Include="src\application\application.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\layer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\entityPoint.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1712,6 +1721,7 @@
     <None Include="shader\modelLoading\fragment.glsl" />
     <None Include="shader\depthRender\vertex.glsl" />
     <None Include="shader\depthRender\fragment.glsl" />
+    <None Include="imgui.ini" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">

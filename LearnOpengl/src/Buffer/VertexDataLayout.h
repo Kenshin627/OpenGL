@@ -33,25 +33,28 @@ public:
 	{
 		return false;
 	};
+
 	template<>
 	void push<float>(unsigned int count)
 	{
 		m_Elements.push_back({ count, GL_FLOAT, GL_FALSE, m_Stride });
 		calcOffset(count, GL_FLOAT);
-		
 	}
+
 	template<>
 	void push<int>(unsigned int count)
 	{
-		m_Elements.push_back({ count, GL_INT, GL_FALSE, m_Stride });		
+		m_Elements.push_back({ count, GL_INT, GL_FALSE, m_Stride });
 		calcOffset(count, GL_INT);
 	}
+
 	template<>
 	void push<unsigned char>(unsigned int count)
 	{
-		m_Elements.push_back({ count, GL_UNSIGNED_BYTE, GL_TRUE, m_Stride });		
+		m_Elements.push_back({ count, GL_UNSIGNED_BYTE, GL_TRUE, m_Stride });
 		calcOffset(count, GL_UNSIGNED_BYTE);
 	}
+
 private:
 	void calcOffset(unsigned int count, unsigned int type);
 	Layout_Container_Type m_Elements;

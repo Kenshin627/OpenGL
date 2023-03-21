@@ -1,8 +1,8 @@
 #include <iostream>
 #include "sceneLoader.h"
 
-SceneLoader::SceneLoader() {}
-SceneLoader::~SceneLoader() {}
+SceneLoader::SceneLoader() = default;
+SceneLoader::~SceneLoader() = default;
 
 std::shared_ptr<Node> SceneLoader::loadModel(const std::string& path)
 {
