@@ -1,6 +1,6 @@
 #include "Renderer.h"
 
-X_Renderer::X_Renderer() :camera(std::make_shared<Camera>(glm::vec3(0, 10, 30), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 10.0f, 0.2)), m_FBO(nullptr), clearColor(glm::vec4(0.2, 0.2, 0.2, 1.0)), mode(RenderMode::BlinnPhong), wireFrameColor(glm::vec3(0.5, 0.7, 0.2))
+X_Renderer::X_Renderer() :camera(std::make_shared<Camera>(glm::vec3(0, 8, 23), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 10.0f, 0.2)), m_FBO(nullptr), clearColor(glm::vec4(0.2, 0.2, 0.2, 1.0)), mode(RenderMode::wireFrame), wireFrameColor(glm::vec3(0.5, 0.7, 0.2))
 {
 	lights.push_back(DirectionLight{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(1.0f) });
 	compileShaders();
@@ -118,6 +118,7 @@ void X_Renderer::compileShaders()
 	//PBR‘› ±Œ¥ µœ÷
 	shaders.insert({ RenderMode::PBR, std::make_shared<Shader>("shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl") });
 	shaders.insert({ RenderMode::Depth, std::make_shared<Shader>("shader/depthRender/vertex.glsl", "shader/depthRender/fragment.glsl") });
+	shaders.insert({ RenderMode::Normal, std::make_shared<Shader>("shader/normal/vertex.glsl", "shader/normal/fragment.glsl") });
 }
 
 //void setLight(const Shader& program)

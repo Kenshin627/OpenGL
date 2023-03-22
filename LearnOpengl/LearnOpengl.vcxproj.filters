@@ -1745,6 +1745,8 @@
     <None Include="imgui.ini" />
     <None Include="shader\wireFrame\vertex.glsl" />
     <None Include="shader\wireFrame\fragment.glsl" />
+    <None Include="shader\normal\vertex.glsl" />
+    <None Include="shader\normal\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">

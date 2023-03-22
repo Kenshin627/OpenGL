@@ -739,6 +739,8 @@
     <None Include="shader\depthRender\vertex.glsl" />
     <None Include="shader\modelLoading\fragment.glsl" />
     <None Include="shader\modelLoading\vertex.glsl" />
+    <None Include="shader\normal\fragment.glsl" />
+    <None Include="shader\normal\vertex.glsl" />
     <None Include="shader\triangle\fragment.glsl" />
     <None Include="shader\triangle\vertex.glsl" />
     <None Include="shader\wireFrame\fragment.glsl" />

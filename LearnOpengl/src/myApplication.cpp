@@ -118,7 +118,7 @@ public:
 
 		#pragma region RenderMode
 		ImGui::Begin("Render Mode");
-		const char* items[] = { "wireFrame", "BlinnPhong", "PBR", "Depth" };
+		const char* items[] = { "wireFrame", "BlinnPhong", "PBR", "Depth", "Normal"};
 		static int item_current = 0;
 		if (ImGui::Combo(" ", &item_current, items, IM_ARRAYSIZE(items)))
 		{

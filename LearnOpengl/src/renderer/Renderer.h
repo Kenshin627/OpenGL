@@ -13,7 +13,8 @@ enum RenderMode
 	wireFrame,
 	BlinnPhong,
 	PBR,
-	Depth
+	Depth,
+	Normal
 };
 
 class X_Renderer
