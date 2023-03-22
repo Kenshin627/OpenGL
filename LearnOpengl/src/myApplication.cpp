@@ -56,9 +56,15 @@ public:
 			sceneGraph.roots.push_back(root);
 		}
 	}
-	void onUpdate(const glm::vec2& viewport, double timestep) override
+
+	void onUpdate(const glm::vec2& viewport, float deltaTime, const ImGuiIO& io) override
 	{
-		renderer.getCamera()->setRatio(viewport.x / viewport.y);
+		std::shared_ptr<Camera> camera = renderer.getCamera();
+		camera->setRatio(viewport.x / viewport.y);
+		if (ImGui::GetActiveID() == 1)
+		{
+			camera->pitchYaw(io.MouseDelta.x, io.MouseDelta.y);
+		}
 		renderer.Render(sceneGraph, viewport);
 		ImGui::Image((void*)(intptr_t)(renderer.getFrameBufferTextureID()), ImVec2(viewport.x, viewport.y), ImVec2(0, 1), ImVec2(1, 0));
 	};

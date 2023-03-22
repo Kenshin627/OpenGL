@@ -239,10 +239,11 @@ namespace Kenshin
 
 			ImGui::Begin("Scene");
 			ImVec2 viewport = ImGui::GetWindowSize();
+			ImGuiIO io = ImGui::GetIO();
 			//graphic render
 			for (auto& layer : m_LayerSatack)
 			{
-				layer->onUpdate(glm::vec2(viewport.x, viewport.y), m_TimeStep);
+				layer->onUpdate(glm::vec2(viewport.x, viewport.y), m_FrameTime, io);
 			}
 			ImGui::End();
 
