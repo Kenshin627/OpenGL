@@ -59,7 +59,6 @@ namespace Kenshin
 		float m_FrameTime = 0.0f;
 		float m_LastFrameTime = 0.0f;
 		GLFWwindow* m_windowHandle = nullptr;
-		ImVec4 clearColor = ImVec4(0.2, 0.2, 0.2, 1.0);
 		bool isHoldRightBtn;
 		bool isFirst;
 		float last_mouseX;

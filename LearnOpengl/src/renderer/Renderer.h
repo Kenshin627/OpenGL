@@ -8,7 +8,6 @@
 #include "../program/Shader.h"
 #include "../Buffer/FrameBuffer.h"
 
-
 enum RenderMode
 {
 	wireFrame,
@@ -26,6 +25,7 @@ public:
 	void Recursivedraw(const std::shared_ptr<Node>& node, const Shader& p);
 	std::shared_ptr<Camera> getCamera() { return camera; };
 	void buildFBO(const glm::vec2& viewport);
+	void clear();
 	unsigned getFrameBufferTextureID() const { return m_FBO->GetTextureID(); };
 private:
 	std::shared_ptr<Camera> camera;

@@ -13,7 +13,7 @@ static Kenshin::Application* s_Instance = nullptr;
 
 namespace Kenshin
 {
-	Application::Application(const ApplicationSpecification& specification) :m_Specification(specification), m_MenubarCallback(nullptr), m_Running(false), m_TimeStep(0.0f), m_FrameTime(0.0f), m_LastFrameTime(0.0f), m_windowHandle(nullptr), clearColor(ImVec4(0.2, 0.2, 0.2, 1.0)), isHoldRightBtn(false), isFirst(true), last_mouseX(0.0f), last_mouseY(0.0f)
+	Application::Application(const ApplicationSpecification& specification) :m_Specification(specification), m_MenubarCallback(nullptr), m_Running(false), m_TimeStep(0.0f), m_FrameTime(0.0f), m_LastFrameTime(0.0f), m_windowHandle(nullptr), isHoldRightBtn(false), isFirst(true), last_mouseX(0.0f), last_mouseY(0.0f)
 	{
 		s_Instance = this;
 		init();

@@ -1,6 +1,6 @@
 #include "Renderer.h"
 
-X_Renderer::X_Renderer():camera(std::make_shared<Camera>(glm::vec3(0, 10, 20), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 1000.0f, glm::radians(45.0f), 10.0f, 0.2)), m_FBO(nullptr), clearColor(glm::vec4(0.2, 0.2, 0.1, 1.0))
+X_Renderer::X_Renderer():camera(std::make_shared<Camera>(glm::vec3(0, 10, 20), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 1000.0f, glm::radians(45.0f), 10.0f, 0.2)), m_FBO(nullptr), clearColor(glm::vec4(0.2, 0.2, 0.2, 1.0))
 {
 	lights.push_back(DirectionLight{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(1.0f) });
 }
@@ -9,10 +9,8 @@ X_Renderer::~X_Renderer() {}
 
 void X_Renderer::Render(const SceneGraph& sceneGraph, RenderMode mode, const glm::vec2& viewport)
 {
-	/*glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glViewport(0.0f, 0.0f, viewport.x, viewport.y);*/
+	clear();
+	glViewport(0.0f, 0.0f, viewport.x, viewport.y);
 	Shader program("shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl");
 	program.bind();
 	/*setLight(program);*/
@@ -29,6 +27,7 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, RenderMode mode, const glm
 	program.setMatrix33("modelInverseTranspose", modelInverseTranspose);
 	buildFBO(viewport);
 	m_FBO->bind();
+	clear();
 	for (const std::shared_ptr<Node>& node : sceneGraph.roots)
 	{
 		Recursivedraw(node, program);
@@ -74,6 +73,12 @@ void X_Renderer::Recursivedraw(const std::shared_ptr<Node>& node, const Shader& 
 			Recursivedraw(node, p);
 		}
 	}
+}
+
+void X_Renderer::clear()
+{
+	glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void X_Renderer::buildFBO(const glm::vec2& viewport)
