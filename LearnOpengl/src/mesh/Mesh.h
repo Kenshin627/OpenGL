@@ -51,6 +51,7 @@ public:
 	}
 	const std::shared_ptr<Material>& getMaterial() const { return material; };
 	const unsigned indicesCount() const { return ibo.indicesCount(); };
+	const std::string getName() const { return name; };
 	~Mesh() {}
 private:
 	std::string name;

@@ -43,6 +43,8 @@ namespace Kenshin
 
 		void close();
 		float getTime() const;
+		float getFPS() const;
+		float getFrameTime() const;
 		GLFWwindow* getWindowHandle() const { return m_windowHandle; };
 	private:
 		void init();

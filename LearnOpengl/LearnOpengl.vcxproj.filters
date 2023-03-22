@@ -84,6 +84,24 @@
     <ClCompile Include="src\Buffer\FrameBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Kenshin\Downloads\implot-master\implot_items.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Kenshin\Downloads\implot-master\implot.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Kenshin\Downloads\implot-master\implot_demo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\vendor\imGui\implot.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\vendor\imGui\implot_demo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\vendor\imGui\implot_items.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1281,6 +1299,18 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Buffer\FrameBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Kenshin\Downloads\implot-master\implot.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Kenshin\Downloads\implot-master\implot_internal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\vendor\imGui\implot.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\vendor\imGui\implot_internal.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

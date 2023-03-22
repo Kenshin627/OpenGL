@@ -77,7 +77,7 @@ namespace Kenshin
 		style->TabRounding = 1.0f;
 		
 		ImVec4* colors = style->Colors;
-		colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+		colors[ImGuiCol_Text] = ImVec4(1.00f, 0.68f, 0.17f, 1.00f);
 		colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
 		colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.06f, 0.06f, 0.94f);
 		colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
@@ -239,22 +239,18 @@ namespace Kenshin
 				ImGui::EndMenuBar();
 			}
 
-			ImGui::Begin("Viewport");
-			ImGui::BeginChild("Game Renderer");
+			ImGui::Begin("Scene");
 			ImVec2 viewport = ImGui::GetWindowSize();
-
 			//graphic render
 			for (auto& layer : m_LayerSatack)
 			{
 				layer->onUpdate(glm::vec2(viewport.x, viewport.y), m_TimeStep);
 			}
-
-			ImGui::EndChild();
 			ImGui::End();
 
 			for (auto& layer : m_LayerSatack)
 			{
-				layer->onUIRender();
+				layer->onUIRender(getFPS(), getFrameTime());
 			}
 
 			ImGui::End();
@@ -282,6 +278,16 @@ namespace Kenshin
 	float Application::getTime() const
 	{
 		return (float)glfwGetTime();
+	}
+
+	float Application::getFrameTime() const
+	{
+		return m_FrameTime;
+	}
+
+	float Application::getFPS() const
+	{
+		return 1.0f / getFrameTime();
 	}
 
 	void Application::setTime()
