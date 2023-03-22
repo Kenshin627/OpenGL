@@ -50,9 +50,6 @@ namespace Kenshin
 		void init();
 		void shutdown();
 		void setTime();
-		void framebuffer_size_callback(int width, int height);
-		void mouseMove_callback(double xpos, double ypos);
-		void mouseClick_callback(int button, int action);
 	private:
 		ApplicationSpecification m_Specification;
 		std::function<void()> m_MenubarCallback;
@@ -66,6 +63,7 @@ namespace Kenshin
 		float last_mouseX;
 		float last_mouseY;
 		std::vector<std::shared_ptr<Layer>> m_LayerSatack;
+		glm::vec2 m_viewportSize;
 	};
 
 	Application* createApplication(int argc, char** argv);

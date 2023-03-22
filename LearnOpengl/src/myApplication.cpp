@@ -60,13 +60,21 @@ public:
 	void onUpdate(const glm::vec2& viewport, float deltaTime, const ImGuiIO& io) override
 	{
 		std::shared_ptr<Camera> camera = renderer.getCamera();
-		camera->setRatio(viewport.x / viewport.y);
-		if (ImGui::GetActiveID() == 1)
+		if (m_viewportSize.x != viewport.x || m_viewportSize.y != viewport.y)
+		{
+			m_viewportSize.x = viewport.x;
+			m_viewportSize.y = viewport.y;
+			camera->setRatio(viewport.x / viewport.y);
+			renderer.reszieFBO(m_viewportSize.x, m_viewportSize.y);
+		}
+
+		/*if (ImGui::GetFocusID() == ImGui::FindWindowByName("Scene")->ID && io.MouseDown[1])
 		{
 			camera->pitchYaw(io.MouseDelta.x, io.MouseDelta.y);
-		}
-		renderer.Render(sceneGraph, viewport);
-		ImGui::Image((void*)(intptr_t)(renderer.getFrameBufferTextureID()), ImVec2(viewport.x, viewport.y), ImVec2(0, 1), ImVec2(1, 0));
+		}*/
+
+		renderer.Render(sceneGraph, m_viewportSize);
+		ImGui::Image((void*)(intptr_t)(renderer.getFrameBufferTextureID()), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
 	};
 
 	void onUIRender(float fps, float deltaTime) override
@@ -134,6 +142,7 @@ public:
 		{
 			ImGui::ColorPicker3("wireFrameColor", &renderer.getWireFrameColor().x);
 		}
+
 		ImGui::End();
 		#pragma endregion
 	}
@@ -141,6 +150,7 @@ private:
 	X_Renderer renderer;
 	SceneGraph sceneGraph;
 	SceneLoader sceneLoader;
+	glm::vec2 m_viewportSize;
 };
 								
 Kenshin::Application* Kenshin::createApplication(int argc, char** argv)

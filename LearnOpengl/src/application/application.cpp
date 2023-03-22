@@ -13,7 +13,7 @@ static Kenshin::Application* s_Instance = nullptr;
 
 namespace Kenshin
 {
-	Application::Application(const ApplicationSpecification& specification) :m_Specification(specification), m_MenubarCallback(nullptr), m_Running(false), m_TimeStep(0.0f), m_FrameTime(0.0f), m_LastFrameTime(0.0f), m_windowHandle(nullptr), isHoldRightBtn(false), isFirst(true), last_mouseX(0.0f), last_mouseY(0.0f)
+	Application::Application(const ApplicationSpecification& specification) :m_Specification(specification), m_MenubarCallback(nullptr), m_Running(false), m_TimeStep(0.0f), m_FrameTime(0.0f), m_LastFrameTime(0.0f), m_windowHandle(nullptr), isHoldRightBtn(false), isFirst(true), last_mouseX(0.0f), last_mouseY(0.0f), m_viewportSize(glm::vec2(0.0f, 0.0f))
 	{
 		s_Instance = this;
 		init();
@@ -135,18 +135,6 @@ namespace Kenshin
 
 		ImGui_ImplGlfw_InitForOpenGL(m_windowHandle, true);
 		ImGui_ImplOpenGL3_Init("#version 460");
-		//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		#pragma region old events
-		//auto size_callback = [](GLFWwindow* w, int width, int height) { static_cast<Application*>(glfwGetWindowUserPointer(w))->framebuffer_size_callback(width, height); };
-
-		//auto move_callback = [](GLFWwindow* w, double xpos, double ypos) { static_cast<Application*>(glfwGetWindowUserPointer(w))->mouseMove_callback(xpos, ypos); };
-
-		//auto click_callback = [](GLFWwindow* w, int button, int action, int modes) { static_cast<Application*>(glfwGetWindowUserPointer(w))->mouseClick_callback(button, action); };
-
-		//glfwSetFramebufferSizeCallback(m_windowHandle, size_callback);
-		//glfwSetCursorPosCallback(m_windowHandle, move_callback);
-		//glfwSetMouseButtonCallback(m_windowHandle, click_callback);
-		#pragma endregion
 	}
 
 	void Application::shutdown()
@@ -175,8 +163,6 @@ namespace Kenshin
 		while (!glfwWindowShouldClose(m_windowHandle) && m_Running)
 		{
 			glfwPollEvents();
-			//processInput(*this, deltaTime);
-
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
@@ -237,15 +223,17 @@ namespace Kenshin
 				ImGui::EndMenuBar();
 			}
 
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 			ImGui::Begin("Scene");
-			ImVec2 viewport = ImGui::GetWindowSize();
 			ImGuiIO io = ImGui::GetIO();
-			//graphic render
+			ImVec2 size = ImGui::GetContentRegionAvail();
+			
 			for (auto& layer : m_LayerSatack)
 			{
-				layer->onUpdate(glm::vec2(viewport.x, viewport.y), m_FrameTime, io);
+				layer->onUpdate(glm::vec2(size.x, size.y), m_FrameTime, io);
 			}
 			ImGui::End();
+			ImGui::PopStyleVar();
 
 			for (auto& layer : m_LayerSatack)
 			{
@@ -255,17 +243,12 @@ namespace Kenshin
 			ImGui::End();
 			ImGui::Render();
 
-			
-			//renderer->Render(sceneGraph, mode);
-			
-	/*		int display_w, display_h;
-			glfwGetFramebufferSize(m_windowHandle, &display_w, &display_h);		*/	
+/*			int display_w, display_h;
+			glfwGetFramebufferSize(m_windowHandle, &display_w, &display_h);	*/		
 			
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());			
 			glfwSwapBuffers(m_windowHandle);
-
 			setTime();
-			//clear();
 		}
 	}
 
@@ -296,67 +279,5 @@ namespace Kenshin
 		m_LastFrameTime = currentTime;
 		m_TimeStep = std::min<float>(m_FrameTime, 0.0333f);
 	}
-
-	#pragma region 事件回调
-
-	void Application::framebuffer_size_callback(int width, int height)
-	{
-		//抛出事件
-		//getRenderer()->getCamera()->setRatio(width * 1.0f / height);
-		glViewport(0, 0, width, height);
-	}
-
-	void Application::mouseMove_callback(double xpos, double ypos)
-	{
-		if (isHoldRightBtn)
-		{
-			if (isFirst)
-			{
-				last_mouseX = xpos;
-				last_mouseY = ypos;
-				isFirst = false;
-			}
-			float xoffset = xpos - last_mouseX;
-			float yoffset = ypos - last_mouseY;
-			last_mouseX = xpos;
-			last_mouseY = ypos;
-			//抛出事件
-			//getRenderer()->getCamera()->pitchYaw(xoffset, yoffset);
-		}
-	}
-
-	void Application::mouseClick_callback(int button, int action)
-	{
-		if (button == 1 && action == 1)
-		{
-			isHoldRightBtn = true;
-		}
-		else {
-			isHoldRightBtn = false;
-			isFirst = true;
-		}
-	}
-
-	void processInput(const Application& app, double deltaTime)
-	{
-		GLFWwindow* handle = app.getWindowHandle();
-		if (glfwGetKey(handle, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		{
-			glfwSetWindowShouldClose(handle, true);
-		}
-
-		//抛出事件
-		//const auto keyConfig = window.getRenderer()->getCamera()->getKeybordConfig();
-		//for (auto& keyV : keyConfig)
-		//{
-		//	if (glfwGetKey(window.getWindowInstance(), keyV.first) == GLFW_PRESS)
-		//	{
-		//		window.getRenderer()->getCamera()->move(keyV.second, deltaTime);
-		//	}
-		//}
-	}
-
-	#pragma endregion
-
 }
 

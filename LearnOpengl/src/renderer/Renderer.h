@@ -26,6 +26,7 @@ public:
 	void Recursivedraw(const std::shared_ptr<Node>& node, const Shader& p);
 	std::shared_ptr<Camera> getCamera() { return camera; };
 	void buildFBO(const glm::vec2& viewport);
+	void reszieFBO(unsigned width, unsigned height);
 	void clear();
 	unsigned getFrameBufferTextureID() const { return m_FBO->GetTextureID(); };
 	void setRenderMode(RenderMode _mode) { mode = _mode; };
