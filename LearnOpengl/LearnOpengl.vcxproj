@@ -741,6 +741,8 @@
     <None Include="shader\modelLoading\vertex.glsl" />
     <None Include="shader\triangle\fragment.glsl" />
     <None Include="shader\triangle\vertex.glsl" />
+    <None Include="shader\wireFrame\fragment.glsl" />
+    <None Include="shader\wireFrame\vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg" />

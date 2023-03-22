@@ -1,40 +1,61 @@
 #include "Renderer.h"
 
-X_Renderer::X_Renderer():camera(std::make_shared<Camera>(glm::vec3(0, 10, 20), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 1000.0f, glm::radians(45.0f), 10.0f, 0.2)), m_FBO(nullptr), clearColor(glm::vec4(0.2, 0.2, 0.2, 1.0))
+X_Renderer::X_Renderer() :camera(std::make_shared<Camera>(glm::vec3(0, 10, 30), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 10.0f, 0.2)), m_FBO(nullptr), clearColor(glm::vec4(0.2, 0.2, 0.2, 1.0)), mode(RenderMode::BlinnPhong), wireFrameColor(glm::vec3(0.5, 0.7, 0.2))
 {
 	lights.push_back(DirectionLight{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(1.0f) });
+	compileShaders();
 }
 
 X_Renderer::~X_Renderer() {}
 
-void X_Renderer::Render(const SceneGraph& sceneGraph, RenderMode mode, const glm::vec2& viewport)
+void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport)
 {
+	glEnable(GL_DEPTH_TEST);
+	if (mode == RenderMode::wireFrame)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}else {	
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
 	clear();
 	glViewport(0.0f, 0.0f, viewport.x, viewport.y);
-	Shader program("shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl");
-	program.bind();
-	/*setLight(program);*/
-	program.setVec3("directionLight.color", lights[0].getColor());
-	program.setVec3("directionLight.direction", lights[0].getDirection());
-
-	/**-----DRAW CALL-------------------------------**/
-	glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
-	modelMatrix = glm::rotate(modelMatrix, glm::radians(45.0f), glm::vec3(0, 1, 0));
-	glm::mat3x3 modelInverseTranspose = glm::mat3x3(glm::transpose(glm::inverse(modelMatrix)));
-	program.setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
-	program.setVec3("cameraPosition", camera->getPosition());
-	program.setMatrix44("model", modelMatrix);
-	program.setMatrix33("modelInverseTranspose", modelInverseTranspose);
-	buildFBO(viewport);
-	m_FBO->bind();
-	clear();
-	for (const std::shared_ptr<Node>& node : sceneGraph.roots)
+	auto programIter = shaders.find(mode);
+	if (programIter != shaders.cend())
 	{
-		Recursivedraw(node, program);
-	}
-	m_FBO->unbind();
-	/**-----DRAW CALL END---------------------------- */
+		programIter->second->bind();
+		/*setLight(program);*/
+		programIter->second->setVec3("directionLight.color", lights[0].getColor());
+		programIter->second->setVec3("directionLight.direction", lights[0].getDirection());
 
+		/**-----DRAW CALL-------------------------------**/
+		glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
+		modelMatrix = glm::rotate(modelMatrix, glm::radians(45.0f), glm::vec3(0, 1, 0));
+		glm::mat3x3 modelInverseTranspose = glm::mat3x3(glm::transpose(glm::inverse(modelMatrix)));
+		programIter->second->setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
+		programIter->second->setVec3("cameraPosition", camera->getPosition());
+		programIter->second->setMatrix44("model", modelMatrix);
+		programIter->second->setMatrix33("modelInverseTranspose", modelInverseTranspose);
+
+		//linear Depth
+		programIter->second->setFloat("near", camera->getNear());
+		programIter->second->setFloat("far", camera->getFar());
+
+		//wireFrame
+		programIter->second->setVec3("wireFrameColor", wireFrameColor);
+
+		buildFBO(viewport);
+		m_FBO->bind();
+		clear();
+		for (const std::shared_ptr<Node>& node : sceneGraph.roots)
+		{
+			Recursivedraw(node, *programIter->second);
+		}
+		m_FBO->unbind();
+		/**-----DRAW CALL END---------------------------- */
+	}
+	else {
+		std::cout << "not Found asective shaders!" << std::endl;
+	}
 }
 
 void X_Renderer::Recursivedraw(const std::shared_ptr<Node>& node, const Shader& p)
@@ -88,6 +109,15 @@ void X_Renderer::buildFBO(const glm::vec2& viewport)
 		m_FBO.reset();
 	}
 	m_FBO = std::make_unique<FrameBuffer>(viewport.x, viewport.y);
+}
+
+void X_Renderer::compileShaders()
+{
+	shaders.insert({ RenderMode::wireFrame, std::make_shared<Shader>("shader/wireFrame/vertex.glsl", "shader/wireFrame/fragment.glsl") });
+	shaders.insert({ RenderMode::BlinnPhong, std::make_shared<Shader>("shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl") });
+	//PBR‘› ±Œ¥ µœ÷
+	shaders.insert({ RenderMode::PBR, std::make_shared<Shader>("shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl") });
+	shaders.insert({ RenderMode::Depth, std::make_shared<Shader>("shader/depthRender/vertex.glsl", "shader/depthRender/fragment.glsl") });
 }
 
 //void setLight(const Shader& program)

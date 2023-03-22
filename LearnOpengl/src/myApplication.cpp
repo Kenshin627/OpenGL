@@ -59,7 +59,7 @@ public:
 	void onUpdate(const glm::vec2& viewport, double timestep) override
 	{
 		renderer.getCamera()->setRatio(viewport.x / viewport.y);
-		renderer.Render(sceneGraph, RenderMode::BlinnPhong, viewport);
+		renderer.Render(sceneGraph, viewport);
 		ImGui::Image((void*)(intptr_t)(renderer.getFrameBufferTextureID()), ImVec2(viewport.x, viewport.y), ImVec2(0, 1), ImVec2(1, 0));
 	};
 
@@ -113,6 +113,21 @@ public:
 			ImPlot::EndPlot();
 		}
 		//ImPlot::ShowDemoWindow();
+		ImGui::End();
+		#pragma endregion
+
+		#pragma region RenderMode
+		ImGui::Begin("Render Mode");
+		const char* items[] = { "wireFrame", "BlinnPhong", "PBR", "Depth" };
+		static int item_current = 0;
+		if (ImGui::Combo(" ", &item_current, items, IM_ARRAYSIZE(items)))
+		{
+			renderer.setRenderMode((RenderMode)item_current);
+		}
+		if (item_current == 0)
+		{
+			ImGui::ColorPicker3("wireFrameColor", &renderer.getWireFrameColor().x);
+		}
 		ImGui::End();
 		#pragma endregion
 	}

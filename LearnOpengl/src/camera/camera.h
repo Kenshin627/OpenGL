@@ -62,6 +62,8 @@ public:
 
 	const glm::mat4& viewMatrix() const { return view; };
 	const glm::mat4& projMatrix() const { return proj; };
+	float getNear() const { return minZ; };
+	float getFar() const { return maxZ; };
 	const std::unordered_map<unsigned, MoveDirection>& getKeybordConfig() const { return keyConfig; };
 	void setRatio(float ratio);
 	void setFov(float fov);

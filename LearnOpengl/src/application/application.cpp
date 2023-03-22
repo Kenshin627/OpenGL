@@ -169,9 +169,7 @@ namespace Kenshin
 
 	void Application::run()
 	{
-		m_Running = true;
-		glEnable(GL_DEPTH_TEST);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		m_Running = true;		
 		ImGuiIO& io = ImGui::GetIO();
 
 		while (!glfwWindowShouldClose(m_windowHandle) && m_Running)
