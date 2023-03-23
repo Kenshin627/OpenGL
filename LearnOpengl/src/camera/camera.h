@@ -15,6 +15,8 @@ enum MoveDirection
 	Right
 };
 
+enum ImGuiKey;
+
 class Camera
 {
 	friend std::ostream& operator<<(std::ostream&, const Camera&);
@@ -64,7 +66,7 @@ public:
 	const glm::mat4& projMatrix() const { return proj; };
 	float getNear() const { return minZ; };
 	float getFar() const { return maxZ; };
-	const std::unordered_map<unsigned, MoveDirection>& getKeybordConfig() const { return keyConfig; };
+	const std::unordered_map<ImGuiKey, MoveDirection>& getKeybordConfig() const { return keyConfig; };
 	void setRatio(float ratio);
 	void setFov(float fov);
 private:
@@ -85,5 +87,5 @@ private:
 	glm::mat4x4 view;
 	glm::mat4x4 proj;
 	
-	std::unordered_map<unsigned, MoveDirection> keyConfig;
+	std::unordered_map<ImGuiKey, MoveDirection> keyConfig;
 };

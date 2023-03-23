@@ -1,4 +1,5 @@
 #include "camera.h"
+#include "../application/vendor/imGui/imgui.h"
 
 Camera::Camera(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up, float aspectRatio, float minZ, float maxZ, float fov, float moveSpeed, float sensitivity)
 	:position(position), 
@@ -20,10 +21,10 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& direction, const glm:
 
 	perspective();
 	keyConfig = {
-		{ GLFW_KEY_W, MoveDirection::Forward },
-		{ GLFW_KEY_S, MoveDirection::Back },
-		{ GLFW_KEY_A,	MoveDirection::Left },
-		{ GLFW_KEY_D, MoveDirection::Right }
+		{ ImGuiKey::ImGuiKey_W, MoveDirection::Forward },
+		{ ImGuiKey::ImGuiKey_S, MoveDirection::Back },
+		{ ImGuiKey::ImGuiKey_A,	MoveDirection::Left },
+		{ ImGuiKey::ImGuiKey_D, MoveDirection::Right }
 	};
 }
 	

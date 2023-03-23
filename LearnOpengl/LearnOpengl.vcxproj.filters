@@ -93,6 +93,9 @@
     <ClCompile Include="src\application\vendor\imGui\implot_items.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\mesh\BasicMeshes\Plane.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1298,6 +1301,9 @@
     <ClInclude Include="src\application\vendor\imGui\implot_internal.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\mesh\BasicMeshes\Plane.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\triangle\vertex.glsl" />
@@ -1747,6 +1753,8 @@
     <None Include="shader\wireFrame\fragment.glsl" />
     <None Include="shader\normal\vertex.glsl" />
     <None Include="shader\normal\fragment.glsl" />
+    <None Include="shader\grid\vertex.glsl" />
+    <None Include="shader\grid\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">

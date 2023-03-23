@@ -33,7 +33,7 @@ void Shader::bind() const
 
 void Shader::unbind() const
 {
-	glUseProgram(m_RendererID);
+	glUseProgram(0);
 }
 
 unsigned Shader::compileShader(const std::string& path, GLenum shaderType)

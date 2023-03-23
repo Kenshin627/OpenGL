@@ -5,7 +5,8 @@ X_Renderer::X_Renderer():
 	m_FBO(std::make_unique<FrameBuffer>(1.0, 1.0)), 
 	clearColor(glm::vec4(0.2, 0.2, 0.2, 1.0)), 
 	mode(RenderMode::wireFrame), 
-	wireFrameColor(glm::vec3(0.5, 0.7, 0.2))
+	wireFrameColor(glm::vec3(0.5, 0.7, 0.2)),
+	grid("grid")
 {
 	lights.push_back(DirectionLight{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(1.0f) });
 	compileShaders();
@@ -54,6 +55,17 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport)
 		{
 			Recursivedraw(node, *programIter->second);
 		}
+		programIter->second->unbind();
+
+		//render plane
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		auto gridShader = *shaders.find(RenderMode::grid)->second;
+		gridShader.bind();
+		gridShader.setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
+		gridShader.setVec2("viewport", viewport.x, viewport.y);
+		grid.bind();
+		glDrawElements(GL_TRIANGLES, grid.indicesCount(), GL_UNSIGNED_INT, (const void*)0);
+		grid.unbind();
 		m_FBO->unbind();
 		/**-----DRAW CALL END---------------------------- */
 	}
@@ -86,7 +98,6 @@ void X_Renderer::Recursivedraw(const std::shared_ptr<Node>& node, const Shader& 
 				p.setInt("material.specularTexture", 2);
 			}
 			p.setFloat("material.shininess", mat->shininess ? mat->shininess : 32.0);
-			std::cout << mesh->indicesCount() << std::endl;
 			glDrawElements(GL_TRIANGLES, mesh->indicesCount(), GL_UNSIGNED_INT, (const void*)0);
 			mesh->unbind();
 		}
@@ -128,6 +139,7 @@ void X_Renderer::compileShaders()
 	shaders.insert({ RenderMode::PBR, std::make_shared<Shader>("shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl") });
 	shaders.insert({ RenderMode::Depth, std::make_shared<Shader>("shader/depthRender/vertex.glsl", "shader/depthRender/fragment.glsl") });
 	shaders.insert({ RenderMode::Normal, std::make_shared<Shader>("shader/normal/vertex.glsl", "shader/normal/fragment.glsl") });
+	shaders.insert({ RenderMode::grid, std::make_shared<Shader>("shader/grid/vertex.glsl", "shader/grid/fragment.glsl") });
 }
 
 //void setLight(const Shader& program)

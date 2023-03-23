@@ -226,11 +226,11 @@ namespace Kenshin
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 			ImGui::Begin("Scene");
 			ImGuiIO io = ImGui::GetIO();
-			ImVec2 size = ImGui::GetContentRegionAvail();
+			ImVec2 size = ImGui::GetContentRegionAvail();			
 			
 			for (auto& layer : m_LayerSatack)
 			{
-				layer->onUpdate(glm::vec2(size.x, size.y), m_FrameTime, io);
+				layer->onUpdate(Kenshin::updatePayload{ glm::vec2(size.x, size.y), m_FrameTime, io, ImGui::IsWindowHovered(), ImGui::IsWindowFocused()});
 			}
 			ImGui::End();
 			ImGui::PopStyleVar();

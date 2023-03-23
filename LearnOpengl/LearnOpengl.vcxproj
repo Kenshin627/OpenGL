@@ -168,6 +168,7 @@
     <ClCompile Include="src\light\pointLight.cpp" />
     <ClCompile Include="src\myApplication.cpp" />
     <ClCompile Include="src\program\Shader.cpp" />
+    <ClCompile Include="src\mesh\BasicMeshes\Plane.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
     <ClCompile Include="src\sceneLoader\SceneLoader.cpp" />
     <ClCompile Include="src\Texture\Texture.cpp" />
@@ -568,6 +569,7 @@
     <ClInclude Include="src\material\Material.h" />
     <ClInclude Include="src\mesh\Mesh.h" />
     <ClInclude Include="src\program\Shader.h" />
+    <ClInclude Include="src\mesh\BasicMeshes\Plane.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\sceneLoader\sceneLoader.h" />
     <ClInclude Include="src\Texture\Texture.h" />
@@ -737,6 +739,8 @@
     <None Include="shader\blinnPhong\vertex.glsl" />
     <None Include="shader\depthRender\fragment.glsl" />
     <None Include="shader\depthRender\vertex.glsl" />
+    <None Include="shader\grid\fragment.glsl" />
+    <None Include="shader\grid\vertex.glsl" />
     <None Include="shader\modelLoading\fragment.glsl" />
     <None Include="shader\modelLoading\vertex.glsl" />
     <None Include="shader\normal\fragment.glsl" />

@@ -57,21 +57,33 @@ public:
 		}
 	}
 
-	void onUpdate(const glm::vec2& viewport, float deltaTime, const ImGuiIO& io) override
+	void onUpdate(const Kenshin::updatePayload& payload) override
 	{
 		std::shared_ptr<Camera> camera = renderer.getCamera();
-		if (m_viewportSize.x != viewport.x || m_viewportSize.y != viewport.y)
+		if (m_viewportSize.x != payload.viewport.x || m_viewportSize.y != payload.viewport.y)
 		{
-			m_viewportSize.x = viewport.x;
-			m_viewportSize.y = viewport.y;
-			camera->setRatio(viewport.x / viewport.y);
+			m_viewportSize.x = payload.viewport.x;
+			m_viewportSize.y = payload.viewport.y;
+			camera->setRatio(payload.viewport.x / payload.viewport.y);
 			renderer.reszieFBO(m_viewportSize.x, m_viewportSize.y);
 		}
 
-		/*if (ImGui::GetFocusID() == ImGui::FindWindowByName("Scene")->ID && io.MouseDown[1])
+		if (payload.isHover && payload.io.MouseDown[1])
 		{
-			camera->pitchYaw(io.MouseDelta.x, io.MouseDelta.y);
-		}*/
+			camera->pitchYaw(payload.io.MouseDelta.x, payload.io.MouseDelta.y);
+		}
+
+		if (payload.isHover && payload.isfocus)
+		{
+			for (auto& key : camera->getKeybordConfig())
+			{
+				if (ImGui::IsKeyDown(key.first))
+				{
+					camera->move(key.second, payload.deltaTime);
+					break;
+				}
+			}
+		}
 
 		renderer.Render(sceneGraph, m_viewportSize);
 		ImGui::Image((void*)(intptr_t)(renderer.getFrameBufferTextureID()), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
@@ -132,7 +144,7 @@ public:
 
 		#pragma region RenderMode
 		ImGui::Begin("Render Mode");
-		const char* items[] = { "wireFrame", "BlinnPhong", "PBR", "Depth", "Normal"};
+		const char* items[] = { "wireFrame", "BlinnPhong", "PBR", "Depth", "Normal", "grid" };
 		static int item_current = 0;
 		if (ImGui::Combo(" ", &item_current, items, IM_ARRAYSIZE(items)))
 		{

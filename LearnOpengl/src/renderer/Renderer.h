@@ -7,6 +7,7 @@
 #include "../light/directionLight.h"
 #include "../program/Shader.h"
 #include "../Buffer/FrameBuffer.h"
+#include "../mesh/BasicMeshes/Plane.h"
 
 enum RenderMode
 {
@@ -14,7 +15,8 @@ enum RenderMode
 	BlinnPhong,
 	PBR,
 	Depth,
-	Normal
+	Normal,
+	grid
 };
 
 class X_Renderer
@@ -41,4 +43,5 @@ private:
 	glm::vec4 clearColor;
 	RenderMode mode;
 	glm::vec3 wireFrameColor;
+	Plane grid;
 };
