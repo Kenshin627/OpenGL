@@ -8,6 +8,7 @@
 #include "../program/Shader.h"
 #include "../Buffer/FrameBuffer.h"
 #include "../mesh/BasicMeshes/Plane.h"
+#include "PostProcess.h"
 
 enum RenderMode
 {
@@ -35,13 +36,18 @@ public:
 	RenderMode getRenderMode() const { return mode; };
 	void compileShaders();
 	glm::vec3& getWireFrameColor() { return wireFrameColor; };
+	void compilePostProcess();
 private:
 	std::shared_ptr<Camera> camera;
 	std::vector<DirectionLight> lights;
-	std::unique_ptr<FrameBuffer> m_FBO;
+	std::shared_ptr<FrameBuffer> m_FBO;
+	std::shared_ptr<FrameBuffer> prevFBO;
 	std::unordered_map<RenderMode, std::shared_ptr<Shader>> shaders;
 	glm::vec4 clearColor;
 	RenderMode mode;
 	glm::vec3 wireFrameColor;
 	Plane grid;
+	std::unordered_map<PostProcessMode, std::shared_ptr<PostProcess>> postProcesses;
+	Quad quad;
+	unsigned outputTextureID;
 };

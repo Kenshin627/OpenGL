@@ -2,14 +2,17 @@
 
 X_Renderer::X_Renderer():
 	camera(std::make_shared<Camera>(glm::vec3(0, 8, 23), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 10.0f, 0.06)), 
-	m_FBO(std::make_unique<FrameBuffer>(1.0, 1.0)), 
+	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)), 
+	prevFBO(m_FBO),
 	clearColor(glm::vec4(0.2, 0.2, 0.2, 1.0)), 
-	mode(RenderMode::wireFrame), 
+	mode(RenderMode::BlinnPhong), 
 	wireFrameColor(glm::vec3(0.5, 0.7, 0.2)),
-	grid("grid")
+	grid("grid"),
+	quad()
 {
 	lights.push_back(DirectionLight{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(1.0f) });
 	compileShaders();
+	compilePostProcess();
 }
 
 X_Renderer::~X_Renderer() {}
@@ -33,7 +36,8 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport)
 		programIter->second->setVec3("directionLight.color", lights[0].getColor());
 		programIter->second->setVec3("directionLight.direction", lights[0].getDirection());
 
-		/**-----DRAW CALL-------------------------------**/
+		#pragma region DRAW CALL
+
 		glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
 		modelMatrix = glm::rotate(modelMatrix, glm::radians(45.0f), glm::vec3(0, 1, 0));
 		glm::mat3x3 modelInverseTranspose = glm::mat3x3(glm::transpose(glm::inverse(modelMatrix)));
@@ -57,17 +61,40 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport)
 		}
 		programIter->second->unbind();
 
+		#pragma region GRID Î´Íê³É
 		//render plane
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		/*glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		auto gridShader = *shaders.find(RenderMode::grid)->second;
 		gridShader.bind();
 		gridShader.setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
 		gridShader.setVec2("viewport", viewport.x, viewport.y);
 		grid.bind();
 		glDrawElements(GL_TRIANGLES, grid.indicesCount(), GL_UNSIGNED_INT, (const void*)0);
-		grid.unbind();
+		grid.unbind();*/
+		#pragma endregion
+
 		m_FBO->unbind();
-		/**-----DRAW CALL END---------------------------- */
+
+		#pragma region postProcess
+		quad.bind();
+///*		clear()*/;
+		//glDisable(GL_DEPTH_TEST);
+		for (auto& postProcess : postProcesses)
+		{
+			//postProcess.second->bind();
+			//clear();
+			//glBindTexture(GL_TEXTURE_2D, prevFBO->GetTextureID());
+			//postProcess.second->draw(prevFBO->GetTextureID());
+			//glBindTexture(GL_TEXTURE_2D, 0);
+			prevFBO = postProcess.second->getFBO();		
+			//postProcess.second->unbind();
+		}
+//		//outputTextureID = prevFBO->GetTextureID();
+//		//prevFBO = m_FBO;
+		quad.unbind();
+		#pragma endregion
+
+		#pragma endregion
 	}
 	else {
 		std::cout << "not Found asective shaders!" << std::endl;
@@ -129,6 +156,10 @@ void X_Renderer::buildFBO(const glm::vec2& viewport)
 void X_Renderer::reszieFBO(unsigned width, unsigned height)
 {
 	m_FBO->resize(width, height);
+	for (auto& postProcess : postProcesses)
+	{
+		postProcess.second->resetFBO(width, height);
+	}
 }
 
 void X_Renderer::compileShaders()
@@ -141,6 +172,14 @@ void X_Renderer::compileShaders()
 	shaders.insert({ RenderMode::Normal, std::make_shared<Shader>("shader/normal/vertex.glsl", "shader/normal/fragment.glsl") });
 	shaders.insert({ RenderMode::grid, std::make_shared<Shader>("shader/grid/vertex.glsl", "shader/grid/fragment.glsl") });
 }
+
+void X_Renderer::compilePostProcess()
+{
+	//compile grayScale shader
+	postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::GrayScale, std::make_shared<PostProcess>("grayScale", "shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl", PostProcessMode::GrayScale)));
+}
+
+#pragma region lights
 
 //void setLight(const Shader& program)
 //{
@@ -168,85 +207,4 @@ void X_Renderer::compileShaders()
 //	program.setFloat("spotLight.outterCutOff", glm::cos(glm::radians(sl.getOutterCutOff())));
 //}
 
-#pragma region TEST
-//void TestBox(const Shader& program)
-//{
-//	//Materials
-//	BlinnPhongMaterial gold{ glm::vec3(0.75164, 0.60648, 0.22648), glm::vec3(0.628281, 0.555802, 0.366065), glm::vec3(0.24725,0.1995,0.0745), 0.4f };
-//	BlinnPhongMaterial silver{ glm::vec3(0.50754f, 0.50754f, 0.50754f), glm::vec3(0.508273f, 0.508273f, 0.508273f), glm::vec3(0.19225f, 0.19225f, 0.19225f), 51.2f };
-//
-//	std::vector<float> vertices = {
-//			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
-//			 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
-//			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
-//			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
-//			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
-//			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
-//
-//			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f,
-//			 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f,
-//			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f,
-//			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f,
-//			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f,
-//			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f,
-//
-//			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-//			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
-//			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-//			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-//			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
-//			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-//
-//			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-//			 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
-//			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-//			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-//			 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
-//			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-//
-//			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
-//			 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f,
-//			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
-//			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
-//			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
-//			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
-//
-//			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
-//			 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f,
-//			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
-//			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
-//			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
-//			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f
-//	};
-//
-//	VertexArray vao;
-//	vao.bind();
-//	VertexBuffer vbo{ vertices.data(), sizeof(float) * vertices.size() };
-//	VertexDataLayout layout;
-//	layout.push<float>(3);
-//	layout.push<float>(3);
-//	layout.push<float>(2);
-//	vao.AddBuffer(vbo, layout);
-//	vao.unbind();
-//
-//	setLight(program);
-//
-//	Texture texture1("resource/textures/dogface.jpg", TEXTURE_TYPE::DIFFUSE);
-//	Texture texture2("resource/textures/container.jpg", TEXTURE_TYPE::DIFFUSE);
-//
-//	vao.bind();
-//
-//	texture1.bind();
-//	texture2.bind();
-//
-//	program.bind();
-//
-//	//uniforms
-//
-//
-//	program.setVec3("material.diffuseColor", gold.getDiffuseColor());
-//	program.setVec3("material.specularColor", gold.getSpecularColor());
-//	program.setVec3("material.ambientColor", gold.getAmbientColor());
-//	program.setFloat("material.shininess", gold.getShininess());
-//}
 #pragma endregion

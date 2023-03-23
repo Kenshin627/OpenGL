@@ -4,8 +4,6 @@ uniform vec2 viewport;
 
 out vec4 outColor;
 
-float grid_intensity = 0.7;
-
 // Thick lines 
 float grid(vec2 fragCoord, float space, float gridWidth)
 {
@@ -25,6 +23,6 @@ void main()
     vec2 p = gl_FragCoord.xy;
 	vec2 c = viewport.xy / 2.0;
     col *= (1.0 - length(c - p)/viewport.x*0.7);
-    col *= clamp(grid(gl_FragCoord.xy, 10., 0.5) *  grid(gl_FragCoord.xy, 50., 1.), grid_intensity, 1.0);
-    outColor = vec4(1.0, 0.0, 0.0, 1.0);
+    col *= clamp(grid(gl_FragCoord.xy, 10., 0.5) *  grid(gl_FragCoord.xy, 50., 1.), 0.7, 1.0);
+    outColor = vec4(col, 1.0);
 }

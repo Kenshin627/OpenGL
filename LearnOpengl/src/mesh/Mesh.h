@@ -46,14 +46,14 @@ public:
 
 	void unbind() const 
 	{ 
-		//ibo.unbind();
+		ibo.unbind();
 		vao.unbind();
 	}
 	const std::shared_ptr<Material>& getMaterial() const { return material; };
 	const unsigned indicesCount() const { return ibo.indicesCount(); };
 	const std::string getName() const { return name; };
 	~Mesh() {}
-private:
+protected:
 	std::string name;
 	std::vector<Vertex> vertices;
 	std::vector<unsigned> indices;

@@ -168,7 +168,6 @@
     <ClCompile Include="src\light\pointLight.cpp" />
     <ClCompile Include="src\myApplication.cpp" />
     <ClCompile Include="src\program\Shader.cpp" />
-    <ClCompile Include="src\mesh\BasicMeshes\Plane.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
     <ClCompile Include="src\sceneLoader\SceneLoader.cpp" />
     <ClCompile Include="src\Texture\Texture.cpp" />
@@ -570,6 +569,7 @@
     <ClInclude Include="src\mesh\Mesh.h" />
     <ClInclude Include="src\program\Shader.h" />
     <ClInclude Include="src\mesh\BasicMeshes\Plane.h" />
+    <ClInclude Include="src\renderer\PostProcess.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\sceneLoader\sceneLoader.h" />
     <ClInclude Include="src\Texture\Texture.h" />
@@ -741,10 +741,10 @@
     <None Include="shader\depthRender\vertex.glsl" />
     <None Include="shader\grid\fragment.glsl" />
     <None Include="shader\grid\vertex.glsl" />
-    <None Include="shader\modelLoading\fragment.glsl" />
-    <None Include="shader\modelLoading\vertex.glsl" />
     <None Include="shader\normal\fragment.glsl" />
     <None Include="shader\normal\vertex.glsl" />
+    <None Include="shader\grayScale\fragment.glsl" />
+    <None Include="shader\grayScale\vertex.glsl" />
     <None Include="shader\triangle\fragment.glsl" />
     <None Include="shader\triangle\vertex.glsl" />
     <None Include="shader\wireFrame\fragment.glsl" />

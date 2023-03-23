@@ -93,9 +93,6 @@
     <ClCompile Include="src\application\vendor\imGui\implot_items.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\mesh\BasicMeshes\Plane.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1304,6 +1301,9 @@
     <ClInclude Include="src\mesh\BasicMeshes\Plane.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\renderer\PostProcess.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\triangle\vertex.glsl" />
@@ -1744,8 +1744,6 @@
     </None>
     <None Include="dependencies\ASSIMP\lib\assimp-vc143-mt.dll" />
     <None Include="assimp-vc143-mt.dll" />
-    <None Include="shader\modelLoading\vertex.glsl" />
-    <None Include="shader\modelLoading\fragment.glsl" />
     <None Include="shader\depthRender\vertex.glsl" />
     <None Include="shader\depthRender\fragment.glsl" />
     <None Include="imgui.ini" />
@@ -1755,6 +1753,8 @@
     <None Include="shader\normal\fragment.glsl" />
     <None Include="shader\grid\vertex.glsl" />
     <None Include="shader\grid\fragment.glsl" />
+    <None Include="shader\grayScale\vertex.glsl" />
+    <None Include="shader\grayScale\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">
