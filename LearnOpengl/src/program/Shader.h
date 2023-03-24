@@ -34,6 +34,6 @@ private:
 	}
 private:
 	unsigned m_RendererID;
-	unsigned compileShader(const std::string& path, GLenum shaderType);
+	unsigned compileShader(const std::string& path, unsigned shaderType);
 	mutable std::unordered_map<std::string, int> uniformLocationCaches;
 };

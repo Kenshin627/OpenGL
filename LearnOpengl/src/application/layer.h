@@ -12,6 +12,7 @@ namespace Kenshin
 		ImGuiIO io;
 		bool isHover;
 		bool isfocus;
+		float ts;
 	};
 
 	class Layer

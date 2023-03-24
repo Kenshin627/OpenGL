@@ -93,6 +93,15 @@
     <ClCompile Include="src\application\vendor\imGui\implot_items.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\mesh\BasicMeshes\Quad\Quad.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\postProcess\GrayScale\GrayScale.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1301,7 +1310,16 @@
     <ClInclude Include="src\mesh\BasicMeshes\Plane.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\PostProcess.h">
+    <ClInclude Include="src\renderer\postProcess\PostProcess.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mesh\BasicMeshes\Quad\Quad.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\postProcess\GrayScale\GrayScale.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1755,6 +1773,8 @@
     <None Include="shader\grid\fragment.glsl" />
     <None Include="shader\grayScale\vertex.glsl" />
     <None Include="shader\grayScale\fragment.glsl" />
+    <None Include="shader\GlitchRGBSplit\vertex.glsl" />
+    <None Include="shader\GlitchRGBSplit\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">

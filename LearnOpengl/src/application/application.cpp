@@ -230,7 +230,7 @@ namespace Kenshin
 			
 			for (auto& layer : m_LayerSatack)
 			{
-				layer->onUpdate(Kenshin::updatePayload{ glm::vec2(size.x, size.y), m_FrameTime, io, ImGui::IsWindowHovered(), ImGui::IsWindowFocused()});
+				layer->onUpdate(Kenshin::updatePayload{ glm::vec2(size.x, size.y), m_FrameTime, io, ImGui::IsWindowHovered(), ImGui::IsWindowFocused(), getTime()});
 			}
 			ImGui::End();
 			ImGui::PopStyleVar();

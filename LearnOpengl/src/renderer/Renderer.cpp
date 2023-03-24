@@ -1,4 +1,6 @@
 #include "Renderer.h"
+#include "postProcess/GrayScale/GrayScale.h"
+#include "postProcess/GlitchRGBSplit/GlitchRGBSplit.h"
 
 X_Renderer::X_Renderer():
 	camera(std::make_shared<Camera>(glm::vec3(0, 8, 23), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 10.0f, 0.06)), 
@@ -17,7 +19,7 @@ X_Renderer::X_Renderer():
 
 X_Renderer::~X_Renderer() {}
 
-void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport)
+void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts)
 {
 	glEnable(GL_DEPTH_TEST);
 	if (mode == RenderMode::wireFrame)
@@ -77,10 +79,10 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport)
 
 		#pragma region postProcess
 		quad.bind();
-///*		clear()*/;
 		//glDisable(GL_DEPTH_TEST);
 		for (auto& postProcess : postProcesses)
 		{
+			postProcess.second->update(ts);
 			postProcess.second->bind();
 			clear();
 			glActiveTexture(GL_TEXTURE0);
@@ -153,7 +155,7 @@ void X_Renderer::buildFBO(const glm::vec2& viewport)
 	m_FBO = std::make_unique<FrameBuffer>(viewport.x, viewport.y);
 }
 
-void X_Renderer::reszieFBO(unsigned width, unsigned height)
+void X_Renderer::resizeFBO(unsigned width, unsigned height)
 {
 	m_FBO->resize(width, height);
 	for (auto& postProcess : postProcesses)
@@ -176,7 +178,8 @@ void X_Renderer::compileShaders()
 void X_Renderer::compilePostProcess()
 {
 	//compile grayScale shader
-	postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::GrayScale, std::make_shared<PostProcess>("grayScale", "shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl", PostProcessMode::GrayScale)));
+	//postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::GrayScalize, std::make_shared<GrayScale>("grayScale", "shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl", PostProcessMode::GrayScalize)));
+	postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::GlitchRGBSplit, std::make_shared<GlitchRGBSpliter>("grayScale", "shader/GlitchRGBSplit/vertex.glsl", "shader/GlitchRGBSplit/fragment.glsl", PostProcessMode::GlitchRGBSplit, 10.0f, 0.5f, Direction::Horizontal)));
 }
 
 #pragma region lights

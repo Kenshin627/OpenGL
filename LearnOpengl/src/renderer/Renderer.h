@@ -8,7 +8,8 @@
 #include "../program/Shader.h"
 #include "../Buffer/FrameBuffer.h"
 #include "../mesh/BasicMeshes/Plane.h"
-#include "PostProcess.h"
+#include "postProcess/PostProcess.h"
+#include "../mesh/BasicMeshes/Quad/Quad.h"
 
 enum RenderMode
 {
@@ -25,11 +26,11 @@ class X_Renderer
 public:
 	X_Renderer();
 	~X_Renderer();
-	void Render(const SceneGraph& sceneGraph, const glm::vec2& viewport);
+	void Render(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts);
 	void Recursivedraw(const std::shared_ptr<Node>& node, const Shader& p);
 	std::shared_ptr<Camera> getCamera() { return camera; };
 	void buildFBO(const glm::vec2& viewport);
-	void reszieFBO(unsigned width, unsigned height);
+	void resizeFBO(unsigned width, unsigned height);
 	void clear();
 	unsigned getFrameBufferTextureID() const { return outputTextureID; };
 	void setRenderMode(RenderMode _mode) { mode = _mode; };

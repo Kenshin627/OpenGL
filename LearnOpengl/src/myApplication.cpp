@@ -65,7 +65,7 @@ public:
 			m_viewportSize.x = payload.viewport.x;
 			m_viewportSize.y = payload.viewport.y;
 			camera->setRatio(payload.viewport.x / payload.viewport.y);
-			renderer.reszieFBO(m_viewportSize.x, m_viewportSize.y);
+			renderer.resizeFBO(m_viewportSize.x, m_viewportSize.y);
 		}
 
 		if (payload.isHover && payload.io.MouseDown[1])
@@ -85,7 +85,7 @@ public:
 			}
 		}
 
-		renderer.Render(sceneGraph, m_viewportSize);
+		renderer.Render(sceneGraph, m_viewportSize, payload.ts);
 		ImGui::Image((void*)(intptr_t)(renderer.getFrameBufferTextureID()), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
 	};
 
