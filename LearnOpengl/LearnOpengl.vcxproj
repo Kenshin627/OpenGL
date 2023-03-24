@@ -173,6 +173,7 @@
     <ClCompile Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.cpp" />
     <ClCompile Include="src\renderer\postProcess\GrayScale\GrayScale.cpp" />
     <ClCompile Include="src\renderer\postProcess\Inversion\Inversion.cpp" />
+    <ClCompile Include="src\renderer\postProcess\NuClear\NuClear.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
     <ClCompile Include="src\sceneLoader\SceneLoader.cpp" />
     <ClCompile Include="src\Texture\Texture.cpp" />
@@ -579,6 +580,7 @@
     <ClInclude Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.h" />
     <ClInclude Include="src\renderer\postProcess\GrayScale\GrayScale.h" />
     <ClInclude Include="src\renderer\postProcess\Inversion\Inversion.h" />
+    <ClInclude Include="src\renderer\postProcess\NuClear\NuClear.h" />
     <ClInclude Include="src\renderer\postProcess\PostProcess.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\sceneLoader\sceneLoader.h" />
@@ -745,6 +747,7 @@
     <None Include="dependencies\GLM\glm\gtx\vector_query.inl" />
     <None Include="dependencies\GLM\glm\gtx\wrap.inl" />
     <None Include="imgui.ini" />
+    <None Include="resource\fonts\msyh.ttc" />
     <None Include="shader\blinnPhong\fragment.glsl" />
     <None Include="shader\blinnPhong\vertex.glsl" />
     <None Include="shader\depthRender\fragment.glsl" />
@@ -759,6 +762,8 @@
     <None Include="shader\normal\vertex.glsl" />
     <None Include="shader\grayScale\fragment.glsl" />
     <None Include="shader\grayScale\vertex.glsl" />
+    <None Include="shader\nuclearEffect\fragment.glsl" />
+    <None Include="shader\nuclearEffect\vertex.glsl" />
     <None Include="shader\triangle\fragment.glsl" />
     <None Include="shader\triangle\vertex.glsl" />
     <None Include="shader\wireFrame\fragment.glsl" />
@@ -772,6 +777,12 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="dependencies\ASSIMP\lib\assimp-vc143-mt.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="resource\fonts\JetBrainsMono-Medium.ttf" />
+    <Font Include="resource\fonts\JetBrainsMono-Regular.ttf" />
+    <Font Include="resource\fonts\JetBrainsMono-SemiBold.ttf" />
+    <Font Include="resource\fonts\sourceCodePro.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

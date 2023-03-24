@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "postProcess/GrayScale/GrayScale.h"
 #include "postProcess/GlitchRGBSplit/GlitchRGBSplit.h"
+#include "postProcess/NuClear/NuClear.h"
 
 X_Renderer::X_Renderer():
 	camera(std::make_shared<Camera>(glm::vec3(0, 8, 23), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.06)), 
@@ -200,7 +201,9 @@ void X_Renderer::compilePostProcess()
 
 	//postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::GlitchRGBSplit, std::make_shared<GlitchRGBSpliter>("grayScale", "shader/GlitchRGBSplit/vertex.glsl", "shader/GlitchRGBSplit/fragment.glsl", PostProcessMode::GlitchRGBSplit, 10.0f, 0.5f, Direction::Horizontal)));
 
-	  postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::Inversion, std::make_shared<GrayScale>("inversion", "shader/inversion/vertex.glsl", "shader/inversion/fragment.glsl", PostProcessMode::Inversion)));
+	//postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::Inversion, std::make_shared<GrayScale>("inversion", "shader/inversion/vertex.glsl", "shader/inversion/fragment.glsl", PostProcessMode::Inversion)));
+
+	postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::NuClearEffect, std::make_shared<NuClear>("inversion", "shader/nuclearEffect/vertex.glsl", "shader/nuclearEffect/fragment.glsl", PostProcessMode::NuClearEffect)));
 }
 
 #pragma region lights

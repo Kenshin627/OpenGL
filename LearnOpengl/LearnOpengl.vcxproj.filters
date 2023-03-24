@@ -108,6 +108,9 @@
     <ClCompile Include="src\renderer\postProcess\Inversion\Inversion.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\renderer\postProcess\NuClear\NuClear.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1334,6 +1337,9 @@
     <ClInclude Include="src\renderer\postProcess\Inversion\Inversion.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\renderer\postProcess\NuClear\NuClear.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\triangle\vertex.glsl" />
@@ -1789,6 +1795,9 @@
     <None Include="shader\grid\fragment.glsl" />
     <None Include="shader\inversion\fragment.glsl" />
     <None Include="shader\inversion\vertex.glsl" />
+    <None Include="shader\nuclearEffect\vertex.glsl" />
+    <None Include="shader\nuclearEffect\fragment.glsl" />
+    <None Include="resource\fonts\msyh.ttc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">
@@ -1800,5 +1809,11 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="dependencies\ASSIMP\lib\assimp-vc143-mt.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="resource\fonts\JetBrainsMono-Medium.ttf" />
+    <Font Include="resource\fonts\JetBrainsMono-Regular.ttf" />
+    <Font Include="resource\fonts\JetBrainsMono-SemiBold.ttf" />
+    <Font Include="resource\fonts\sourceCodePro.ttf" />
   </ItemGroup>
 </Project>

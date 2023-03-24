@@ -11,7 +11,8 @@ enum PostProcessMode
 	Bloom,
 	Shadow,
 	GlitchRGBSplit,
-	Inversion
+	Inversion,
+	NuClearEffect
 };
 
 class PostProcess
