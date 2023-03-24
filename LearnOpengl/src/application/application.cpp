@@ -59,7 +59,7 @@ namespace Kenshin
 		
 		ImGuiStyle* style = &ImGui::GetStyle();
 		ImGui::StyleColorsDark();
-		io.Fonts->AddFontFromFileTTF("./resource/fonts/JetBrainsMono-Medium.ttf", 20, NULL, io.Fonts->GetGlyphRangesChineseFull());
+		io.Fonts->AddFontFromFileTTF("./resource/fonts/JetBrainsMono-Medium.ttf", 18, NULL, io.Fonts->GetGlyphRangesChineseFull());
 		style->WindowPadding = ImVec2(3, 5);
 		style->FramePadding  = ImVec2(4, 0);
 		style->CellPadding   = ImVec2(3, 2);

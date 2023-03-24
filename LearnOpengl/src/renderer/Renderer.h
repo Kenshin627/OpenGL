@@ -31,7 +31,7 @@ public:
 	void buildFBO(const glm::vec2& viewport);
 	void reszieFBO(unsigned width, unsigned height);
 	void clear();
-	unsigned getFrameBufferTextureID() const { return m_FBO->GetTextureID(); };
+	unsigned getFrameBufferTextureID() const { return outputTextureID; };
 	void setRenderMode(RenderMode _mode) { mode = _mode; };
 	RenderMode getRenderMode() const { return mode; };
 	void compileShaders();

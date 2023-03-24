@@ -81,19 +81,19 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport)
 		//glDisable(GL_DEPTH_TEST);
 		for (auto& postProcess : postProcesses)
 		{
-			//postProcess.second->bind();
-			//clear();
-			//glBindTexture(GL_TEXTURE_2D, prevFBO->GetTextureID());
-			//postProcess.second->draw(prevFBO->GetTextureID());
-			//glBindTexture(GL_TEXTURE_2D, 0);
+			postProcess.second->bind();
+			clear();
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, prevFBO->GetTextureID());
+			postProcess.second->draw(0);
+			glBindTexture(GL_TEXTURE_2D, 0);
 			prevFBO = postProcess.second->getFBO();		
-			//postProcess.second->unbind();
+			postProcess.second->unbind();
 		}
-//		//outputTextureID = prevFBO->GetTextureID();
-//		//prevFBO = m_FBO;
+		outputTextureID = prevFBO->GetTextureID();
+		prevFBO = m_FBO;
 		quad.unbind();
 		#pragma endregion
-
 		#pragma endregion
 	}
 	else {
