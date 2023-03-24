@@ -170,6 +170,7 @@
     <ClCompile Include="src\mesh\BasicMeshes\Quad\Quad.cpp" />
     <ClCompile Include="src\myApplication.cpp" />
     <ClCompile Include="src\program\Shader.cpp" />
+    <ClCompile Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.cpp" />
     <ClCompile Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.cpp" />
     <ClCompile Include="src\renderer\postProcess\GrayScale\GrayScale.cpp" />
     <ClCompile Include="src\renderer\postProcess\Inversion\Inversion.cpp" />
@@ -577,6 +578,7 @@
     <ClInclude Include="src\mesh\Mesh.h" />
     <ClInclude Include="src\program\Shader.h" />
     <ClInclude Include="src\mesh\BasicMeshes\Plane.h" />
+    <ClInclude Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.h" />
     <ClInclude Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.h" />
     <ClInclude Include="src\renderer\postProcess\GrayScale\GrayScale.h" />
     <ClInclude Include="src\renderer\postProcess\Inversion\Inversion.h" />
@@ -752,6 +754,8 @@
     <None Include="shader\blinnPhong\vertex.glsl" />
     <None Include="shader\depthRender\fragment.glsl" />
     <None Include="shader\depthRender\vertex.glsl" />
+    <None Include="shader\edgeDetection\fragment.glsl" />
+    <None Include="shader\edgeDetection\vertex.glsl" />
     <None Include="shader\GlitchRGBSplit\fragment.glsl" />
     <None Include="shader\GlitchRGBSplit\vertex.glsl" />
     <None Include="shader\grid\fragment.glsl" />

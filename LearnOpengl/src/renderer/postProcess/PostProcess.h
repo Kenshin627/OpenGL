@@ -12,7 +12,8 @@ enum PostProcessMode
 	Shadow,
 	GlitchRGBSplit,
 	Inversion,
-	NuClearEffect
+	NuClearEffect,
+	EdgeDetectionEffect
 };
 
 class PostProcess

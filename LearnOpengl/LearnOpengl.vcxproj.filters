@@ -111,6 +111,9 @@
     <ClCompile Include="src\renderer\postProcess\NuClear\NuClear.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1340,6 +1343,9 @@
     <ClInclude Include="src\renderer\postProcess\NuClear\NuClear.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\triangle\vertex.glsl" />
@@ -1798,6 +1804,8 @@
     <None Include="shader\nuclearEffect\vertex.glsl" />
     <None Include="shader\nuclearEffect\fragment.glsl" />
     <None Include="resource\fonts\msyh.ttc" />
+    <None Include="shader\edgeDetection\vertex.glsl" />
+    <None Include="shader\edgeDetection\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">
