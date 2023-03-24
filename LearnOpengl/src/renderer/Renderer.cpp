@@ -6,7 +6,7 @@ X_Renderer::X_Renderer():
 	camera(std::make_shared<Camera>(glm::vec3(0, 8, 23), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.06)), 
 	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)), 
 	prevFBO(m_FBO),
-	clearColor(glm::vec4(0.2, 0.2, 0.2, 1.0)), 
+	clearColor(glm::vec4(0.0, 0.0, 0.0, 1.0)), 
 	mode(RenderMode::BlinnPhong), 
 	wireFrameColor(glm::vec3(0.5, 0.7, 0.2)),
 	grid("grid"),
@@ -22,6 +22,13 @@ X_Renderer::~X_Renderer() {}
 void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts)
 {
 	glEnable(GL_DEPTH_TEST);
+
+	#pragma region faceCulling
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CCW);
+	glCullFace(GL_BACK);
+	#pragma endregion
+
 	if (mode == RenderMode::wireFrame)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -33,12 +40,12 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	auto programIter = shaders.find(mode);
 	if (programIter != shaders.cend())
 	{
+		#pragma region scene Graph render
+
 		programIter->second->bind();
 		/*setLight(program);*/
 		programIter->second->setVec3("directionLight.color", lights[0].getColor());
 		programIter->second->setVec3("directionLight.direction", lights[0].getDirection());
-
-		#pragma region DRAW CALL
 
 		glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
 		modelMatrix = glm::rotate(modelMatrix, glm::radians(45.0f), glm::vec3(0, 1, 0));
@@ -55,6 +62,7 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 		//wireFrame
 		programIter->second->setVec3("wireFrameColor", wireFrameColor);
 
+
 		m_FBO->bind();
 		clear();
 		for (const std::shared_ptr<Node>& node : sceneGraph.roots)
@@ -62,16 +70,17 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 			Recursivedraw(node, *programIter->second);
 		}
 		programIter->second->unbind();
+		#pragma endregion
 
-		#pragma region GRID 未完成
+		#pragma region GRID 已完成
 		//render plane
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		Shader& gridShader = *shaders.find(RenderMode::grid)->second;
 		gridShader.bind();
 		gridShader.setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
 		gridShader.setVec2("viewport", viewport);
-		gridShader.setVec3("mainColor", glm::vec3(0.3, 0.3, 0.3));
-		gridShader.setVec3("lineColor", glm::vec3(.7, 0.7, 0.7));
+		gridShader.setVec3("mainColor", glm::vec3(0.0, 0.0, 0.0));
+		gridShader.setVec3("lineColor", glm::vec3(.0, 0.5, 0.5));
 		//gridRatio, majorUnitFrequency, minorUnitVisibility, opacity
 		gridShader.setVec4("gridControl", glm::vec4(1.0, 10, 0.33, .5));
 		gridShader.setVec3("gridOffset", glm::vec3(0, 0, 0));
@@ -79,11 +88,11 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 		grid.bind();
 		glDrawElements(GL_TRIANGLES, grid.indicesCount(), GL_UNSIGNED_INT, (const void*)0);
 		grid.unbind();
-		#pragma endregion
 
 		outputTextureID = m_FBO->GetTextureID();
 		m_FBO->unbind();
-
+		#pragma endregion
+		
 		#pragma region postProcess
 		quad.bind();
 		//glDisable(GL_DEPTH_TEST);
@@ -105,7 +114,6 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 			prevFBO = m_FBO;
 		}
 		quad.unbind();
-		#pragma endregion
 		#pragma endregion
 	}
 	else {
@@ -189,7 +197,10 @@ void X_Renderer::compilePostProcess()
 {
 	//compile process shaders
 	//postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::GrayScalize, std::make_shared<GrayScale>("grayScale", "shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl", PostProcessMode::GrayScalize)));
-	postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::GlitchRGBSplit, std::make_shared<GlitchRGBSpliter>("grayScale", "shader/GlitchRGBSplit/vertex.glsl", "shader/GlitchRGBSplit/fragment.glsl", PostProcessMode::GlitchRGBSplit, 10.0f, 0.5f, Direction::Horizontal)));
+
+	//postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::GlitchRGBSplit, std::make_shared<GlitchRGBSpliter>("grayScale", "shader/GlitchRGBSplit/vertex.glsl", "shader/GlitchRGBSplit/fragment.glsl", PostProcessMode::GlitchRGBSplit, 10.0f, 0.5f, Direction::Horizontal)));
+
+	  postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::Inversion, std::make_shared<GrayScale>("inversion", "shader/inversion/vertex.glsl", "shader/inversion/fragment.glsl", PostProcessMode::Inversion)));
 }
 
 #pragma region lights

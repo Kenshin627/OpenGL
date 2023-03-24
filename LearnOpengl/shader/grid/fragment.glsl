@@ -18,7 +18,6 @@ float getVisibility(float position) {
     {
         return 1.0;
     }  
-
     return gridControl.z;
 }
 
@@ -59,8 +58,7 @@ float normalImpactOnAxis(float x) {
     return normalImpact;
 }
 
-void main(void) {
-    
+void main(void) {    
     // Scale position to the requested ratio.
     float gridRatio = gridControl.x;
     vec3 gridPos = (vPosition + gridOffset.xyz) / gridRatio;
@@ -81,7 +79,5 @@ void main(void) {
     
     // Create the color.
     vec3 color = mix(mainColor, lineColor, grid);
-
     gl_FragColor = vec4(color.rgb, 1.0);
-
 }

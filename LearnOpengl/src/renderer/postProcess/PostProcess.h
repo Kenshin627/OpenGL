@@ -10,7 +10,8 @@ enum PostProcessMode
 	GrayScalize,
 	Bloom,
 	Shadow,
-	GlitchRGBSplit
+	GlitchRGBSplit,
+	Inversion
 };
 
 class PostProcess
