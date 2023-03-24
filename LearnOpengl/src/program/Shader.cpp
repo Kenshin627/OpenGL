@@ -83,89 +83,78 @@ int Shader::getUniformLocation(const std::string& name) const
 	return location;
 }
 
-void Shader::setVec4(const std::string& name, float v1, float v2, float v3, float v4) const
+void Shader::setMatrix44(const std::string& name, const glm::mat4x4& mat44) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1)
 	{
-		glUniform4f(location, v1, v2, v3, v4);
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat44));
 		return;
 	}
 	printUniformError(name);
 }
 
-void Shader::setVec3(const std::string& name, float v1, float v2, float v3) const
+void Shader::setMatrix33(const std::string& name, const glm::mat3x3& mat33) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1)
 	{
-		glUniform3f(location, v1, v2, v3);
+		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(mat33));
 		return;
 	}
 	printUniformError(name);
 }
 
-void Shader::setVec2(const std::string& name, float v1, float v2) const
+void Shader::setVec4(const std::string& name, const glm::vec4& v4) const
+{
+	int location = getUniformLocation(name);
+	if (location != -1)
+	{
+		glUniform4fv(location, 1, glm::value_ptr(v4));
+		return;
+	}
+	printUniformError(name);
+}
+
+void Shader::setVec3(const std::string& name, const glm::vec3& v3) const
+{
+	int location = getUniformLocation(name);
+	if (location != -1)
+	{
+		glUniform3fv(location, 1, glm::value_ptr(v3));
+		return;
+	}
+	printUniformError(name);
+}
+
+void Shader::setVec2(const std::string& name, const glm::vec2& v2) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1) 
 	{
-		glUniform2f(location, v1, v2);
+		glUniform2fv(location, 1, glm::value_ptr(v2));
 		return;
 	}
 	printUniformError(name);
 }
 
-void Shader::setInt(const std::string& name, int v1) const
+void Shader::setInt(const std::string& name, int iv) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1)
 	{
-		glUniform1i(location, v1);
+		glUniform1i(location, iv);
 		return;
 	}
 	printUniformError(name);
 }
 
-void Shader::setMatrix44(const std::string& name, const glm::mat4x4& mat) const
+void Shader::setFloat(const std::string& name, float fv) const
 {
 	int location = getUniformLocation(name);
 	if (location != -1)
 	{
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
-		return;
-	}
-	printUniformError(name);
-}
-
-void Shader::setMatrix33(const std::string& name, const glm::mat3x3& mat) const
-{
-	int location = getUniformLocation(name);
-	if (location != -1)
-	{
-		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(mat));
-		return;
-	}
-	printUniformError(name);
-}
-
-void Shader::setVec3(const std::string& name, const glm::vec3& vec3) const
-{
-	int location = getUniformLocation(name);
-	if (location != -1)
-	{
-		glUniform3fv(location, 1, glm::value_ptr(vec3));
-		return;
-	}
-	printUniformError(name);
-}
-
-void Shader::setFloat(const std::string& name, float v1) const
-{
-	int location = getUniformLocation(name);
-	if (location != -1)
-	{
-		glUniform1f(location, v1);
+		glUniform1f(location, fv);
 		return;
 	}
 	printUniformError(name);

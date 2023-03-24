@@ -3,7 +3,7 @@
 #include "postProcess/GlitchRGBSplit/GlitchRGBSplit.h"
 
 X_Renderer::X_Renderer():
-	camera(std::make_shared<Camera>(glm::vec3(0, 8, 23), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 10.0f, 0.06)), 
+	camera(std::make_shared<Camera>(glm::vec3(0, 8, 23), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.06)), 
 	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)), 
 	prevFBO(m_FBO),
 	clearColor(glm::vec4(0.2, 0.2, 0.2, 1.0)), 
@@ -65,35 +65,45 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 
 		#pragma region GRID Î´Íê³É
 		//render plane
-		/*glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		auto gridShader = *shaders.find(RenderMode::grid)->second;
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		Shader& gridShader = *shaders.find(RenderMode::grid)->second;
 		gridShader.bind();
 		gridShader.setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
-		gridShader.setVec2("viewport", viewport.x, viewport.y);
+		gridShader.setVec2("viewport", viewport);
+		gridShader.setVec3("mainColor", glm::vec3(0.3, 0.3, 0.3));
+		gridShader.setVec3("lineColor", glm::vec3(.7, 0.7, 0.7));
+		//gridRatio, majorUnitFrequency, minorUnitVisibility, opacity
+		gridShader.setVec4("gridControl", glm::vec4(1.0, 10, 0.33, .5));
+		gridShader.setVec3("gridOffset", glm::vec3(0, 0, 0));
+
 		grid.bind();
 		glDrawElements(GL_TRIANGLES, grid.indicesCount(), GL_UNSIGNED_INT, (const void*)0);
-		grid.unbind();*/
+		grid.unbind();
 		#pragma endregion
 
+		outputTextureID = m_FBO->GetTextureID();
 		m_FBO->unbind();
 
 		#pragma region postProcess
 		quad.bind();
 		//glDisable(GL_DEPTH_TEST);
-		for (auto& postProcess : postProcesses)
+		if (mode == RenderMode::BlinnPhong)
 		{
-			postProcess.second->update(ts);
-			postProcess.second->bind();
-			clear();
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, prevFBO->GetTextureID());
-			postProcess.second->draw(0);
-			glBindTexture(GL_TEXTURE_2D, 0);
-			prevFBO = postProcess.second->getFBO();		
-			postProcess.second->unbind();
+			for (auto& postProcess : postProcesses)
+			{
+				postProcess.second->update(ts);
+				postProcess.second->bind();
+				clear();
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, prevFBO->GetTextureID());
+				postProcess.second->draw(0);
+				glBindTexture(GL_TEXTURE_2D, 0);
+				prevFBO = postProcess.second->getFBO();
+				postProcess.second->unbind();
+			}
+			outputTextureID = prevFBO->GetTextureID();
+			prevFBO = m_FBO;
 		}
-		outputTextureID = prevFBO->GetTextureID();
-		prevFBO = m_FBO;
 		quad.unbind();
 		#pragma endregion
 		#pragma endregion
@@ -177,7 +187,7 @@ void X_Renderer::compileShaders()
 
 void X_Renderer::compilePostProcess()
 {
-	//compile grayScale shader
+	//compile process shaders
 	//postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::GrayScalize, std::make_shared<GrayScale>("grayScale", "shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl", PostProcessMode::GrayScalize)));
 	postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::GlitchRGBSplit, std::make_shared<GlitchRGBSpliter>("grayScale", "shader/GlitchRGBSplit/vertex.glsl", "shader/GlitchRGBSplit/fragment.glsl", PostProcessMode::GlitchRGBSplit, 10.0f, 0.5f, Direction::Horizontal)));
 }

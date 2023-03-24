@@ -1770,11 +1770,11 @@
     <None Include="shader\normal\vertex.glsl" />
     <None Include="shader\normal\fragment.glsl" />
     <None Include="shader\grid\vertex.glsl" />
-    <None Include="shader\grid\fragment.glsl" />
     <None Include="shader\grayScale\vertex.glsl" />
     <None Include="shader\grayScale\fragment.glsl" />
     <None Include="shader\GlitchRGBSplit\vertex.glsl" />
     <None Include="shader\GlitchRGBSplit\fragment.glsl" />
+    <None Include="shader\grid\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">
