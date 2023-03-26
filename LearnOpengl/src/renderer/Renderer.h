@@ -11,6 +11,7 @@
 #include "../mesh/BasicMeshes/Quad/Quad.h"
 #include "../mesh/BasicMeshes/Grid/Grid.h"
 #include "../mesh/BasicMeshes/SkyBox/SkyBox.h"
+#include "../Buffer/ShadowFrameBuffer.h"
 
 enum RenderMode
 {
@@ -22,7 +23,10 @@ enum RenderMode
 	grid,
 	EnvironmentMapReflect,
 	EnvironmentMapRefract,
-	visualNormal
+	visualNormal,
+	ShadowMap,
+	BlinnPhongCastShadow,
+	GridCastShadow
 };
 
 class X_Renderer
@@ -31,6 +35,7 @@ public:
 	X_Renderer();
 	~X_Renderer();
 	void Render(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts);
+	void RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts);
 	void Recursivedraw(const std::shared_ptr<Node>& node, const Shader& p);
 	std::shared_ptr<Camera> getCamera() { return camera; };
 	void buildFBO(const glm::vec2& viewport);
@@ -57,4 +62,5 @@ private:
 	SkyBox skybox;
 	std::unordered_map<std::string, float> refractiveIndex;
 	unsigned outputTextureID;
+	std::shared_ptr<ShadowFrameBuffer> shadow_FBO;
 };

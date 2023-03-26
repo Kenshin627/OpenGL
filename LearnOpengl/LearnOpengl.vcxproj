@@ -164,6 +164,7 @@
     <ClCompile Include="src\application\vendor\imGui\implot_items.cpp" />
     <ClCompile Include="src\Buffer\FrameBuffer.cpp" />
     <ClCompile Include="src\Buffer\IndexBuffer.cpp" />
+    <ClCompile Include="src\Buffer\ShadowFrameBuffer.cpp" />
     <ClCompile Include="src\camera\camera.cpp" />
     <ClCompile Include="src\light\pointLight.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\Grid\Grid.cpp" />
@@ -567,6 +568,7 @@
     <ClInclude Include="src\application\vendor\imGui\implot_internal.h" />
     <ClInclude Include="src\Buffer\FrameBuffer.h" />
     <ClInclude Include="src\Buffer\IndexBuffer.h" />
+    <ClInclude Include="src\Buffer\ShadowFrameBuffer.h" />
     <ClInclude Include="src\camera\camera.h" />
     <ClInclude Include="src\light\baseLight.h" />
     <ClInclude Include="src\light\directionLight.h" />
@@ -751,6 +753,8 @@
     <None Include="dependencies\GLM\glm\gtx\wrap.inl" />
     <None Include="imgui.ini" />
     <None Include="resource\fonts\msyh.ttc" />
+    <None Include="shader\blinnPhongCastShadow\fragment.glsl" />
+    <None Include="shader\blinnPhongCastShadow\vertex.glsl" />
     <None Include="shader\blinnPhong\fragment.glsl" />
     <None Include="shader\blinnPhong\vertex.glsl" />
     <None Include="shader\depthRender\fragment.glsl" />
@@ -763,6 +767,8 @@
     <None Include="shader\environmentMapRefract\vertex.glsl" />
     <None Include="shader\GlitchRGBSplit\fragment.glsl" />
     <None Include="shader\GlitchRGBSplit\vertex.glsl" />
+    <None Include="shader\gridCastShadow\fragment.glsl" />
+    <None Include="shader\gridCastShadow\vertex.glsl" />
     <None Include="shader\grid\fragment.glsl" />
     <None Include="shader\grid\vertex.glsl" />
     <None Include="shader\inversion\fragment.glsl" />
@@ -773,6 +779,8 @@
     <None Include="shader\grayScale\vertex.glsl" />
     <None Include="shader\nuclearEffect\fragment.glsl" />
     <None Include="shader\nuclearEffect\vertex.glsl" />
+    <None Include="shader\shadowMap\fragment.glsl" />
+    <None Include="shader\shadowMap\vertex.glsl" />
     <None Include="shader\skyBox\fragment.glsl" />
     <None Include="shader\skyBox\vertex.glsl" />
     <None Include="shader\triangle\fragment.glsl" />
