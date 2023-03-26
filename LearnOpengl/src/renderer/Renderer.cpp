@@ -101,7 +101,7 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 		visualNormalProgram->second->setMatrix44("modelView", camera->viewMatrix() * modelMatrix);
 		visualNormalProgram->second->setMatrix33("inverseModelView", glm::mat3x3(glm::transpose(glm::inverse(camera->viewMatrix() * modelMatrix))));
 		visualNormalProgram->second->setMatrix44("projection", camera->projMatrix());
-		visualNormalProgram->second->setFloat("magnitude", 0.3);
+		visualNormalProgram->second->setFloat("magnitude", 0.5);
 		visualNormalProgram->second->setVec3("lineColor", glm::vec3(0.3, 0.6, 0.8));
 
 		for (const std::shared_ptr<Node>& node : sceneGraph.roots)

@@ -93,7 +93,6 @@ blinnPhongCoffient calcBlinnphong(vec3 lightDirection)
 	vec3 normal = normalize(vNormal);
 	vec3 eyeDirection = normalize(cameraPosition - vPos);
 	vec3 lightDirectionReverse = -lightDirection;
-	vec3 lightDirectionReflect = reflect(lightDirection, normal);
 	//1. ambient
 
 	vec3 ambient = vec3(texture(material.ambientTexture, vUv));
@@ -106,7 +105,8 @@ blinnPhongCoffient calcBlinnphong(vec3 lightDirection)
 
 	//3. specular
 	vec3 specularC = vec3(texture(material.specularTexture, vUv));
-	vec3 specular  = pow(max(dot(lightDirectionReflect, eyeDirection), 0.0), material.shininess) * specularC;
+	vec3 halfwayDir = normalize(eyeDirection + lightDirectionReverse);
+	vec3 specular  = pow(max(dot(halfwayDir, normal), 0.0), material.shininess) * specularC;
 
 	return blinnPhongCoffient(ambient, diffuse, specular);
 }
