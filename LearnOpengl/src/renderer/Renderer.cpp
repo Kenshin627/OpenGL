@@ -5,14 +5,22 @@
 #include "postProcess/EdgeDetection/EdgeDetection.h"
 
 X_Renderer::X_Renderer():
-	camera(std::make_shared<Camera>(glm::vec3(0, 8, 23), glm::vec3(0, 0, -1), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.06)), 
+	camera(std::make_shared<Camera>(glm::vec3(0, 30, 30), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
 	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)), 
 	prevFBO(m_FBO),
 	clearColor(glm::vec4(0.0, 0.0, 0.0, 1.0)), 
 	mode(RenderMode::BlinnPhong), 
 	wireFrameColor(glm::vec3(0.5, 0.7, 0.2)),
-	grid("grid"),
-	quad()
+	grid(),
+	quad(),
+	skybox(
+		{ "resource/textures/skyBox/right.jpg", "resource/textures/skyBox/left.jpg", 
+		  "resource/textures/skyBox/top.jpg",   "resource/textures/skyBox/bottom.jpg", 
+		  "resource/textures/skyBox/front.jpg", "resource/textures/skyBox/back.jpg" 
+		}, 
+		"shader/skyBox/vertex.glsl", 
+		"shader/skyBox/fragment.glsl"
+	)
 {
 	lights.push_back(DirectionLight{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(1.0f) });
 	compileShaders();
@@ -26,9 +34,9 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	glEnable(GL_DEPTH_TEST);
 
 	#pragma region faceCulling
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
-	glCullFace(GL_BACK);
+	//glEnable(GL_CULL_FACE);
+	//glFrontFace(GL_CCW);
+	//glCullFace(GL_BACK);
 	#pragma endregion
 
 	if (mode == RenderMode::wireFrame)
@@ -50,7 +58,7 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 		programIter->second->setVec3("directionLight.direction", lights[0].getDirection());
 
 		glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
-		modelMatrix = glm::rotate(modelMatrix, glm::radians(45.0f), glm::vec3(0, 1, 0));
+		//modelMatrix = glm::rotate(modelMatrix, glm::radians(45.0f), glm::vec3(0, 1, 0));
 		glm::mat3x3 modelInverseTranspose = glm::mat3x3(glm::transpose(glm::inverse(modelMatrix)));
 		programIter->second->setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
 		programIter->second->setVec3("cameraPosition", camera->getPosition());
@@ -86,10 +94,16 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 		//gridRatio, majorUnitFrequency, minorUnitVisibility, opacity
 		gridShader.setVec4("gridControl", glm::vec4(1.0, 10, 0.33, .5));
 		gridShader.setVec3("gridOffset", glm::vec3(0, 0, 0));
-
 		grid.bind();
-		glDrawElements(GL_TRIANGLES, grid.indicesCount(), GL_UNSIGNED_INT, (const void*)0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
 		grid.unbind();
+
+		#pragma endregion
+
+		#pragma region SkyBox
+		skybox.bind();
+		skybox.draw(*camera, 0);
+		skybox.unbind();
 
 		outputTextureID = m_FBO->GetTextureID();
 		m_FBO->unbind();
@@ -205,7 +219,7 @@ void X_Renderer::compilePostProcess()
 
 	//postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::NuClearEffect, std::make_shared<NuClear>("inversion", "shader/nuclearEffect/vertex.glsl", "shader/nuclearEffect/fragment.glsl", PostProcessMode::NuClearEffect)));
 
-	postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::EdgeDetectionEffect, std::make_shared<EdgeDetection>("inversion", "shader/edgeDetection/vertex.glsl", "shader/edgeDetection/fragment.glsl", PostProcessMode::EdgeDetectionEffect)));
+	//postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::EdgeDetectionEffect, std::make_shared<EdgeDetection>("inversion", "shader/edgeDetection/vertex.glsl", "shader/edgeDetection/fragment.glsl", PostProcessMode::EdgeDetectionEffect)));
 }
 
 #pragma region lights

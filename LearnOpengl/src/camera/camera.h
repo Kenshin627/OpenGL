@@ -21,7 +21,7 @@ class Camera
 {
 	friend std::ostream& operator<<(std::ostream&, const Camera&);
 public:
-	Camera(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up, float aspectRatio, float minZ, float maxZ, float fov, float moveSpeed, float sensitivity);
+	Camera(const glm::vec3& position, const glm::vec3& target, const glm::vec3& up, float aspectRatio, float minZ, float maxZ, float fov, float moveSpeed, float sensitivity);
 	~Camera();
 	void lookAt();
 	void perspective();
@@ -70,10 +70,13 @@ public:
 	void setRatio(float ratio);
 	void setFov(float fov);
 private:
+	void buildAnglesAndRadius();
+private:
 	glm::vec3 position;
 	glm::vec3 direction;
 	glm::vec3 up;
 	glm::vec3 right;
+	glm::vec3 target;
 	float aspectRatio;
 	float minZ;
 	float maxZ;
@@ -81,8 +84,12 @@ private:
 	float sensitivity;
 	float moveSpeed;
 
-	float yaw;
-	float pitch;
+	float alpha;
+	float beta;
+	float radius;
+
+	glm::mat4x4 uptoYMatrix;
+	glm::mat4x4 ytoUpMatrix;
 
 	glm::mat4x4 view;
 	glm::mat4x4 proj;

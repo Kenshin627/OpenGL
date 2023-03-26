@@ -168,6 +168,7 @@
     <ClCompile Include="src\light\pointLight.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\Grid\Grid.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\Quad\Quad.cpp" />
+    <ClCompile Include="src\mesh\BasicMeshes\SkyBox\SkyBox.cpp" />
     <ClCompile Include="src\myApplication.cpp" />
     <ClCompile Include="src\program\Shader.cpp" />
     <ClCompile Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.cpp" />
@@ -575,9 +576,9 @@
     <ClInclude Include="src\material\Material.h" />
     <ClInclude Include="src\mesh\BasicMeshes\Grid\Grid.h" />
     <ClInclude Include="src\mesh\BasicMeshes\Quad\Quad.h" />
+    <ClInclude Include="src\mesh\BasicMeshes\SkyBox\SkyBox.h" />
     <ClInclude Include="src\mesh\Mesh.h" />
     <ClInclude Include="src\program\Shader.h" />
-    <ClInclude Include="src\mesh\BasicMeshes\Plane.h" />
     <ClInclude Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.h" />
     <ClInclude Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.h" />
     <ClInclude Include="src\renderer\postProcess\GrayScale\GrayScale.h" />
@@ -768,6 +769,8 @@
     <None Include="shader\grayScale\vertex.glsl" />
     <None Include="shader\nuclearEffect\fragment.glsl" />
     <None Include="shader\nuclearEffect\vertex.glsl" />
+    <None Include="shader\skyBox\fragment.glsl" />
+    <None Include="shader\skyBox\vertex.glsl" />
     <None Include="shader\triangle\fragment.glsl" />
     <None Include="shader\triangle\vertex.glsl" />
     <None Include="shader\wireFrame\fragment.glsl" />
@@ -775,6 +778,12 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg" />
+    <Image Include="resource\textures\skyBox\back.jpg" />
+    <Image Include="resource\textures\skyBox\bottom.jpg" />
+    <Image Include="resource\textures\skyBox\front.jpg" />
+    <Image Include="resource\textures\skyBox\left.jpg" />
+    <Image Include="resource\textures\skyBox\right.jpg" />
+    <Image Include="resource\textures\skyBox\top.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="dependencies\GLM\glm\CMakeLists.txt" />

@@ -7,9 +7,10 @@
 #include "../light/directionLight.h"
 #include "../program/Shader.h"
 #include "../Buffer/FrameBuffer.h"
-#include "../mesh/BasicMeshes/Plane.h"
 #include "postProcess/PostProcess.h"
 #include "../mesh/BasicMeshes/Quad/Quad.h"
+#include "../mesh/BasicMeshes/Grid/Grid.h"
+#include "../mesh/BasicMeshes/SkyBox/SkyBox.h"
 
 enum RenderMode
 {
@@ -47,8 +48,9 @@ private:
 	glm::vec4 clearColor;
 	RenderMode mode;
 	glm::vec3 wireFrameColor;
-	Plane grid;
+	Grid grid;
 	std::unordered_map<PostProcessMode, std::shared_ptr<PostProcess>> postProcesses;
 	Quad quad;
+	SkyBox skybox;
 	unsigned outputTextureID;
 };

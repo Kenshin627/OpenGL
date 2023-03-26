@@ -114,6 +114,9 @@
     <ClCompile Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\mesh\BasicMeshes\SkyBox\SkyBox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1319,9 +1322,6 @@
     <ClInclude Include="src\application\vendor\imGui\implot_internal.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\mesh\BasicMeshes\Plane.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\renderer\postProcess\PostProcess.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -1344,6 +1344,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mesh\BasicMeshes\SkyBox\SkyBox.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1806,9 +1809,29 @@
     <None Include="resource\fonts\msyh.ttc" />
     <None Include="shader\edgeDetection\vertex.glsl" />
     <None Include="shader\edgeDetection\fragment.glsl" />
+    <None Include="shader\skyBox\vertex.glsl" />
+    <None Include="shader\skyBox\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\textures\skyBox\back.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\textures\skyBox\bottom.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\textures\skyBox\front.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\textures\skyBox\left.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\textures\skyBox\right.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\textures\skyBox\top.jpg">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>
