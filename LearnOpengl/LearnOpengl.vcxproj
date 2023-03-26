@@ -777,6 +777,9 @@
     <None Include="shader\skyBox\vertex.glsl" />
     <None Include="shader\triangle\fragment.glsl" />
     <None Include="shader\triangle\vertex.glsl" />
+    <None Include="shader\visualNormal\fragment.glsl" />
+    <None Include="shader\visualNormal\geometry.glsl" />
+    <None Include="shader\visualNormal\vertex.glsl" />
     <None Include="shader\wireFrame\fragment.glsl" />
     <None Include="shader\wireFrame\vertex.glsl" />
   </ItemGroup>

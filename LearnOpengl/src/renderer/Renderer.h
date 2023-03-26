@@ -21,7 +21,8 @@ enum RenderMode
 	Normal,
 	grid,
 	EnvironmentMapReflect,
-	EnvironmentMapRefract
+	EnvironmentMapRefract,
+	visualNormal
 };
 
 class X_Renderer

@@ -1,13 +1,21 @@
 #include <glad/gl.h>
 #include "Shader.h"
 
-Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath):m_RendererID(0)
+Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath):m_RendererID(0)
 {
 	int success;
 	std::array<char, 512> msg;
+	m_RendererID = glCreateProgram();
+
 	unsigned vertexID = compileShader(vertexPath, GL_VERTEX_SHADER);
 	unsigned fragmentID = compileShader(fragmentPath, GL_FRAGMENT_SHADER);
-	m_RendererID = glCreateProgram();
+	unsigned geometryID = 0;
+	if (!geometryPath.empty())
+	{
+		unsigned geometryID = compileShader(geometryPath, GL_GEOMETRY_SHADER);
+		glAttachShader(m_RendererID, geometryID);
+	}
+	
 	glAttachShader(m_RendererID, vertexID);
 	glAttachShader(m_RendererID, fragmentID);
 	glLinkProgram(m_RendererID);
@@ -19,6 +27,10 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath):m
 	}
 	glDeleteShader(vertexID);
 	glDeleteShader(fragmentID);
+	if (geometryID != 0)
+	{
+		glDeleteShader(geometryID);
+	}
 }
 
 Shader::~Shader()
@@ -36,7 +48,7 @@ void Shader::unbind() const
 	glUseProgram(0);
 }
 
-unsigned Shader::compileShader(const std::string& path, GLenum shaderType)
+unsigned Shader::compileShader(const std::string& path, unsigned shaderType)
 {
 	std::string shaderCode;
 	std::ifstream shaderFile;
@@ -58,7 +70,7 @@ unsigned Shader::compileShader(const std::string& path, GLenum shaderType)
 		if (!success)
 		{
 			glGetShaderInfoLog(shaderID, 512, nullptr, msg.data());
-			std::cout << "ERROR::SHADER::" << (shaderType == GL_VERTEX_SHADER ? "VERTEX" : "FRAGMENT") << "::COMPILATION_FAILED\n" << msg.data() << std::endl;
+			std::cout << "ERROR::SHADER::" << (shaderType == GL_VERTEX_SHADER ? "VERTEX" : shaderType == GL_FRAGMENT_SHADER? "FRAGMENT" : "GEOMETRY") << "::COMPILATION_FAILED\n" << msg.data() << std::endl;
 		}
 		return shaderID;
 	}

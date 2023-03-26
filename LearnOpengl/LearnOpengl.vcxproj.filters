@@ -1815,6 +1815,9 @@
     <None Include="shader\environmentMapReflect\fragment.glsl" />
     <None Include="shader\environmentMapRefract\vertex.glsl" />
     <None Include="shader\environmentMapRefract\fragment.glsl" />
+    <None Include="shader\visualNormal\vertex.glsl" />
+    <None Include="shader\visualNormal\geometry.glsl" />
+    <None Include="shader\visualNormal\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">

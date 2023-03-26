@@ -5,7 +5,7 @@
 #include "postProcess/EdgeDetection/EdgeDetection.h"
 
 X_Renderer::X_Renderer():
-	camera(std::make_shared<Camera>(glm::vec3(0, 30, 30), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
+	camera(std::make_shared<Camera>(glm::vec3(0, 17, 35), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
 	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)), 
 	prevFBO(m_FBO),
 	clearColor(glm::vec4(0.0, 0.0, 0.0, 1.0)), 
@@ -72,9 +72,9 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 		programIter->second->setVec3("cameraPosition", camera->getPosition());
 		programIter->second->setMatrix44("model", modelMatrix);
 		programIter->second->setMatrix33("modelInverseTranspose", modelInverseTranspose);
-		glActiveTexture(GL_TEXTURE0+5);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, skybox.getTextureID());
-		programIter->second->setInt("skyBox", 5);
+		programIter->second->setInt("skyBox", 0);
 		programIter->second->setFloat("refractiveIndex", refractiveIndex.find("damon")->second);
 
 		//linear Depth
@@ -92,6 +92,23 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 			Recursivedraw(node, *programIter->second);
 		}
 		programIter->second->unbind();
+		#pragma endregion
+
+		#pragma region visual normal
+		auto visualNormalProgram = shaders.find(RenderMode::visualNormal);
+		visualNormalProgram->second->bind();
+		//visual Normal
+		visualNormalProgram->second->setMatrix44("modelView", camera->viewMatrix() * modelMatrix);
+		visualNormalProgram->second->setMatrix33("inverseModelView", glm::mat3x3(glm::transpose(glm::inverse(camera->viewMatrix() * modelMatrix))));
+		visualNormalProgram->second->setMatrix44("projection", camera->projMatrix());
+		visualNormalProgram->second->setFloat("magnitude", 0.3);
+		visualNormalProgram->second->setVec3("lineColor", glm::vec3(0.3, 0.6, 0.8));
+
+		for (const std::shared_ptr<Node>& node : sceneGraph.roots)
+		{
+			Recursivedraw(node, *visualNormalProgram->second);
+		}
+		visualNormalProgram->second->unbind();
 		#pragma endregion
 
 		#pragma region GRID ÒÑÍê³É
@@ -221,6 +238,7 @@ void X_Renderer::compileShaders()
 	shaders.insert({ RenderMode::grid, std::make_shared<Shader>("shader/grid/vertex.glsl", "shader/grid/fragment.glsl") });
 	shaders.insert({ RenderMode::EnvironmentMapReflect, std::make_shared<Shader>("shader/environmentMapReflect/vertex.glsl", "shader/environmentMapReflect/fragment.glsl") });
 	shaders.insert({ RenderMode::EnvironmentMapRefract, std::make_shared<Shader>("shader/environmentMapRefract/vertex.glsl", "shader/environmentMapRefract/fragment.glsl") });
+	shaders.insert({ RenderMode::visualNormal, std::make_shared<Shader>("shader/visualNormal/vertex.glsl", "shader/visualNormal/fragment.glsl", "shader/visualNormal/geometry.glsl") });
 }
 
 void X_Renderer::compilePostProcess()

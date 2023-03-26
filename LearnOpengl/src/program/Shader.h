@@ -13,7 +13,7 @@
 class Shader
 {
 public:
-	Shader(const std::string& vertexPath, const std::string& fragmentPath);
+	Shader(const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath = "");
 	~Shader();
 	void bind() const;
 	void unbind() const;
