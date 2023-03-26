@@ -1813,6 +1813,8 @@
     <None Include="shader\skyBox\fragment.glsl" />
     <None Include="shader\environmentMapReflect\vertex.glsl" />
     <None Include="shader\environmentMapReflect\fragment.glsl" />
+    <None Include="shader\environmentMapRefract\vertex.glsl" />
+    <None Include="shader\environmentMapRefract\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">

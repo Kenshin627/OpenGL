@@ -20,7 +20,16 @@ X_Renderer::X_Renderer():
 		}, 
 		"shader/skyBox/vertex.glsl", 
 		"shader/skyBox/fragment.glsl"
-	)
+	),
+	refractiveIndex(
+	{
+		{ "air", 1.00 },
+		{ "water", 1.33 },
+		{ "ice", 1.309 },
+		{ "glass", 1.52 },
+		{ "damon", 2.42 },
+	}),
+	outputTextureID(0)
 {
 	lights.push_back(DirectionLight{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(1.0f) });
 	compileShaders();
@@ -66,6 +75,7 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 		glActiveTexture(GL_TEXTURE0+5);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, skybox.getTextureID());
 		programIter->second->setInt("skyBox", 5);
+		programIter->second->setFloat("refractiveIndex", refractiveIndex.find("damon")->second);
 
 		//linear Depth
 		programIter->second->setFloat("near", camera->getNear());
@@ -210,6 +220,7 @@ void X_Renderer::compileShaders()
 	shaders.insert({ RenderMode::Normal, std::make_shared<Shader>("shader/normal/vertex.glsl", "shader/normal/fragment.glsl") });
 	shaders.insert({ RenderMode::grid, std::make_shared<Shader>("shader/grid/vertex.glsl", "shader/grid/fragment.glsl") });
 	shaders.insert({ RenderMode::EnvironmentMapReflect, std::make_shared<Shader>("shader/environmentMapReflect/vertex.glsl", "shader/environmentMapReflect/fragment.glsl") });
+	shaders.insert({ RenderMode::EnvironmentMapRefract, std::make_shared<Shader>("shader/environmentMapRefract/vertex.glsl", "shader/environmentMapRefract/fragment.glsl") });
 }
 
 void X_Renderer::compilePostProcess()

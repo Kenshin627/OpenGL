@@ -20,7 +20,8 @@ enum RenderMode
 	Depth,
 	Normal,
 	grid,
-	EnvironmentMapReflect
+	EnvironmentMapReflect,
+	EnvironmentMapRefract
 };
 
 class X_Renderer
@@ -53,5 +54,6 @@ private:
 	std::unordered_map<PostProcessMode, std::shared_ptr<PostProcess>> postProcesses;
 	Quad quad;
 	SkyBox skybox;
+	std::unordered_map<std::string, float> refractiveIndex;
 	unsigned outputTextureID;
 };
