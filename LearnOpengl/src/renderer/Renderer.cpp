@@ -34,9 +34,9 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	glEnable(GL_DEPTH_TEST);
 
 	#pragma region faceCulling
-	//glEnable(GL_CULL_FACE);
-	//glFrontFace(GL_CCW);
-	//glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CCW);
+	glCullFace(GL_BACK);
 	#pragma endregion
 
 	if (mode == RenderMode::wireFrame)
