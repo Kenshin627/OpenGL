@@ -1811,6 +1811,8 @@
     <None Include="shader\edgeDetection\fragment.glsl" />
     <None Include="shader\skyBox\vertex.glsl" />
     <None Include="shader\skyBox\fragment.glsl" />
+    <None Include="shader\environmentMapReflect\vertex.glsl" />
+    <None Include="shader\environmentMapReflect\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">

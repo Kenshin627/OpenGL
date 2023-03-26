@@ -19,7 +19,8 @@ enum RenderMode
 	PBR,
 	Depth,
 	Normal,
-	grid
+	grid,
+	EnvironmentMapReflect
 };
 
 class X_Renderer

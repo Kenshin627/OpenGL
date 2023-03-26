@@ -111,3 +111,7 @@ void SkyBox::draw(const Camera& camera, unsigned slot)
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glDepthFunc(GL_LESS);
 }
+
+unsigned SkyBox::getTextureID() const {
+    return m_TextureID;
+}

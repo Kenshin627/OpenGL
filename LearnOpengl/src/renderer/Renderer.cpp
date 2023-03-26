@@ -58,12 +58,14 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 		programIter->second->setVec3("directionLight.direction", lights[0].getDirection());
 
 		glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
-		//modelMatrix = glm::rotate(modelMatrix, glm::radians(45.0f), glm::vec3(0, 1, 0));
 		glm::mat3x3 modelInverseTranspose = glm::mat3x3(glm::transpose(glm::inverse(modelMatrix)));
 		programIter->second->setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
 		programIter->second->setVec3("cameraPosition", camera->getPosition());
 		programIter->second->setMatrix44("model", modelMatrix);
 		programIter->second->setMatrix33("modelInverseTranspose", modelInverseTranspose);
+		glActiveTexture(GL_TEXTURE0+5);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skybox.getTextureID());
+		programIter->second->setInt("skyBox", 5);
 
 		//linear Depth
 		programIter->second->setFloat("near", camera->getNear());
@@ -207,6 +209,7 @@ void X_Renderer::compileShaders()
 	shaders.insert({ RenderMode::Depth, std::make_shared<Shader>("shader/depthRender/vertex.glsl", "shader/depthRender/fragment.glsl") });
 	shaders.insert({ RenderMode::Normal, std::make_shared<Shader>("shader/normal/vertex.glsl", "shader/normal/fragment.glsl") });
 	shaders.insert({ RenderMode::grid, std::make_shared<Shader>("shader/grid/vertex.glsl", "shader/grid/fragment.glsl") });
+	shaders.insert({ RenderMode::EnvironmentMapReflect, std::make_shared<Shader>("shader/environmentMapReflect/vertex.glsl", "shader/environmentMapReflect/fragment.glsl") });
 }
 
 void X_Renderer::compilePostProcess()

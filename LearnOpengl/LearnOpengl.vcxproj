@@ -757,6 +757,8 @@
     <None Include="shader\depthRender\vertex.glsl" />
     <None Include="shader\edgeDetection\fragment.glsl" />
     <None Include="shader\edgeDetection\vertex.glsl" />
+    <None Include="shader\environmentMapReflect\fragment.glsl" />
+    <None Include="shader\environmentMapReflect\vertex.glsl" />
     <None Include="shader\GlitchRGBSplit\fragment.glsl" />
     <None Include="shader\GlitchRGBSplit\vertex.glsl" />
     <None Include="shader\grid\fragment.glsl" />

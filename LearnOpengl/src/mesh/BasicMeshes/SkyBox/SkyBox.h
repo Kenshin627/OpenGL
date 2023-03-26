@@ -15,6 +15,7 @@ public:
 	void draw(const Camera& camera, unsigned slot = 0);
 	void bind();
 	void unbind();
+	unsigned getTextureID() const;
 private:
 	std::unique_ptr<VertexArray> m_VAO;
 	std::unique_ptr<VertexBuffer> m_VBO;
