@@ -54,15 +54,13 @@ X_Renderer::X_Renderer():
 X_Renderer::~X_Renderer() = default;
 
 void X_Renderer::RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts)
-{
-	glCullFace(GL_FRONT);
+{	
 	clear();
 	glViewport(0.0f, 0.0f, viewport.x, viewport.y);	
 
 	std::shared_ptr<Shader> shadowShader = shaderLib.find(ShaderType::ShadowMap)->second;
 	shadowShader->bind();	
-	shadowShader->setMatrix44("model", glm::identity<glm::mat4x4>());
-	shadowShader->setMatrix44("lightViewProjection", lights[0]->getLightSpaceMatrix());
+	shadowShader->setCommonUniforms();
 	shadow_FBO->bind();
 	clear();
 	for (const std::shared_ptr<Node>& node : sceneGraph.roots)
