@@ -129,6 +129,12 @@
     <ClCompile Include="src\program\EnvironmentMapRefract\environmentMapRefract.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\program\Depth\Depth.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\program\WireFrame\WireFrame.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1371,6 +1377,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\program\EnvironmentMapRefract\environmentMapRefract.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\program\Depth\Depth.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\program\WireFrame\WireFrame.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

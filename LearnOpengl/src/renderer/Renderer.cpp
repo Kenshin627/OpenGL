@@ -7,6 +7,8 @@
 #include "../program/BlinnPhong/BlinnPhong.h"
 #include "../program/EnvironmentMapReflect/environmentMapReflect.h"
 #include "../program/EnvironmentMapRefract/environmentMapRefract.h"
+#include "../program/Depth/Depth.h"
+#include "../program/WireFrame/WireFrame.h"
 
 X_Renderer::X_Renderer():
 	camera(std::make_shared<Camera>(glm::vec3(0, 17, 35), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
@@ -76,10 +78,6 @@ void X_Renderer::RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& vie
 
 void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts)
 {
-	if (mode == RenderMode::_WireFrame)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
 	
 	if (enableShadows)
 	{
@@ -91,18 +89,10 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 
 	#pragma region scene Graph render
 	//std::shared_ptr<Shader> shader = shaderLib.find((ShaderType)mode)->second;
-	std::shared_ptr<Shader> shader = shaderLib.find(ShaderType::EnvironmentMapRefract)->second;
+	std::shared_ptr<Shader> shader = shaderLib.find(ShaderType::WireFrame)->second;
 	shader->bind();	
 	//uniforms 
-	shader->setCommonUniforms();
-	
-
-	//linear Depth
-	shader->setFloat("near", camera->getNear());
-	shader->setFloat("far", camera->getFar());
-
-	//wireFrame
-	shader->setVec3("wireFrameColor", wireFrameColor);
+	shader->setCommonUniforms();	
 
 	//shadow
 	glActiveTexture(GL_TEXTURE6);
@@ -234,10 +224,10 @@ void X_Renderer::resizeFBO(unsigned width, unsigned height)
 
 void X_Renderer::compileShaders()
 {
-	shaderLib.insert({ ShaderType::WireFrame, std::make_shared<Shader>(std::vector<std::string>{ "shader/wireFrame/vertex.glsl", "shader/wireFrame/fragment.glsl" })});
+	shaderLib.insert({ ShaderType::WireFrame, std::make_shared<WireFrameShader>(std::vector<std::string>{ "shader/wireFrame/vertex.glsl", "shader/wireFrame/fragment.glsl" }, camera, wireFrameColor)});
 	shaderLib.insert({ ShaderType::BlinnPhong, std::make_shared<BlinnPhongShader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" }, camera, lights[0])});
 	shaderLib.insert({ ShaderType::PBR, std::make_shared<BlinnPhongShader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" }, camera, lights[0]) });
-	shaderLib.insert({ ShaderType::Depth, std::make_shared<Shader>(std::vector<std::string>{ "shader/depthRender/vertex.glsl", "shader/depthRender/fragment.glsl" }) });
+	shaderLib.insert({ ShaderType::Depth, std::make_shared<DepthShader>(std::vector<std::string>{ "shader/depthRender/vertex.glsl", "shader/depthRender/fragment.glsl" }, camera) });
 	shaderLib.insert({ ShaderType::Normal, std::make_shared<Shader>(std::vector<std::string>{ "shader/normal/vertex.glsl", "shader/normal/fragment.glsl" }) });
 	shaderLib.insert({ ShaderType::Grid, std::make_shared<Shader>(std::vector<std::string>{ "shader/grid/vertex.glsl", "shader/grid/fragment.glsl" }) });
 	shaderLib.insert({ ShaderType::EnvironmentMapReflect, std::make_shared<EnvironmentMapReflectShader>(std::vector<std::string>{ "shader/environmentMapReflect/vertex.glsl", "shader/environmentMapReflect/fragment.glsl" }, camera, skybox.getTextureID())});
