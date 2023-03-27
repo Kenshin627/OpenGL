@@ -123,6 +123,12 @@
     <ClCompile Include="src\program\BlinnPhong\BlinnPhong.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\program\EnvironmentMapReflect\environmentMapReflect.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\program\EnvironmentMapRefract\environmentMapRefract.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1359,6 +1365,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\program\BlinnPhong\BlinnPhong.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\program\EnvironmentMapReflect\environmentMapReflect.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\program\EnvironmentMapRefract\environmentMapRefract.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

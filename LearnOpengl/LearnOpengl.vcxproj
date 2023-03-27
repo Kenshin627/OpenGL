@@ -172,6 +172,8 @@
     <ClCompile Include="src\mesh\BasicMeshes\SkyBox\SkyBox.cpp" />
     <ClCompile Include="src\myApplication.cpp" />
     <ClCompile Include="src\program\BlinnPhong\BlinnPhong.cpp" />
+    <ClCompile Include="src\program\EnvironmentMapReflect\environmentMapReflect.cpp" />
+    <ClCompile Include="src\program\EnvironmentMapRefract\environmentMapRefract.cpp" />
     <ClCompile Include="src\program\Shader.cpp" />
     <ClCompile Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.cpp" />
     <ClCompile Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.cpp" />
@@ -582,6 +584,8 @@
     <ClInclude Include="src\mesh\BasicMeshes\SkyBox\SkyBox.h" />
     <ClInclude Include="src\mesh\Mesh.h" />
     <ClInclude Include="src\program\BlinnPhong\BlinnPhong.h" />
+    <ClInclude Include="src\program\EnvironmentMapReflect\environmentMapReflect.h" />
+    <ClInclude Include="src\program\EnvironmentMapRefract\environmentMapRefract.h" />
     <ClInclude Include="src\program\Shader.h" />
     <ClInclude Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.h" />
     <ClInclude Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.h" />
