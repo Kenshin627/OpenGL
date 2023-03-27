@@ -10,7 +10,7 @@ enum Direction
 class GlitchRGBSpliter : public PostProcess
 {
 public:
-	GlitchRGBSpliter(const std::string& name, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& geometryShaderPath, float speed, float intensity, Direction direct);
+	GlitchRGBSpliter(const std::vector<std::string>& paths, float speed, float intensity, Direction direct);
 	void draw(unsigned slot) const override;
 	void update(float ts) override;
 	void setTime(float t);

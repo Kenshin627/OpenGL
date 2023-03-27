@@ -10,12 +10,12 @@ out vec2 vUv;
 
 uniform mat4 modelViewProjection;
 uniform mat4 model;
-uniform mat3 modelInverseTranspose;
+uniform mat3 normalMatrix;
 
 void main()
 {
 	vPos = vec3(model * vec4(aPosition, 1.0));
-	vNormal =  modelInverseTranspose * aNormal;
+	vNormal =  normalMatrix * aNormal;
 	vUv = aUv;
 	gl_Position = modelViewProjection * vec4(aPosition, 1.0);
 }

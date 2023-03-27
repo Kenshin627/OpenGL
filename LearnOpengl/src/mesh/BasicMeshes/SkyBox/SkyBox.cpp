@@ -86,7 +86,7 @@ SkyBox::SkyBox(const std::vector<std::string>& faces, const std::string& vertexS
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
     //program
-    program = std::make_unique<Shader>(vertexShaderPath, fragmentShaderPath);
+    program = std::make_unique<Shader>(std::vector<std::string>{ vertexShaderPath, fragmentShaderPath });
 }
 
 void SkyBox::bind()

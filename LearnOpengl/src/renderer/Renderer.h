@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <array>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "../sceneLoader/sceneLoader.h"
@@ -60,7 +61,7 @@ public:
 	glm::vec3& getWireFrameColor() { return wireFrameColor; };
 private:
 	std::shared_ptr<Camera> camera;
-	std::vector<DirectionLight> lights;
+	std::vector<std::shared_ptr<DirectionLight>> lights;
 	std::shared_ptr<FrameBuffer> m_FBO;
 	std::shared_ptr<FrameBuffer> prevFBO;
 	std::unordered_map<ShaderType, std::shared_ptr<Shader>> shaderLib;
@@ -73,4 +74,5 @@ private:
 	std::unordered_map<std::string, float> refractiveIndex;
 	unsigned outputTextureID;
 	std::shared_ptr<ShadowFrameBuffer> shadow_FBO;
+	bool enableShadows;
 };

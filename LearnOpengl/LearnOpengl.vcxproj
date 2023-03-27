@@ -171,6 +171,7 @@
     <ClCompile Include="src\mesh\BasicMeshes\Quad\Quad.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\SkyBox\SkyBox.cpp" />
     <ClCompile Include="src\myApplication.cpp" />
+    <ClCompile Include="src\program\BlinnPhong\BlinnPhong.cpp" />
     <ClCompile Include="src\program\Shader.cpp" />
     <ClCompile Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.cpp" />
     <ClCompile Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.cpp" />
@@ -580,6 +581,7 @@
     <ClInclude Include="src\mesh\BasicMeshes\Quad\Quad.h" />
     <ClInclude Include="src\mesh\BasicMeshes\SkyBox\SkyBox.h" />
     <ClInclude Include="src\mesh\Mesh.h" />
+    <ClInclude Include="src\program\BlinnPhong\BlinnPhong.h" />
     <ClInclude Include="src\program\Shader.h" />
     <ClInclude Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.h" />
     <ClInclude Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.h" />

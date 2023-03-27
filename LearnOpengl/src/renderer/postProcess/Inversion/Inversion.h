@@ -1,10 +1,10 @@
 #pragma once
 #include "../PostProcess.h"
 
-class Inversion :public PostProcess
+class InversionEffect :public PostProcess
 {
 public:
-	Inversion(const std::string& name, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& geometryShaderPath = "");
-	~Inversion();
+	InversionEffect(const std::vector<std::string>& paths);
+	~InversionEffect();
 	void draw(unsigned slot) const override;
 };

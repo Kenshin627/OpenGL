@@ -3,20 +3,28 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <array>
 #include <unordered_map>
+#include <vector>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "../mesh/Mesh.h"
+
+enum ShaderCategory
+{
+	NormalShader,
+	PostProcessShader
+};
+
 class Shader
 {
 public:
-	Shader(const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath = "");
-	~Shader();
-	void bind() const;
-	void unbind() const;
+	Shader(const std::vector<std::string>& paths);
+	virtual ~Shader();
+	virtual void bind() const;
+	virtual void unbind() const;
 
 	void setVec4(const std::string& name, const glm::vec4& v4) const;
 	void setVec3(const std::string& name, const glm::vec3& v3) const;
@@ -25,14 +33,18 @@ public:
 	void setFloat(const std::string& name, float fv) const;
 	void setMatrix44(const std::string& name, const glm::mat4x4& mat44) const;
 	void setMatrix33(const std::string& name, const glm::mat3x3& mat33) const;
+	virtual void setCommonUniforms() const {  }
+	virtual void setMeshUniforms(std::shared_ptr<Mesh> mesh) const {  }
+	ShaderCategory getType() const { return type; };
 private:
 	int getUniformLocation(const std::string& name) const;
 	inline void printUniformError(const std::string& name) const
 	{
 		std::cout << "[set Uniform]:" << "UNIFORM " << name << " Not found!" << std::endl;
 	}
-private:
+protected:
 	unsigned m_RendererID;
 	unsigned compileShader(const std::string& path, unsigned shaderType);
 	mutable std::unordered_map<std::string, int> uniformLocationCaches;
+	ShaderCategory type;
 };

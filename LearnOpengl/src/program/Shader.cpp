@@ -1,18 +1,19 @@
 #include <glad/gl.h>
+#include <array>
 #include "Shader.h"
 
-Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath):m_RendererID(0)
+Shader::Shader(const std::vector<std::string>& paths):m_RendererID(0)
 {
 	int success;
 	std::array<char, 512> msg;
 	m_RendererID = glCreateProgram();
 
-	unsigned vertexID = compileShader(vertexPath, GL_VERTEX_SHADER);
-	unsigned fragmentID = compileShader(fragmentPath, GL_FRAGMENT_SHADER);
+	unsigned vertexID = compileShader(paths[0], GL_VERTEX_SHADER);
+	unsigned fragmentID = compileShader(paths[1], GL_FRAGMENT_SHADER);
 	unsigned geometryID = 0;
-	if (!geometryPath.empty())
+	if (paths.size() == 3)
 	{
-		unsigned geometryID = compileShader(geometryPath, GL_GEOMETRY_SHADER);
+		unsigned geometryID = compileShader(paths[2], GL_GEOMETRY_SHADER);
 		glAttachShader(m_RendererID, geometryID);
 	}
 	
@@ -31,6 +32,7 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath, c
 	{
 		glDeleteShader(geometryID);
 	}
+	type = ShaderCategory::NormalShader;
 }
 
 Shader::~Shader()
@@ -47,7 +49,7 @@ void Shader::unbind() const
 {
 	glUseProgram(0);
 }
-
+	
 unsigned Shader::compileShader(const std::string& path, unsigned shaderType)
 {
 	std::string shaderCode;

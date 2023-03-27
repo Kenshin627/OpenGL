@@ -120,6 +120,9 @@
     <ClCompile Include="src\Buffer\ShadowFrameBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\program\BlinnPhong\BlinnPhong.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1353,6 +1356,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Buffer\ShadowFrameBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\program\BlinnPhong\BlinnPhong.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #include <glad/gl.h>
 #include "GlitchRGBSplit.h"
 
-GlitchRGBSpliter::GlitchRGBSpliter(const std::string& name, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& geometryShaderPath, float speed = 10.0f, float intensity = 0.5f, Direction direct = Direction::Horizontal) :PostProcess(name, vertexShaderPath, fragmentShaderPath, geometryShaderPath), m_Speed(speed), m_Intensity(intensity * 0.1f), m_Direct(direct), m_Time(0.0f) {}
+GlitchRGBSpliter::GlitchRGBSpliter(const std::vector<std::string>& paths, float speed = 10.0f, float intensity = 0.5f, Direction direct = Direction::Horizontal) :PostProcess(paths), m_Speed(speed), m_Intensity(intensity * 0.1f), m_Direct(direct), m_Time(0.0f) {}
 
 void GlitchRGBSpliter::setTime(float t)
 {
@@ -10,10 +10,10 @@ void GlitchRGBSpliter::setTime(float t)
 
 void GlitchRGBSpliter::draw(unsigned slot) const
 {
-	program->setInt("pipeLineTexture", slot);
-	program->setFloat("intensity", m_Intensity);
-	program->setFloat("time", floorf(m_Time * m_Speed));
-	program->setInt("direction", m_Direct);
+	setInt("pipeLineTexture", slot);
+	setFloat("intensity", m_Intensity);
+	setFloat("time", floorf(m_Time * m_Speed));
+	setInt("direction", m_Direct);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
 }
 

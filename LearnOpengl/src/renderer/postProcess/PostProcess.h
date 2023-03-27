@@ -5,25 +5,27 @@
 #include "../../Buffer/FrameBuffer.h"
 #include "../../program/Shader.h"
 
-class PostProcess
+class PostProcess: public Shader
 {
 public:
-	PostProcess(const std::string& name, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& geometryShaderPath = "") :
-		name(name),
-		program(std::make_shared<Shader>(vertexShaderPath, fragmentShaderPath)),
+	PostProcess(const std::vector<std::string>& paths) :
+		Shader(paths),
 		m_FBO(std::make_shared<FrameBuffer>(1, 1))
-	{ }
+	{ 
+		type = ShaderCategory::PostProcessShader;
+	}
+	virtual ~PostProcess() {}
 
-	void bind() const
+	void bind() const override
 	{
-		program->bind();
+		glUseProgram(m_RendererID);
 		m_FBO->bind();
 	}
 
-	void unbind() const
+	void unbind() const override
 	{
 		m_FBO->unbind();
-		program->unbind();
+		glUseProgram(0);
 	}
 
 	virtual void draw(unsigned slot) const { }
@@ -37,7 +39,5 @@ public:
 
 	std::shared_ptr<FrameBuffer> getFBO() const { return m_FBO; };
 protected:
-	std::string name;
-	std::shared_ptr<Shader> program;
 	std::shared_ptr<FrameBuffer> m_FBO;
 };
