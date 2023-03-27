@@ -176,6 +176,7 @@
     <ClCompile Include="src\program\EnvironmentMapReflect\environmentMapReflect.cpp" />
     <ClCompile Include="src\program\EnvironmentMapRefract\environmentMapRefract.cpp" />
     <ClCompile Include="src\program\Shader.cpp" />
+    <ClCompile Include="src\program\ShadowMap\ShadowMap.cpp" />
     <ClCompile Include="src\program\WireFrame\WireFrame.cpp" />
     <ClCompile Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.cpp" />
     <ClCompile Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.cpp" />
@@ -590,6 +591,7 @@
     <ClInclude Include="src\program\EnvironmentMapReflect\environmentMapReflect.h" />
     <ClInclude Include="src\program\EnvironmentMapRefract\environmentMapRefract.h" />
     <ClInclude Include="src\program\Shader.h" />
+    <ClInclude Include="src\program\ShadowMap\ShadowMap.h" />
     <ClInclude Include="src\program\WireFrame\WireFrame.h" />
     <ClInclude Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.h" />
     <ClInclude Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.h" />
