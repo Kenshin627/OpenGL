@@ -9,6 +9,7 @@
 #include "../program/EnvironmentMapRefract/environmentMapRefract.h"
 #include "../program/Depth/Depth.h"
 #include "../program/WireFrame/WireFrame.h"
+#include "../program/ShadowMap/ShadowMap.h"
 
 X_Renderer::X_Renderer():
 	camera(std::make_shared<Camera>(glm::vec3(0, 17, 35), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
@@ -36,7 +37,6 @@ X_Renderer::X_Renderer():
 		{ "damon", 2.42 },
 	}),
 	outputTextureID(0),
-	shadow_FBO(std::make_shared<ShadowFrameBuffer>(1.0, 1.0)),
 	enableShadows(true)
 {
 	lights.push_back(std::make_shared<DirectionLight>(glm::vec3(0.3f, -0.7f, -1.0f), glm::vec3(1.0f)));
@@ -61,17 +61,17 @@ void X_Renderer::RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& vie
 	std::shared_ptr<Shader> shadowShader = shaderLib.find(ShaderType::ShadowMap)->second;
 	shadowShader->bind();	
 	shadowShader->setCommonUniforms();
-	shadow_FBO->bind();
 	clear();
 	for (const std::shared_ptr<Node>& node : sceneGraph.roots)
 	{
 		Recursivedraw(node);
 	}
 	grid.bind();
+	//shadowShader->setMeshUniforms(grid);
+	shadowShader->setMatrix44("model", glm::identity<glm::mat4x4>());
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
-	grid.unbind();
-	shadow_FBO->unbind();
-	glCullFace(GL_BACK);
+	grid.unbind();	
+	shadowShader->unbind();
 }
 
 void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts)
@@ -81,20 +81,22 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	{
 		RenderShadow(sceneGraph, viewport, ts);
 	}
+	ShadowMapShader& shadowShader = (ShadowMapShader&)*shaderLib.find(ShaderType::ShadowMap)->second;
 
 	clear();
 	glViewport(0.0f, 0.0f, viewport.x, viewport.y);
 
 	#pragma region scene Graph render
 	//std::shared_ptr<Shader> shader = shaderLib.find((ShaderType)mode)->second;
-	std::shared_ptr<Shader> shader = shaderLib.find(ShaderType::WireFrame)->second;
+	std::shared_ptr<Shader> shader = shaderLib.find(ShaderType::BlinnPhongCastShadow)->second;
+	
 	shader->bind();	
 	//uniforms 
 	shader->setCommonUniforms();	
 
 	//shadow
 	glActiveTexture(GL_TEXTURE6);
-	glBindTexture(GL_TEXTURE_2D, shadow_FBO->GetTextureID());
+	glBindTexture(GL_TEXTURE_2D, shadowShader.getFBO()->GetTextureID());
 	shader->setInt("shadowMap", 6);
 	shader->setMatrix44("lightPosSpace", lights[0]->getLightSpaceMatrix());
 
@@ -127,6 +129,7 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	#pragma region GRID ÒÑÍê³É
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	Shader& gridShader = *shaderLib.find(ShaderType::GridCastShadow)->second;
+
 	gridShader.bind();
 	gridShader.setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * glm::identity <glm::mat4x4>() );
 	gridShader.setVec2("viewport", viewport);
@@ -137,7 +140,7 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	gridShader.setVec3("gridOffset", glm::vec3(0, 0, 0));
 
 	glActiveTexture(GL_TEXTURE6);
-	glBindTexture(GL_TEXTURE_2D, shadow_FBO->GetTextureID());
+	glBindTexture(GL_TEXTURE_2D, shadowShader.getFBO()->GetTextureID());
 	gridShader.setInt("shadowMap", 6);
 	gridShader.setMatrix44("lightPosSpace", lights[0]->getLightSpaceMatrix());
 	grid.bind();
@@ -210,7 +213,6 @@ void X_Renderer::clear()
 void X_Renderer::resizeFBO(unsigned width, unsigned height)
 {
 	m_FBO->resize(width, height);
-	shadow_FBO->resize(width, height);
 	for (auto& shader : shaderLib)
 	{
 		if (shader.second->getType() == ShaderCategory::PostProcessShader)
@@ -231,7 +233,7 @@ void X_Renderer::compileShaders()
 	shaderLib.insert({ ShaderType::EnvironmentMapReflect, std::make_shared<EnvironmentMapReflectShader>(std::vector<std::string>{ "shader/environmentMapReflect/vertex.glsl", "shader/environmentMapReflect/fragment.glsl" }, camera, skybox.getTextureID())});
 	shaderLib.insert({ ShaderType::EnvironmentMapRefract, std::make_shared<EnvironmentMapRefractShader>(std::vector<std::string>{ "shader/environmentMapRefract/vertex.glsl", "shader/environmentMapRefract/fragment.glsl" }, camera, skybox.getTextureID(), refractiveIndex.find("glass")->second)});
 	shaderLib.insert({ ShaderType::visualNormal, std::make_shared<Shader>(std::vector<std::string>{ "shader/visualNormal/vertex.glsl", "shader/visualNormal/fragment.glsl", "shader/visualNormal/geometry.glsl" }) });
-	shaderLib.insert({ ShaderType::ShadowMap, std::make_shared<Shader>(std::vector<std::string>{ "shader/shadowMap/vertex.glsl", "shader/shadowMap/fragment.glsl" }) });
+	shaderLib.insert({ ShaderType::ShadowMap, std::make_shared<ShadowMapShader>(std::vector<std::string>{ "shader/shadowMap/vertex.glsl", "shader/shadowMap/fragment.glsl" }, lights[0])});
 	shaderLib.insert({ ShaderType::BlinnPhongCastShadow, std::make_shared<Shader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" }) });
 	shaderLib.insert({ ShaderType::GridCastShadow, std::make_shared<Shader>(std::vector<std::string>{ "shader/gridCastShadow/vertex.glsl", "shader/gridCastShadow/fragment.glsl" }) });
 

@@ -9,9 +9,9 @@ class PostProcess: public Shader
 {
 public:
 	PostProcess(const std::vector<std::string>& paths) :
-		Shader(paths),
-		m_FBO(std::make_shared<FrameBuffer>(1, 1))
+		Shader(paths)
 	{ 
+		buildFBO(1.0f, 1.0f);
 		type = ShaderCategory::PostProcessShader;
 	}
 	virtual ~PostProcess() {}
@@ -37,7 +37,12 @@ public:
 		m_FBO->resize(viewporX, viewportY);
 	}
 
-	std::shared_ptr<FrameBuffer> getFBO() const { return m_FBO; };
+	virtual void buildFBO(unsigned viewportX, unsigned viewportY)
+	{
+		m_FBO = std::make_shared<FrameBuffer>(viewportX, viewportY);
+	}
+
+	std::shared_ptr<FrameBuffer> getFBO() const { return m_FBO; }
 protected:
 	std::shared_ptr<FrameBuffer> m_FBO;
 };

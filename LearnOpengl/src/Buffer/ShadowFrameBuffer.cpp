@@ -2,28 +2,12 @@
 #include <iostream>
 #include "ShadowFrameBuffer.h"
 
-ShadowFrameBuffer::ShadowFrameBuffer(unsigned width, unsigned height) :viewport_Width(width), viewport_Height(height)
+ShadowFrameBuffer::ShadowFrameBuffer(unsigned width, unsigned height): FrameBuffer(width, height)
 {
 	invalidate();
 }
 
-ShadowFrameBuffer::~ShadowFrameBuffer()
-{
-	glDeleteFramebuffers(1, &m_RendererID);
-	glDeleteTextures(1, &m_RenderTextureID);
-	glDeleteRenderbuffers(1, &m_RenderBufferID);
-}
-
-void ShadowFrameBuffer::bind() const
-{
-	glViewport(0, 0, viewport_Width, viewport_Height);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
-}
-
-void ShadowFrameBuffer::unbind() const
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+ShadowFrameBuffer::~ShadowFrameBuffer() { }
 
 void ShadowFrameBuffer::invalidate()
 {
@@ -56,10 +40,4 @@ void ShadowFrameBuffer::invalidate()
 		std::cout << "[ERROR]: FRAME BUFFER initialize error!";
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-void ShadowFrameBuffer::resize(unsigned width, unsigned height)
-{
-	viewport_Width = width;
-	viewport_Height = height;
-	invalidate();
 }

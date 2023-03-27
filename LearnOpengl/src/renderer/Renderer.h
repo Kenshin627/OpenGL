@@ -73,6 +73,6 @@ private:
 	SkyBox skybox;
 	std::unordered_map<std::string, float> refractiveIndex;
 	unsigned outputTextureID;
-	std::shared_ptr<ShadowFrameBuffer> shadow_FBO;
+	
 	bool enableShadows;
 };
