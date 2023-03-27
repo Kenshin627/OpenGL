@@ -9,9 +9,9 @@ X_Renderer::X_Renderer():
 	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)), 
 	prevFBO(m_FBO),
 	clearColor(glm::vec4(0.0, 0.0, 0.0, 1.0)), 
-	mode(RenderMode::BlinnPhong), 
+	mode(RenderMode::_BlinnPhong), 
 	wireFrameColor(glm::vec3(0.5, 0.7, 0.2)),
-	grid(),
+	grid(200.0f),
 	quad(),
 	skybox(
 		{ "resource/textures/skyBox/right.jpg", "resource/textures/skyBox/left.jpg", 
@@ -29,41 +29,39 @@ X_Renderer::X_Renderer():
 		{ "glass", 1.52 },
 		{ "damon", 2.42 },
 	}),
-	outputTextureID(0)
+	outputTextureID(0),
+	shadow_FBO(std::make_shared<ShadowFrameBuffer>(1.0, 1.0))
 {
-	shadow_FBO = std::make_shared<ShadowFrameBuffer>(1024, 1024);
-	lights.push_back(DirectionLight{ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(1.0f) });
+	lights.push_back(DirectionLight{ glm::vec3(0.3f, -0.7f, -1.0f), glm::vec3(1.0f) });
 	compileShaders();
-	compilePostProcess();
+	#pragma region faceCulling
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CCW);
+	glCullFace(GL_BACK);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	#pragma endregion
 }
 
-X_Renderer::~X_Renderer() {}
+X_Renderer::~X_Renderer() = default;
 
 void X_Renderer::RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts)
 {
-	glEnable(GL_DEPTH_TEST);
-
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
 	glCullFace(GL_FRONT);
-
 	clear();
-	glViewport(0.0f, 0.0f, 1024, 1024);	
+	glViewport(0.0f, 0.0f, viewport.x, viewport.y);	
 
-	Shader& shadowShader = *shaders.find(RenderMode::ShadowMap)->second;
-	shadowShader.bind();
-	glm::mat4x4 model = glm::identity<glm::mat4x4>();
-	glm::mat4x4 lightProj = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.01f, 100.0f);
-	glm::mat4x4 lightView = glm::lookAt(glm::vec3(-2.0f, 2.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	shadowShader.setMatrix44("model", model);
-	shadowShader.setMatrix44("lightViewProjection", lightProj * lightView);
+	std::shared_ptr<Shader> shadowShader = shaderLib.find(ShaderType::ShadowMap)->second;
+	shadowShader->bind();	
+	shadowShader->setMatrix44("model", glm::identity<glm::mat4x4>());
+	shadowShader->setMatrix44("lightViewProjection", lights[0].getLightSpaceMatrix());
 
 	shadow_FBO->bind();
 	clear();
 
 	for (const std::shared_ptr<Node>& node : sceneGraph.roots)
 	{
-		Recursivedraw(node, shadowShader);
+		Recursivedraw(node);
 	}
 
 	grid.bind();
@@ -75,169 +73,154 @@ void X_Renderer::RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& vie
 
 void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts)
 {
-	RenderShadow(sceneGraph, viewport, ts);
-	glEnable(GL_DEPTH_TEST);
-
-	#pragma region faceCulling
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
-	glCullFace(GL_BACK);
-	#pragma endregion
-
-	if (mode == RenderMode::wireFrame)
+	if (mode == RenderMode::_WireFrame)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}else {	
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
+	
+	RenderShadow(sceneGraph, viewport, ts);
+
 	clear();
 	glViewport(0.0f, 0.0f, viewport.x, viewport.y);
-	auto programIter = shaders.find(mode);
-	if (programIter != shaders.cend())
+
+	#pragma region scene Graph render
+	std::shared_ptr<Shader> shader = shaderLib.find((ShaderType)mode)->second;
+	shader->bind();
+	/*setLight(program);*/
+	shader->setVec3("directionLight.color", lights[0].getColor());
+	shader->setVec3("directionLight.direction", lights[0].getDirection());
+
+	glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
+	glm::mat3x3 modelInverseTranspose = glm::mat3x3(glm::transpose(glm::inverse(modelMatrix)));
+	shader->setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
+	shader->setVec3("cameraPosition", camera->getPosition());
+	shader->setMatrix44("model", modelMatrix);
+	shader->setMatrix33("modelInverseTranspose", modelInverseTranspose);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skybox.getTextureID());
+	shader->setInt("skyBox", 0);
+	shader->setFloat("refractiveIndex", refractiveIndex.find("damon")->second);
+
+	//linear Depth
+	shader->setFloat("near", camera->getNear());
+	shader->setFloat("far", camera->getFar());
+
+	//wireFrame
+	shader->setVec3("wireFrameColor", wireFrameColor);
+
+	//shadow
+	glActiveTexture(GL_TEXTURE6);
+	glBindTexture(GL_TEXTURE_2D, shadow_FBO->GetTextureID());
+	shader->setInt("shadowMap", 6);
+	shader->setMatrix44("lightPosSpace", lights[0].getLightSpaceMatrix());
+
+	m_FBO->bind();
+	clear();
+	for (const std::shared_ptr<Node>& node : sceneGraph.roots)
 	{
-		#pragma region scene Graph render
+		Recursivedraw(node, shader);
+	}
+	shader->unbind();
+	#pragma endregion
 
-		programIter->second->bind();
-		/*setLight(program);*/
-		programIter->second->setVec3("directionLight.color", lights[0].getColor());
-		programIter->second->setVec3("directionLight.direction", lights[0].getDirection());
+	#pragma region visual normal
+	//auto visualNormalProgram = shaders.find(RenderMode::visualNormal);
+	//visualNormalProgram->second->bind();
+	////visual Normal
+	//visualNormalProgram->second->setMatrix44("modelView", camera->viewMatrix() * modelMatrix);
+	//visualNormalProgram->second->setMatrix33("inverseModelView", glm::mat3x3(glm::transpose(glm::inverse(camera->viewMatrix() * modelMatrix))));
+	//visualNormalProgram->second->setMatrix44("projection", camera->projMatrix());
+	//visualNormalProgram->second->setFloat("magnitude", 0.5);
+	//visualNormalProgram->second->setVec3("lineColor", glm::vec3(0.3, 0.6, 0.8));
 
-		glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
-		glm::mat3x3 modelInverseTranspose = glm::mat3x3(glm::transpose(glm::inverse(modelMatrix)));
-		programIter->second->setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
-		programIter->second->setVec3("cameraPosition", camera->getPosition());
-		programIter->second->setMatrix44("model", modelMatrix);
-		programIter->second->setMatrix33("modelInverseTranspose", modelInverseTranspose);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, skybox.getTextureID());
-		programIter->second->setInt("skyBox", 0);
-		programIter->second->setFloat("refractiveIndex", refractiveIndex.find("damon")->second);
+	//for (const std::shared_ptr<Node>& node : sceneGraph.roots)
+	//{
+	//	Recursivedraw(node, *visualNormalProgram->second);
+	//}
+	//visualNormalProgram->second->unbind();
+	#pragma endregion
 
-		//linear Depth
-		programIter->second->setFloat("near", camera->getNear());
-		programIter->second->setFloat("far", camera->getFar());
+	#pragma region GRID 已完成
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	Shader& gridShader = *shaderLib.find(ShaderType::GridCastShadow)->second;
+	gridShader.bind();
+	gridShader.setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
+	gridShader.setVec2("viewport", viewport);
+	gridShader.setVec3("mainColor", glm::vec3(0.0, 0.0, 0.0));
+	gridShader.setVec3("lineColor", glm::vec3(.0, 0.5, 0.5));
+	//gridRatio, majorUnitFrequency, minorUnitVisibility, opacity
+	gridShader.setVec4("gridControl", glm::vec4(1.0, 10, 0.33, .5));
+	gridShader.setVec3("gridOffset", glm::vec3(0, 0, 0));
 
-		//wireFrame
-		programIter->second->setVec3("wireFrameColor", wireFrameColor);
+	glActiveTexture(GL_TEXTURE6);
+	glBindTexture(GL_TEXTURE_2D, shadow_FBO->GetTextureID());
+	gridShader.setInt("shadowMap", 6);
+	gridShader.setMatrix44("lightPosSpace", lights[0].getLightSpaceMatrix());
+	grid.bind();
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
+	grid.unbind();
+	#pragma endregion
 
-		//shadow
-		glActiveTexture(GL_TEXTURE6);
-		glBindTexture(GL_TEXTURE_2D, shadow_FBO->GetTextureID());
-		programIter->second->setInt("shadowMap", 6);
-		glm::mat4x4 lightProj = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.01f, 100.0f);
-		glm::mat4x4 lightView = glm::lookAt(glm::vec3(-2.0f, 2.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		programIter->second->setMatrix44("lightPosSpace", lightProj * lightView);
+	#pragma region SkyBox
+	skybox.bind();
+	skybox.draw(*camera, 0);
+	skybox.unbind();
 
-		m_FBO->bind();
-		clear();
-		for (const std::shared_ptr<Node>& node : sceneGraph.roots)
-		{
-			Recursivedraw(node, *programIter->second);
-		}
-		programIter->second->unbind();
-		#pragma endregion
-
-		#pragma region visual normal
-		//auto visualNormalProgram = shaders.find(RenderMode::visualNormal);
-		//visualNormalProgram->second->bind();
-		////visual Normal
-		//visualNormalProgram->second->setMatrix44("modelView", camera->viewMatrix() * modelMatrix);
-		//visualNormalProgram->second->setMatrix33("inverseModelView", glm::mat3x3(glm::transpose(glm::inverse(camera->viewMatrix() * modelMatrix))));
-		//visualNormalProgram->second->setMatrix44("projection", camera->projMatrix());
-		//visualNormalProgram->second->setFloat("magnitude", 0.5);
-		//visualNormalProgram->second->setVec3("lineColor", glm::vec3(0.3, 0.6, 0.8));
-
-		//for (const std::shared_ptr<Node>& node : sceneGraph.roots)
-		//{
-		//	Recursivedraw(node, *visualNormalProgram->second);
-		//}
-		//visualNormalProgram->second->unbind();
-		#pragma endregion
-
-		#pragma region GRID 已完成
-		//render plane
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		Shader& gridShader = *shaders.find(RenderMode::GridCastShadow)->second;
-		gridShader.bind();
-		gridShader.setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
-		gridShader.setVec2("viewport", viewport);
-		gridShader.setVec3("mainColor", glm::vec3(0.0, 0.0, 0.0));
-		gridShader.setVec3("lineColor", glm::vec3(.0, 0.5, 0.5));
-		//gridRatio, majorUnitFrequency, minorUnitVisibility, opacity
-		gridShader.setVec4("gridControl", glm::vec4(1.0, 10, 0.33, .5));
-		gridShader.setVec3("gridOffset", glm::vec3(0, 0, 0));
-
-		glActiveTexture(GL_TEXTURE6);
-		glBindTexture(GL_TEXTURE_2D, shadow_FBO->GetTextureID());
-		gridShader.setInt("shadowMap", 6);
-		gridShader.setMatrix44("lightPosSpace", lightProj * lightView);
-		grid.bind();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
-		grid.unbind();
-
-		#pragma endregion
-
-		#pragma region SkyBox
-		skybox.bind();
-		skybox.draw(*camera, 0);
-		skybox.unbind();
-
-		outputTextureID = m_FBO->GetTextureID();
-		m_FBO->unbind();
-		#pragma endregion
+	outputTextureID = m_FBO->GetTextureID();
+	m_FBO->unbind();
+	#pragma endregion
 		
-		#pragma region postProcess
-		quad.bind();
-		//glDisable(GL_DEPTH_TEST);
-		if (mode == RenderMode::BlinnPhong)
-		{
-			for (auto& postProcess : postProcesses)
-			{
-				postProcess.second->update(ts);
-				postProcess.second->bind();
-				clear();
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, prevFBO->GetTextureID());
-				postProcess.second->draw(0);
-				glBindTexture(GL_TEXTURE_2D, 0);
-				prevFBO = postProcess.second->getFBO();
-				postProcess.second->unbind();
-			}
-			outputTextureID = prevFBO->GetTextureID();
-			prevFBO = m_FBO;
-		}
-		quad.unbind();
-		#pragma endregion
-	}
-	else {
-		std::cout << "not Found asective shaders!" << std::endl;
-	}
+	#pragma region postProcess
+	quad.bind();
+	//if (mode == RenderMode::BlinnPhong)
+	//{
+	//	for (auto& postProcess : postProcesses)
+	//	{
+	//		postProcess.second->update(ts);
+	//		postProcess.second->bind();
+	//		clear();
+	//		glActiveTexture(GL_TEXTURE0);
+	//		glBindTexture(GL_TEXTURE_2D, prevFBO->GetTextureID());
+	//		postProcess.second->draw(0);
+	//		glBindTexture(GL_TEXTURE_2D, 0);
+	//		prevFBO = postProcess.second->getFBO();
+	//		postProcess.second->unbind();
+	//	}
+	//	outputTextureID = prevFBO->GetTextureID();
+	//	prevFBO = m_FBO;
+	//}
+	quad.unbind();
+	#pragma endregion
 }
 
-void X_Renderer::Recursivedraw(const std::shared_ptr<Node>& node, const Shader& p)
+void X_Renderer::Recursivedraw(const std::shared_ptr<Node>& node, std::shared_ptr<Shader> shader)
 {
 	if (!node->meshes.empty())
 	{
 		for (const std::shared_ptr<Mesh>& mesh : node->meshes)
 		{
+			
+			if (shader != nullptr)
+			{
+				auto mat = mesh->getMaterial();
+				if (!mat->ambientTextures.empty())
+				{
+					mat->ambientTextures[0]->bind(0);
+					shader->setInt("material.ambientTexture", 0);
+				}
+				if (!mat->diffuseTextures.empty())
+				{
+					mat->diffuseTextures[0]->bind(0);
+					shader->setInt("material.diffuseTexture", 0);
+				}
+				if (!mat->specularTextures.empty())
+				{
+					mat->specularTextures[0]->bind(2);
+					shader->setInt("material.specularTexture", 2);
+				}
+				shader->setFloat("material.shininess", mat->shininess ? mat->shininess : 64.0);
+			}
 			mesh->bind();
-			auto mat = mesh->getMaterial();
-			if (!mat->ambientTextures.empty())
-			{
-				mat->ambientTextures[0]->bind(0);
-				p.setInt("material.ambientTexture", 0);
-			}
-			if (!mat->diffuseTextures.empty())
-			{
-				mat->diffuseTextures[0]->bind(0);
-				p.setInt("material.diffuseTexture", 0);
-			}
-			if (!mat->specularTextures.empty())
-			{
-				mat->specularTextures[0]->bind(2);
-				p.setInt("material.specularTexture", 2);
-			}
-			p.setFloat("material.shininess", mat->shininess ? mat->shininess : 32.0);
 			glDrawElements(GL_TRIANGLES, mesh->indicesCount(), GL_UNSIGNED_INT, (const void*)0);
 			mesh->unbind();
 		}
@@ -246,7 +229,7 @@ void X_Renderer::Recursivedraw(const std::shared_ptr<Node>& node, const Shader& 
 	{
 		for (auto& node : node->children)
 		{
-			Recursivedraw(node, p);
+			Recursivedraw(node, shader);
 		}
 	}
 }
@@ -257,52 +240,36 @@ void X_Renderer::clear()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void X_Renderer::buildFBO(const glm::vec2& viewport)
-{
-	if (m_FBO)
-	{
-		m_FBO.reset();
-	}
-	m_FBO = std::make_unique<FrameBuffer>(viewport.x, viewport.y);
-}
-
 void X_Renderer::resizeFBO(unsigned width, unsigned height)
 {
 	m_FBO->resize(width, height);
-	for (auto& postProcess : postProcesses)
+	shadow_FBO->resize(width, height);
+	/*for (auto& postProcess : postProcesses)
 	{
 		postProcess.second->resetFBO(width, height);
-	}
+	}*/
 }
 
 void X_Renderer::compileShaders()
 {
-	shaders.insert({ RenderMode::wireFrame, std::make_shared<Shader>("shader/wireFrame/vertex.glsl", "shader/wireFrame/fragment.glsl") });
-	shaders.insert({ RenderMode::BlinnPhong, std::make_shared<Shader>("shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl") });
-	//PBR暂时未实现
-	shaders.insert({ RenderMode::PBR, std::make_shared<Shader>("shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl") });
-	shaders.insert({ RenderMode::Depth, std::make_shared<Shader>("shader/depthRender/vertex.glsl", "shader/depthRender/fragment.glsl") });
-	shaders.insert({ RenderMode::Normal, std::make_shared<Shader>("shader/normal/vertex.glsl", "shader/normal/fragment.glsl") });
-	shaders.insert({ RenderMode::grid, std::make_shared<Shader>("shader/grid/vertex.glsl", "shader/grid/fragment.glsl") });
-	shaders.insert({ RenderMode::EnvironmentMapReflect, std::make_shared<Shader>("shader/environmentMapReflect/vertex.glsl", "shader/environmentMapReflect/fragment.glsl") });
-	shaders.insert({ RenderMode::EnvironmentMapRefract, std::make_shared<Shader>("shader/environmentMapRefract/vertex.glsl", "shader/environmentMapRefract/fragment.glsl") });
-	shaders.insert({ RenderMode::visualNormal, std::make_shared<Shader>("shader/visualNormal/vertex.glsl", "shader/visualNormal/fragment.glsl", "shader/visualNormal/geometry.glsl") });
-	shaders.insert({ RenderMode::ShadowMap, std::make_shared<Shader>("shader/shadowMap/vertex.glsl", "shader/shadowMap/fragment.glsl") });
-	shaders.insert({ RenderMode::BlinnPhongCastShadow, std::make_shared<Shader>("shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl") });
-	shaders.insert({ RenderMode::GridCastShadow, std::make_shared<Shader>("shader/gridCastShadow/vertex.glsl", "shader/gridCastShadow/fragment.glsl") });
-}
+	shaderLib.insert({ ShaderType::WireFrame, std::make_shared<Shader>("shader/wireFrame/vertex.glsl", "shader/wireFrame/fragment.glsl") });
+	shaderLib.insert({ ShaderType::BlinnPhong, std::make_shared<Shader>("shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl") });	
+	shaderLib.insert({ ShaderType::PBR, std::make_shared<Shader>("shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl") });
+	shaderLib.insert({ ShaderType::Depth, std::make_shared<Shader>("shader/depthRender/vertex.glsl", "shader/depthRender/fragment.glsl") });
+	shaderLib.insert({ ShaderType::Normal, std::make_shared<Shader>("shader/normal/vertex.glsl", "shader/normal/fragment.glsl") });
+	shaderLib.insert({ ShaderType::Grid, std::make_shared<Shader>("shader/grid/vertex.glsl", "shader/grid/fragment.glsl") });
+	shaderLib.insert({ ShaderType::EnvironmentMapReflect, std::make_shared<Shader>("shader/environmentMapReflect/vertex.glsl", "shader/environmentMapReflect/fragment.glsl") });
+	shaderLib.insert({ ShaderType::EnvironmentMapRefract, std::make_shared<Shader>("shader/environmentMapRefract/vertex.glsl", "shader/environmentMapRefract/fragment.glsl") });
+	shaderLib.insert({ ShaderType::visualNormal, std::make_shared<Shader>("shader/visualNormal/vertex.glsl", "shader/visualNormal/fragment.glsl", "shader/visualNormal/geometry.glsl") });
+	shaderLib.insert({ ShaderType::ShadowMap, std::make_shared<Shader>("shader/shadowMap/vertex.glsl", "shader/shadowMap/fragment.glsl") });
+	shaderLib.insert({ ShaderType::BlinnPhongCastShadow, std::make_shared<Shader>("shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl") });
+	shaderLib.insert({ ShaderType::GridCastShadow, std::make_shared<Shader>("shader/gridCastShadow/vertex.glsl", "shader/gridCastShadow/fragment.glsl") });
 
-void X_Renderer::compilePostProcess()
-{
-	//postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::GrayScalize, std::make_shared<GrayScale>("grayScale", "shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl", PostProcessMode::GrayScalize)));
-
-	//postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::GlitchRGBSplit, std::make_shared<GlitchRGBSpliter>("grayScale", "shader/GlitchRGBSplit/vertex.glsl", "shader/GlitchRGBSplit/fragment.glsl", PostProcessMode::GlitchRGBSplit, 10.0f, 0.5f, Direction::Horizontal)));
-
-	//postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::Inversion, std::make_shared<GrayScale>("inversion", "shader/inversion/vertex.glsl", "shader/inversion/fragment.glsl", PostProcessMode::Inversion)));
-
-	//postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::NuClearEffect, std::make_shared<NuClear>("inversion", "shader/nuclearEffect/vertex.glsl", "shader/nuclearEffect/fragment.glsl", PostProcessMode::NuClearEffect)));
-
-	//postProcesses.insert(std::make_pair<PostProcessMode, std::shared_ptr<PostProcess>>(PostProcessMode::EdgeDetectionEffect, std::make_shared<EdgeDetection>("inversion", "shader/edgeDetection/vertex.glsl", "shader/edgeDetection/fragment.glsl", PostProcessMode::EdgeDetectionEffect)));
+	shaderLib.insert({ ShaderType::GrayScalize, std::make_shared<Shader>("shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl") });
+	shaderLib.insert({ ShaderType::GlitchRGBSplit, std::make_shared<Shader>("shader/glitchRGBSplit/vertex.glsl", "shader/glitchRGBSplit/fragment.glsl") });
+	shaderLib.insert({ ShaderType::Inversion, std::make_shared<Shader>("shader/inversion/vertex.glsl", "shader/inversion/fragment.glsl") });
+	shaderLib.insert({ ShaderType::NuClear, std::make_shared<Shader>("shader/nuclear/vertex.glsl", "shader/nuclear/fragment.glsl") });
+	shaderLib.insert({ ShaderType::EdgeDetection, std::make_shared<Shader>("shader/edgeDetection/vertex.glsl", "shader/edgeDetection/fragment.glsl") });
 }
 
 #pragma region lights

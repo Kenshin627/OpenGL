@@ -765,8 +765,8 @@
     <None Include="shader\environmentMapReflect\vertex.glsl" />
     <None Include="shader\environmentMapRefract\fragment.glsl" />
     <None Include="shader\environmentMapRefract\vertex.glsl" />
-    <None Include="shader\GlitchRGBSplit\fragment.glsl" />
-    <None Include="shader\GlitchRGBSplit\vertex.glsl" />
+    <None Include="shader\glitchRGBSplit\fragment.glsl" />
+    <None Include="shader\glitchRGBSplit\vertex.glsl" />
     <None Include="shader\gridCastShadow\fragment.glsl" />
     <None Include="shader\gridCastShadow\vertex.glsl" />
     <None Include="shader\grid\fragment.glsl" />
@@ -777,8 +777,8 @@
     <None Include="shader\normal\vertex.glsl" />
     <None Include="shader\grayScale\fragment.glsl" />
     <None Include="shader\grayScale\vertex.glsl" />
-    <None Include="shader\nuclearEffect\fragment.glsl" />
-    <None Include="shader\nuclearEffect\vertex.glsl" />
+    <None Include="shader\nuclear\fragment.glsl" />
+    <None Include="shader\nuclear\vertex.glsl" />
     <None Include="shader\shadowMap\fragment.glsl" />
     <None Include="shader\shadowMap\vertex.glsl" />
     <None Include="shader\skyBox\fragment.glsl" />

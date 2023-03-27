@@ -5,23 +5,11 @@
 #include "../../Buffer/FrameBuffer.h"
 #include "../../program/Shader.h"
 
-enum PostProcessMode
-{
-	GrayScalize,
-	Bloom,
-	Shadow,
-	GlitchRGBSplit,
-	Inversion,
-	NuClearEffect,
-	EdgeDetectionEffect
-};
-
 class PostProcess
 {
 public:
-	PostProcess(const std::string& name, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, PostProcessMode mode) :
+	PostProcess(const std::string& name, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& geometryShaderPath = "") :
 		name(name),
-		mode(mode),
 		program(std::make_shared<Shader>(vertexShaderPath, fragmentShaderPath)),
 		m_FBO(std::make_shared<FrameBuffer>(1, 1))
 	{ }
@@ -50,7 +38,6 @@ public:
 	std::shared_ptr<FrameBuffer> getFBO() const { return m_FBO; };
 protected:
 	std::string name;
-	PostProcessMode mode;
 	std::shared_ptr<Shader> program;
 	std::shared_ptr<FrameBuffer> m_FBO;
 };

@@ -1,7 +1,7 @@
 #include <glad/gl.h>
 #include "Inversion.h"
 
-Inversion::Inversion(const std::string& name, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, PostProcessMode mode) :PostProcess(name, vertexShaderPath, fragmentShaderPath, mode) {}
+Inversion::Inversion(const std::string& name, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& geometryShaderPath) :PostProcess(name, vertexShaderPath, fragmentShaderPath, geometryShaderPath) {}
 
 Inversion::~Inversion() {}
 void Inversion::draw(unsigned slot) const

@@ -1,7 +1,7 @@
 #include <glad/gl.h>
 #include "GlitchRGBSplit.h"
 
-GlitchRGBSpliter::GlitchRGBSpliter(const std::string& name, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, PostProcessMode mode, float speed = 10.0f, float intensity = 0.5f, Direction direct = Direction::Horizontal) :PostProcess(name, vertexShaderPath, fragmentShaderPath, mode), m_Speed(speed), m_Intensity(intensity * 0.1f), m_Direct(direct), m_Time(0.0f) {}
+GlitchRGBSpliter::GlitchRGBSpliter(const std::string& name, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& geometryShaderPath, float speed = 10.0f, float intensity = 0.5f, Direction direct = Direction::Horizontal) :PostProcess(name, vertexShaderPath, fragmentShaderPath, geometryShaderPath), m_Speed(speed), m_Intensity(intensity * 0.1f), m_Direct(direct), m_Time(0.0f) {}
 
 void GlitchRGBSpliter::setTime(float t)
 {

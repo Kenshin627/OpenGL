@@ -7,14 +7,14 @@
 #include "../../../Buffer/VertexBuffer.h"
 #include "Grid.h"
 
-Grid::Grid()
+GridMesh::GridMesh(float size)
 {
 	{
 		std::vector<float> vertices = {
-			-100, 0, -100,  0, 1, 0,  0, 1,
-			-100, 0,  100,  0, 1, 0,  0, 0,
-			 100, 0,  100,  0, 1, 0,  1, 0,
-			 100, 0, -100,  0, 1, 0,  1, 1,
+			-size, 0, -size,  0, 1, 0,  0, 1,
+			-size, 0,  size,  0, 1, 0,  0, 0,
+			 size, 0,  size,  0, 1, 0,  1, 0,
+			 size, 0, -size,  0, 1, 0,  1, 1,
 		};
 
 		std::vector<unsigned> indices = { 0, 1, 2, 0, 2, 3 };
@@ -32,18 +32,18 @@ Grid::Grid()
 	}
 }
 
-Grid::~Grid()
+GridMesh::~GridMesh()
 {
 	unbind();
 }
 
-void Grid::bind()
+void GridMesh::bind()
 {
 	m_VAO->bind();
 	m_IBO->bind();
 }
 
-void Grid::unbind()
+void GridMesh::unbind()
 {
 	m_IBO->unbind();
 	m_VAO->unbind();

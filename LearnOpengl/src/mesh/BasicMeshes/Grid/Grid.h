@@ -3,11 +3,11 @@ class IndexBuffer;
 class VertexBuffer;
 class VertexDataLayout;
 
-class Grid
+class GridMesh
 {
 public:
-	Grid();
-	~Grid();
+	GridMesh(float size);
+	~GridMesh();
 	void bind();
 	void unbind();
 private:

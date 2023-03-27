@@ -1805,13 +1805,13 @@
     <None Include="shader\grid\vertex.glsl" />
     <None Include="shader\grayScale\vertex.glsl" />
     <None Include="shader\grayScale\fragment.glsl" />
-    <None Include="shader\GlitchRGBSplit\vertex.glsl" />
-    <None Include="shader\GlitchRGBSplit\fragment.glsl" />
+    <None Include="shader\glitchRGBSplit\vertex.glsl" />
+    <None Include="shader\glitchRGBSplit\fragment.glsl" />
     <None Include="shader\grid\fragment.glsl" />
     <None Include="shader\inversion\fragment.glsl" />
     <None Include="shader\inversion\vertex.glsl" />
-    <None Include="shader\nuclearEffect\vertex.glsl" />
-    <None Include="shader\nuclearEffect\fragment.glsl" />
+    <None Include="shader\nuclear\vertex.glsl" />
+    <None Include="shader\nuclear\fragment.glsl" />
     <None Include="resource\fonts\msyh.ttc" />
     <None Include="shader\edgeDetection\vertex.glsl" />
     <None Include="shader\edgeDetection\fragment.glsl" />

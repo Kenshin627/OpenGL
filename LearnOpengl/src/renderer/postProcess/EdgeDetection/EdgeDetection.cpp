@@ -1,7 +1,7 @@
 #include <glad/gl.h>
 #include "EdgeDetection.h"
 
-EdgeDetection::EdgeDetection(const std::string& name, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, PostProcessMode mode) :PostProcess(name, vertexShaderPath, fragmentShaderPath, mode) {}
+EdgeDetection::EdgeDetection(const std::string& name, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& geometryShaderPath) :PostProcess(name, vertexShaderPath, fragmentShaderPath, geometryShaderPath) {}
 
 EdgeDetection::~EdgeDetection() {}
 void EdgeDetection::draw(unsigned slot) const

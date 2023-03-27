@@ -34,7 +34,6 @@ namespace Kenshin
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		m_windowHandle = glfwCreateWindow(m_Specification.width, m_Specification.height, m_Specification.name.c_str(), nullptr, nullptr);
-		glfwSetWindowUserPointer(m_windowHandle, this);
 		
 		if (m_windowHandle == nullptr)
 		{
