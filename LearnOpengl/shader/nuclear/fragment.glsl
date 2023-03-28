@@ -5,7 +5,7 @@ const float offset = 1.0 / 500.0;
 in vec2 vCoords;
 out vec4 fragColor;
 
-uniform sampler2D pipelineTexture;
+uniform sampler2D pipeLineTexture;
 
 void main()
 {
@@ -26,7 +26,7 @@ void main()
 
 	for(int i = 0; i < 9; i++)
 	{
-		samplers[i] = vec3(texture(pipelineTexture, vCoords + coordsOffsets[i]));
+		samplers[i] = vec3(texture(pipeLineTexture, vCoords + coordsOffsets[i]));
 	}
 
 

@@ -76,5 +76,5 @@ private:
 	std::shared_ptr<ShadowFrameBuffer> m_ShadowFBO;
 	bool enableShadows;
 	bool visiualNormal;
-	std::shared_ptr<PostProcess> postProcess;
+	std::shared_ptr<Shader> postProcess;
 };

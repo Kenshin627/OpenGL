@@ -4,16 +4,16 @@ PostProcess::PostProcess(const std::vector<std::string>& paths, std::shared_ptr<
 	Shader(paths),
 	prev_FBO(prev_buffer)
 {
-	buildFBO(1, 1);
+	buildFBO(1.0f, 1.0f);
 	type = ShaderCategory::PostProcessShader;
 }
 
-PostProcess::~PostProcess() = default;
+PostProcess::~PostProcess() {}
 
 void PostProcess::bind() const
 {
-	glUseProgram(m_RendererID);
 	m_FBO->bind();
+	glUseProgram(m_RendererID);
 }
 
 void PostProcess::unbind() const

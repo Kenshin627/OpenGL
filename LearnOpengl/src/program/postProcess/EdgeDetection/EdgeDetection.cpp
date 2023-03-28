@@ -14,5 +14,7 @@ void EdgeDetectionShader::setCommonUniforms() const
 
 void EdgeDetectionShader::unbind() const
 {
+	m_FBO->unbind();
+	glUseProgram(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

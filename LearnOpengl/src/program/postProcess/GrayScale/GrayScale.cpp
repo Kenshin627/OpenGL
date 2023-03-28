@@ -12,5 +12,7 @@ void GrayScaleShader::setCommonUniforms() const
 
 void GrayScaleShader::unbind() const
 {
+	m_FBO->unbind();
+	glUseProgram(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

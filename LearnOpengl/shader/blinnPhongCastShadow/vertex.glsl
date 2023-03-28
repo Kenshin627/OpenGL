@@ -11,13 +11,13 @@ out vec4 fragPosLightSpace;
 
 uniform mat4 modelViewProjection;
 uniform mat4 model;
-uniform mat3 modelInverseTranspose;
+uniform mat3 normalMatrix;
 uniform mat4 lightPosSpace;
 
 void main()
 {
 	vPos = vec3(model * vec4(aPosition, 1.0));
-	vNormal =  modelInverseTranspose * aNormal;
+	vNormal =  normalMatrix * aNormal;
 	vUv = aUv;
 	fragPosLightSpace = lightPosSpace * model * vec4(aPosition, 1.0);
 	gl_Position = modelViewProjection * vec4(aPosition, 1.0);

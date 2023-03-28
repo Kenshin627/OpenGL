@@ -15,7 +15,6 @@
 #include "../program/postProcess/Inversion/Inversion.h"
 #include "../program/postProcess/NuClear/NuClear.h"
 
-
 X_Renderer::X_Renderer():
 	camera(std::make_shared<Camera>(glm::vec3(0, 17, 35), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
 	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)), 
@@ -49,9 +48,9 @@ X_Renderer::X_Renderer():
 {
 	lights.push_back(std::make_shared<DirectionLight>(glm::vec3(0.3f, -0.7f, -1.0f), glm::vec3(1.0f)));
 	compileShaders();
-	
-	//postProcess = (std::shared_ptr<PostProcess>)*shaderLib.find(ShaderType::EdgeDetection)->second;
-	/*setLight(program);*/
+
+	postProcess = shaderLib.find(ShaderType::NuClear)->second;
+
 	#pragma region faceCulling
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -98,7 +97,6 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	clear();
 
 	#pragma region scene Graph render
-	//std::shared_ptr<Shader> shader = shaderLib.find((ShaderType)mode)->second;
 	auto meshShaderType = enableShadows ? ShaderType::BlinnPhong : ShaderType::BlinnPhongCastShadow;
 	std::shared_ptr<Shader> shader = shaderLib.find(meshShaderType)->second;
 	shader->bind();	
@@ -151,16 +149,17 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	{
 		quad.bind();
 		postProcess->bind();
-		postProcess->update(ts);
 		clear();
+		postProcess->update(ts);
 		postProcess->setCommonUniforms();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
 		prevFBO = postProcess->getFBO();
 		postProcess->unbind();
-		outputTextureID = prevFBO->GetTextureID();
-		prevFBO = m_FBO;
+		outputTextureID = postProcess->getFBO()->GetTextureID();
+		
 		quad.unbind();
 	}
+	//prevFBO = m_FBO;
 	#pragma endregion
 }
 
@@ -225,7 +224,7 @@ void X_Renderer::compileShaders()
 
 	//POSTPROCESS
 	shaderLib.insert({ ShaderType::GrayScalize, std::make_shared<GrayScaleShader>(std::vector<std::string>{ "shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl" }, prevFBO) });
-	shaderLib.insert({ ShaderType::GlitchRGBSplit, std::make_shared<GlitchRGBSpliter>(std::vector<std::string>{ "shader/glitchRGBSplit/vertex.glsl", "shader/glitchRGBSplit/fragment.glsl" }, prevFBO, 0.5f, 2.0f, Direction::Horizontal) });
+	shaderLib.insert({ ShaderType::GlitchRGBSplit, std::make_shared<GlitchRGBSpliter>(std::vector<std::string>{ "shader/glitchRGBSplit/vertex.glsl", "shader/glitchRGBSplit/fragment.glsl" }, prevFBO, 10.0f, 0.2f, Direction::Horizontal) });
 	shaderLib.insert({ ShaderType::Inversion, std::make_shared<InversionShader>(std::vector<std::string>{ "shader/inversion/vertex.glsl", "shader/inversion/fragment.glsl" }, prevFBO) });
 	shaderLib.insert({ ShaderType::NuClear, std::make_shared<NuClearShader>(std::vector<std::string>{ "shader/nuclear/vertex.glsl", "shader/nuclear/fragment.glsl" }, prevFBO) });
 	shaderLib.insert({ ShaderType::EdgeDetection, std::make_shared<EdgeDetectionShader>(std::vector<std::string>{ "shader/edgeDetection/vertex.glsl", "shader/edgeDetection/fragment.glsl" }, prevFBO) });

@@ -9,6 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "../mesh/Mesh.h"
+#include "../Buffer/FrameBuffer.h"
 
 enum ShaderCategory
 {
@@ -23,6 +24,10 @@ public:
 	virtual ~Shader();
 	virtual void bind() const;
 	virtual void unbind() const;
+
+	virtual void update(float ts);
+	virtual std::shared_ptr<FrameBuffer> getFBO() const { return nullptr; };
+	virtual std::shared_ptr<FrameBuffer> getPrevFBO() const { return nullptr; };
 
 	void setVec4(const std::string& name, const glm::vec4& v4) const;
 	void setVec3(const std::string& name, const glm::vec3& v3) const;

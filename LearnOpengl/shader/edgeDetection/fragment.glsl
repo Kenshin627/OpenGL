@@ -1,6 +1,6 @@
 #version 330 core
-
-uniform sampler2D pipelineTexture;
+				 
+uniform sampler2D pipeLineTexture;
 
 in vec2 vCoords;
 
@@ -26,7 +26,7 @@ void main()
 
 	for(int i = 0; i < 9; i++)
 	{
-		col += vec3(texture(pipelineTexture, vCoords + coordsOffset[i])) * kernels[i];	
+		col += vec3(texture(pipeLineTexture, vCoords + coordsOffset[i])) * kernels[i];	
 	}
 
 	fragColor = vec4(col, 1.0);

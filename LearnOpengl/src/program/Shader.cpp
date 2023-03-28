@@ -49,6 +49,8 @@ void Shader::unbind() const
 {
 	glUseProgram(0);
 }
+
+void Shader::update(float ts) {}
 	
 unsigned Shader::compileShader(const std::string& path, unsigned shaderType)
 {

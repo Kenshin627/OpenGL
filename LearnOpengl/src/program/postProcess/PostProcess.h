@@ -22,8 +22,8 @@ public:
 
 	virtual void buildFBO(unsigned viewportX, unsigned viewportY);
 	
-	std::shared_ptr<FrameBuffer> getFBO() const { return m_FBO; }
-	std::shared_ptr<FrameBuffer> getPrevFBO() const { return prev_FBO; };
+	std::shared_ptr<FrameBuffer> getFBO() const override { return m_FBO; }
+	std::shared_ptr<FrameBuffer> getPrevFBO() const override { return prev_FBO; };
 protected:
 	std::shared_ptr<FrameBuffer> m_FBO;
 	std::shared_ptr<FrameBuffer> prev_FBO;
