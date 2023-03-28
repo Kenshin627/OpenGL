@@ -29,30 +29,33 @@ public:
 	const Layout_Container_Type& getElements() const { return m_Elements; };
 	const unsigned int getStride() const { return m_Stride; };
 	template<typename T>
-	void push(unsigned int count)
+	VertexDataLayout& push(unsigned int count)
 	{
 		return false;
 	};
 
 	template<>
-	void push<float>(unsigned int count)
+	VertexDataLayout& push<float>(unsigned int count)
 	{
 		m_Elements.push_back({ count, GL_FLOAT, GL_FALSE, m_Stride });
 		calcOffset(count, GL_FLOAT);
+		return *this;
 	}
 
 	template<>
-	void push<int>(unsigned int count)
+	VertexDataLayout& push<int>(unsigned int count)
 	{
 		m_Elements.push_back({ count, GL_INT, GL_FALSE, m_Stride });
 		calcOffset(count, GL_INT);
+		return *this;
 	}
 
 	template<>
-	void push<unsigned char>(unsigned int count)
+	VertexDataLayout& push<unsigned char>(unsigned int count)
 	{
 		m_Elements.push_back({ count, GL_UNSIGNED_BYTE, GL_TRUE, m_Stride });
 		calcOffset(count, GL_UNSIGNED_BYTE);
+		return *this;
 	}
 
 private:

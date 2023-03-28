@@ -38,33 +38,38 @@ std::shared_ptr<Node> SceneLoader::processNode(aiNode* node, const aiScene* scen
 
 std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scene)
 {
-	std::vector<Vertex> vertices;
+	std::vector<float> vertices;
 	std::vector<unsigned> indices;
 	std::vector<Texture> textures;
 	
 
 	for (size_t i = 0; i < mesh->mNumVertices; i++)
 	{
-		Vertex vertex;
+		//Vertex vertex;
 		if (mesh->HasPositions())
 		{
 			auto p = mesh->mVertices[i];
-			vertex.position = glm::vec3(p.x, p.y, p.z);
+			vertices.push_back(p.x);
+			vertices.push_back(p.y);
+			vertices.push_back(p.z);
 		}
 		//ÓÀÔ¶·µ»Øtrue,ÉèÖÃÁËpostprocess: aiProcess_GenSmoothNormals
 		if (mesh->HasNormals())
 		{
 			auto n = mesh->mNormals[i];
-			vertex.normal = glm::vec3(n.x, n.y, n.z);
+			vertices.push_back(n.x);
+			vertices.push_back(n.y);
+			vertices.push_back(n.z);
 		}
 		unsigned uvChannels = mesh->GetNumUVChannels();
 		//for (size_t j = 0; j < uvChannels; j++)
 		//{
 			auto uvs = mesh->mTextureCoords[0][i];
-			//vertex.uvs.emplace_back(uvs.x, uvs.y, uvs.z);
-			vertex.uv = glm::vec3(uvs.x, uvs.y, uvs.z);
+			vertices.push_back(uvs.x);
+			vertices.push_back(uvs.y);
+			//vertices.push_back(uvs.z);
 		//}
-		vertices.push_back(vertex);
+		/*vertices.push_back(vertex);*/
 		//vertex.uvs.clear();
 	}
 
@@ -113,7 +118,11 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 			materialCache.insert({ materialIndex, mat });
 		}		
 	}
-	return std::make_shared<Mesh>(mesh->mName.C_Str(), vertices, indices, mat);
+	VertexDataLayout layout;
+	layout.push<float>(3);
+	layout.push<float>(3);
+	layout.push<float>(2);
+	return std::make_shared<Mesh>(mesh->mName.C_Str(), vertices, indices, mat, layout);
 }
 
 std::vector<std::shared_ptr<Texture>> SceneLoader::loadMaterialTextures(aiMaterial* mat, aiTextureType type, TEXTURE_TYPE tname)

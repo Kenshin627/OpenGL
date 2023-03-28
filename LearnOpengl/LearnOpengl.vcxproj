@@ -73,26 +73,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(LibraryPath)</LibraryPath>
     <IncludePath>$(ProjectDir)dependencies\GLFW\include\GLFW;$(ProjectDir)dependencies\GLAD\include;$(IncludePath);$(ProjectDir)dependencies\GLM</IncludePath>
-    <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)</IntDir>
+    <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(LibraryPath)</LibraryPath>
     <IncludePath>$(ProjectDir)dependencies\GLFW\include\GLFW;$(ProjectDir)dependencies\GLAD\include;$(IncludePath);$(ProjectDir)dependencies\GLM</IncludePath>
-    <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)</IntDir>
+    <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(ProjectDir)dependencies\ASSIMP\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(ProjectDir)dependencies\GLFW\include;$(ProjectDir)dependencies\GLAD\include;$(ProjectDir)dependencies\STB_IMAGE\includes;$(IncludePath);$(ProjectDir)dependencies\GLM;$(ProjectDir)dependencies\ASSIMP\include</IncludePath>
-    <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)</IntDir>
+    <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(ProjectDir)dependencies\ASSIMP\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(ProjectDir)dependencies\GLFW\include;$(ProjectDir)dependencies\GLAD\include;$(ProjectDir)dependencies\STB_IMAGE\includes;$(IncludePath);$(ProjectDir)dependencies\GLM;$(ProjectDir)dependencies\ASSIMP\include</IncludePath>
-    <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)</IntDir>
+    <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

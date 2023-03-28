@@ -68,7 +68,7 @@ private:
 	glm::vec4 clearColor;
 	RenderMode mode;
 	glm::vec3 wireFrameColor;
-	GridMesh grid;
+	std::shared_ptr<GridMesh> grid;
 	Quad quad;
 	SkyBox skybox;
 	std::unordered_map<std::string, float> refractiveIndex;

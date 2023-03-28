@@ -20,7 +20,7 @@ X_Renderer::X_Renderer():
 	clearColor(glm::vec4(0.0, 0.0, 0.0, 1.0)), 
 	mode(RenderMode::_BlinnPhong), 
 	wireFrameColor(glm::vec3(0.5, 0.7, 0.2)),
-	grid(200.0f),
+	grid(std::make_shared<GridMesh>(200.0f)),
 	quad(),
 	skybox(
 		{ "resource/textures/skyBox/right.jpg", "resource/textures/skyBox/left.jpg", 
@@ -70,11 +70,10 @@ void X_Renderer::RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& vie
 	{
 		Recursivedraw(node);
 	}
-	grid.bind();
-	//shadowShader->setMeshUniforms(grid);
-	shadowShader->setMatrix44("model", glm::identity<glm::mat4x4>());
+	grid->bind();
+	shadowShader->setMeshUniforms(grid);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
-	grid.unbind();	
+	grid->unbind();	
 	m_ShadowFBO->unbind();
 	shadowShader->unbind();
 }
@@ -143,13 +142,11 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	//gridShader.setInt("shadowMap", 6);
 	//gridShader.setMatrix44("lightPosSpace", lights[0]->getLightSpaceMatrix());
 	#pragma endregion
-	grid.bind();
-	
+	grid->bind();	
 	gridShader->setCommonUniforms();
-	gridShader->setMeshUniforms(nullptr);
-
+	gridShader->setMeshUniforms(grid);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
-	grid.unbind();
+	grid->unbind();
 	#pragma endregion
 
 	#pragma region SkyBox

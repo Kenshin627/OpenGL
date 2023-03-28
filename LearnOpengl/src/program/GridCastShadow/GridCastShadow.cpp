@@ -1,13 +1,10 @@
 #include "GridCastShadow.h"
 
-GridCastShadowShader::GridCastShadowShader(const std::vector<std::string> paths, std::shared_ptr<Camera> cam, std::shared_ptr<DirectionLight> light, std::shared_ptr<ShadowFrameBuffer> shadowBuffer):
+GridCastShadowShader::GridCastShadowShader(const std::vector<std::string> paths, std::shared_ptr<Camera> cam, std::shared_ptr<DirectionLight> light, std::shared_ptr<ShadowFrameBuffer> shadowBuffer) :
 	Shader(paths),
 	camera(cam),
 	light(light),
-	shadowBuffer(shadowBuffer)
-{
-	
-}
+	shadowBuffer(shadowBuffer) { }
 
 void GridCastShadowShader::setCommonUniforms() const
 {
