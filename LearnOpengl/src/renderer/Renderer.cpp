@@ -12,6 +12,7 @@
 #include "../program/ShadowMap/ShadowMap.h"
 #include "../program/BlinnPhongCastShadow/BlinnPhongCastShadow.h"
 #include "../program/GridCastShadow/GridCastShadow.h"
+#include "../program/Grid/GridShader.h"
 #include "../program/VisualNormal/VisualNormal.h"
 
 X_Renderer::X_Renderer():
@@ -82,23 +83,22 @@ void X_Renderer::RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& vie
 
 void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts)
 {	
+	clear();
+	glViewport(0.0f, 0.0f, viewport.x, viewport.y);
 	if (enableShadows)
 	{
 		RenderShadow(sceneGraph, viewport, ts);
 	}
-	clear();
-	glViewport(0.0f, 0.0f, viewport.x, viewport.y);
-
+	
 	m_FBO->bind();
+	clear();
+
 	#pragma region scene Graph render
 	//std::shared_ptr<Shader> shader = shaderLib.find((ShaderType)mode)->second;
-	std::shared_ptr<Shader> shader = shaderLib.find(ShaderType::BlinnPhongCastShadow)->second;
-	
+	auto meshShaderType = enableShadows ? ShaderType::BlinnPhong : ShaderType::BlinnPhongCastShadow;
+	std::shared_ptr<Shader> shader = shaderLib.find(meshShaderType)->second;
 	shader->bind();	
 	shader->setCommonUniforms();
-
-	
-	clear();
 	for (const std::shared_ptr<Node>& node : sceneGraph.roots)
 	{
 		Recursivedraw(node, shader);
@@ -112,7 +112,6 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 		auto visualNormalShader = shaderLib.find(ShaderType::visualNormal)->second;
 		visualNormalShader->bind();
 		visualNormalShader->setCommonUniforms();
-
 		for (const std::shared_ptr<Node>& node : sceneGraph.roots)
 		{
 			Recursivedraw(node, visualNormalShader);
@@ -123,27 +122,15 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 
 	#pragma region GRID ÒÑÍê³É
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	auto gridShader = shaderLib.find(ShaderType::GridCastShadow)->second;
+	auto gridShaderType = enableShadows ? ShaderType::GridCastShadow : ShaderType::Grid;
+	auto gridShader = shaderLib.find(gridShaderType)->second;
 	gridShader->bind();
-	#pragma region old Grid
-	//gridShader.setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * glm::identity <glm::mat4x4>() );
-	//gridShader.setVec2("viewport", viewport);
-	//gridShader.setVec3("mainColor", glm::vec3(0.0, 0.0, 0.0));
-	//gridShader.setVec3("lineColor", glm::vec3(.0, 0.5, 0.5));
-	////gridRatio, majorUnitFrequency, minorUnitVisibility, opacity
-	//gridShader.setVec4("gridControl", glm::vec4(1.0, 10, 0.33, .5));
-	//gridShader.setVec3("gridOffset", glm::vec3(0, 0, 0));
-
-	//glActiveTexture(GL_TEXTURE6);
-	//glBindTexture(GL_TEXTURE_2D, shadowShader.getFBO()->GetTextureID());
-	//gridShader.setInt("shadowMap", 6);
-	//gridShader.setMatrix44("lightPosSpace", lights[0]->getLightSpaceMatrix());
-	#pragma endregion
 	grid->bind();	
 	gridShader->setCommonUniforms();
 	gridShader->setMeshUniforms(grid);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
 	grid->unbind();
+	gridShader->unbind();
 	#pragma endregion
 
 	#pragma region SkyBox
@@ -229,7 +216,7 @@ void X_Renderer::compileShaders()
 	//shaderLib.insert({ ShaderType::PBR, std::make_shared<BlinnPhongShader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" }, camera, lights[0]) });
 	shaderLib.insert({ ShaderType::Depth, std::make_shared<DepthShader>(std::vector<std::string>{ "shader/depthRender/vertex.glsl", "shader/depthRender/fragment.glsl" }, camera) });
 	shaderLib.insert({ ShaderType::Normal, std::make_shared<Shader>(std::vector<std::string>{ "shader/normal/vertex.glsl", "shader/normal/fragment.glsl" }) });
-	shaderLib.insert({ ShaderType::Grid, std::make_shared<Shader>(std::vector<std::string>{ "shader/grid/vertex.glsl", "shader/grid/fragment.glsl" }) });
+	shaderLib.insert({ ShaderType::Grid, std::make_shared<GridShader>(std::vector<std::string>{ "shader/grid/vertex.glsl", "shader/grid/fragment.glsl" }, camera, glm::vec3(0.3, 0.3, 0.3), glm::vec3(0.6, 0.6, 0.6), glm::vec3(0, 0, 0), glm::vec4(1.0, 10, 0.33, .5)) });
 	shaderLib.insert({ ShaderType::EnvironmentMapReflect, std::make_shared<EnvironmentMapReflectShader>(std::vector<std::string>{ "shader/environmentMapReflect/vertex.glsl", "shader/environmentMapReflect/fragment.glsl" }, camera, skybox.getTextureID())});
 	shaderLib.insert({ ShaderType::EnvironmentMapRefract, std::make_shared<EnvironmentMapRefractShader>(std::vector<std::string>{ "shader/environmentMapRefract/vertex.glsl", "shader/environmentMapRefract/fragment.glsl" }, camera, skybox.getTextureID(), refractiveIndex.find("glass")->second)});
 	shaderLib.insert({ ShaderType::visualNormal, std::make_shared<VisualNormalShader>(std::vector<std::string>{ "shader/visualNormal/vertex.glsl", "shader/visualNormal/fragment.glsl", "shader/visualNormal/geometry.glsl" }, camera, 0.7f, glm::vec3(0.2f, 0.5f, 0.6f)) });
