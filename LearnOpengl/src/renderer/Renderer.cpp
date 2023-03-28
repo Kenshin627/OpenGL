@@ -10,6 +10,8 @@
 #include "../program/Depth/Depth.h"
 #include "../program/WireFrame/WireFrame.h"
 #include "../program/ShadowMap/ShadowMap.h"
+#include "../program/BlinnPhongCastShadow/BlinnPhongCastShadow.h"
+#include "../program/GridCastShadow/GridCastShadow.h"
 
 X_Renderer::X_Renderer():
 	camera(std::make_shared<Camera>(glm::vec3(0, 17, 35), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
@@ -37,6 +39,7 @@ X_Renderer::X_Renderer():
 		{ "damon", 2.42 },
 	}),
 	outputTextureID(0),
+	m_ShadowFBO(std::make_shared<ShadowFrameBuffer>(1.0, 1.0)),
 	enableShadows(true)
 {
 	lights.push_back(std::make_shared<DirectionLight>(glm::vec3(0.3f, -0.7f, -1.0f), glm::vec3(1.0f)));
@@ -60,6 +63,7 @@ void X_Renderer::RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& vie
 
 	std::shared_ptr<Shader> shadowShader = shaderLib.find(ShaderType::ShadowMap)->second;
 	shadowShader->bind();	
+	m_ShadowFBO->bind();
 	shadowShader->setCommonUniforms();
 	clear();
 	for (const std::shared_ptr<Node>& node : sceneGraph.roots)
@@ -71,6 +75,7 @@ void X_Renderer::RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& vie
 	shadowShader->setMatrix44("model", glm::identity<glm::mat4x4>());
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
 	grid.unbind();	
+	m_ShadowFBO->unbind();
 	shadowShader->unbind();
 }
 
@@ -81,7 +86,7 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	{
 		RenderShadow(sceneGraph, viewport, ts);
 	}
-	ShadowMapShader& shadowShader = (ShadowMapShader&)*shaderLib.find(ShaderType::ShadowMap)->second;
+	//ShadowMapShader& shadowShader = (ShadowMapShader&)*shaderLib.find(ShaderType::ShadowMap)->second;
 
 	clear();
 	glViewport(0.0f, 0.0f, viewport.x, viewport.y);
@@ -92,13 +97,7 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	
 	shader->bind();	
 	//uniforms 
-	shader->setCommonUniforms();	
-
-	//shadow
-	glActiveTexture(GL_TEXTURE6);
-	glBindTexture(GL_TEXTURE_2D, shadowShader.getFBO()->GetTextureID());
-	shader->setInt("shadowMap", 6);
-	shader->setMatrix44("lightPosSpace", lights[0]->getLightSpaceMatrix());
+	shader->setCommonUniforms();
 
 	m_FBO->bind();
 	clear();
@@ -128,22 +127,27 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 
 	#pragma region GRID 已完成
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	Shader& gridShader = *shaderLib.find(ShaderType::GridCastShadow)->second;
+	auto gridShader = shaderLib.find(ShaderType::GridCastShadow)->second;
+	gridShader->bind();
+	#pragma region old Grid
+	//gridShader.setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * glm::identity <glm::mat4x4>() );
+	//gridShader.setVec2("viewport", viewport);
+	//gridShader.setVec3("mainColor", glm::vec3(0.0, 0.0, 0.0));
+	//gridShader.setVec3("lineColor", glm::vec3(.0, 0.5, 0.5));
+	////gridRatio, majorUnitFrequency, minorUnitVisibility, opacity
+	//gridShader.setVec4("gridControl", glm::vec4(1.0, 10, 0.33, .5));
+	//gridShader.setVec3("gridOffset", glm::vec3(0, 0, 0));
 
-	gridShader.bind();
-	gridShader.setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * glm::identity <glm::mat4x4>() );
-	gridShader.setVec2("viewport", viewport);
-	gridShader.setVec3("mainColor", glm::vec3(0.0, 0.0, 0.0));
-	gridShader.setVec3("lineColor", glm::vec3(.0, 0.5, 0.5));
-	//gridRatio, majorUnitFrequency, minorUnitVisibility, opacity
-	gridShader.setVec4("gridControl", glm::vec4(1.0, 10, 0.33, .5));
-	gridShader.setVec3("gridOffset", glm::vec3(0, 0, 0));
-
-	glActiveTexture(GL_TEXTURE6);
-	glBindTexture(GL_TEXTURE_2D, shadowShader.getFBO()->GetTextureID());
-	gridShader.setInt("shadowMap", 6);
-	gridShader.setMatrix44("lightPosSpace", lights[0]->getLightSpaceMatrix());
+	//glActiveTexture(GL_TEXTURE6);
+	//glBindTexture(GL_TEXTURE_2D, shadowShader.getFBO()->GetTextureID());
+	//gridShader.setInt("shadowMap", 6);
+	//gridShader.setMatrix44("lightPosSpace", lights[0]->getLightSpaceMatrix());
+	#pragma endregion
 	grid.bind();
+	
+	gridShader->setCommonUniforms();
+	gridShader->setMeshUniforms(nullptr);
+
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
 	grid.unbind();
 	#pragma endregion
@@ -213,6 +217,7 @@ void X_Renderer::clear()
 void X_Renderer::resizeFBO(unsigned width, unsigned height)
 {
 	m_FBO->resize(width, height);
+	m_ShadowFBO->resize(width, height);
 	for (auto& shader : shaderLib)
 	{
 		if (shader.second->getType() == ShaderCategory::PostProcessShader)
@@ -225,8 +230,9 @@ void X_Renderer::resizeFBO(unsigned width, unsigned height)
 void X_Renderer::compileShaders()
 {
 	shaderLib.insert({ ShaderType::WireFrame, std::make_shared<WireFrameShader>(std::vector<std::string>{ "shader/wireFrame/vertex.glsl", "shader/wireFrame/fragment.glsl" }, camera, wireFrameColor)});
-	shaderLib.insert({ ShaderType::BlinnPhong, std::make_shared<BlinnPhongShader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" }, camera, lights[0])});
-	shaderLib.insert({ ShaderType::PBR, std::make_shared<BlinnPhongShader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" }, camera, lights[0]) });
+	shaderLib.insert({ ShaderType::BlinnPhong, std::make_shared<BlinnPhongShader>(std::vector<std::string>{ "shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl" }, camera, lights[0])});
+	//PBR暂未实现
+	//shaderLib.insert({ ShaderType::PBR, std::make_shared<BlinnPhongShader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" }, camera, lights[0]) });
 	shaderLib.insert({ ShaderType::Depth, std::make_shared<DepthShader>(std::vector<std::string>{ "shader/depthRender/vertex.glsl", "shader/depthRender/fragment.glsl" }, camera) });
 	shaderLib.insert({ ShaderType::Normal, std::make_shared<Shader>(std::vector<std::string>{ "shader/normal/vertex.glsl", "shader/normal/fragment.glsl" }) });
 	shaderLib.insert({ ShaderType::Grid, std::make_shared<Shader>(std::vector<std::string>{ "shader/grid/vertex.glsl", "shader/grid/fragment.glsl" }) });
@@ -234,8 +240,8 @@ void X_Renderer::compileShaders()
 	shaderLib.insert({ ShaderType::EnvironmentMapRefract, std::make_shared<EnvironmentMapRefractShader>(std::vector<std::string>{ "shader/environmentMapRefract/vertex.glsl", "shader/environmentMapRefract/fragment.glsl" }, camera, skybox.getTextureID(), refractiveIndex.find("glass")->second)});
 	shaderLib.insert({ ShaderType::visualNormal, std::make_shared<Shader>(std::vector<std::string>{ "shader/visualNormal/vertex.glsl", "shader/visualNormal/fragment.glsl", "shader/visualNormal/geometry.glsl" }) });
 	shaderLib.insert({ ShaderType::ShadowMap, std::make_shared<ShadowMapShader>(std::vector<std::string>{ "shader/shadowMap/vertex.glsl", "shader/shadowMap/fragment.glsl" }, lights[0])});
-	shaderLib.insert({ ShaderType::BlinnPhongCastShadow, std::make_shared<Shader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" }) });
-	shaderLib.insert({ ShaderType::GridCastShadow, std::make_shared<Shader>(std::vector<std::string>{ "shader/gridCastShadow/vertex.glsl", "shader/gridCastShadow/fragment.glsl" }) });
+	shaderLib.insert({ ShaderType::BlinnPhongCastShadow, std::make_shared<BlinnPhongCastShadowShader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" }, camera, lights[0], m_ShadowFBO) });
+	shaderLib.insert({ ShaderType::GridCastShadow, std::make_shared<GridCastShadowShader>(std::vector<std::string>{ "shader/gridCastShadow/vertex.glsl", "shader/gridCastShadow/fragment.glsl" }, camera, lights[0], m_ShadowFBO) });
 
 	shaderLib.insert({ ShaderType::GrayScalize, std::make_shared<GrayScale>(std::vector<std::string>{ "shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl" }) });
 	shaderLib.insert({ ShaderType::GlitchRGBSplit, std::make_shared<GlitchRGBSpliter>(std::vector<std::string>{ "shader/glitchRGBSplit/vertex.glsl", "shader/glitchRGBSplit/fragment.glsl" }, 0.5f, 2.0f, Direction::Horizontal) });

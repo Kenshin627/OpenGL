@@ -1,47 +1,27 @@
 #pragma once
 #include <memory>
 #include <string>
-
 #include "../../Buffer/FrameBuffer.h"
 #include "../../program/Shader.h"
 
 class PostProcess: public Shader
 {
 public:
-	PostProcess(const std::vector<std::string>& paths) :
-		Shader(paths)
-	{ 
-		buildFBO(1.0f, 1.0f);
-		type = ShaderCategory::PostProcessShader;
-	}
-	virtual ~PostProcess() {}
+	PostProcess(const std::vector<std::string>& paths);
+	virtual ~PostProcess();
 
-	void bind() const override
-	{
-		glUseProgram(m_RendererID);
-		m_FBO->bind();
-	}
+	void bind() const override;
 
-	void unbind() const override
-	{
-		m_FBO->unbind();
-		glUseProgram(0);
-	}
+	void unbind() const override;
 
-	virtual void draw(unsigned slot) const { }
+	virtual void draw(unsigned slot) const;
 
-	virtual void update(float ts) { }
+	virtual void update(float ts);
 
-	void resetFBO(unsigned viewporX, unsigned viewportY)
-	{
-		m_FBO->resize(viewporX, viewportY);
-	}
+	void resetFBO(unsigned viewporX, unsigned viewportY);
 
-	virtual void buildFBO(unsigned viewportX, unsigned viewportY)
-	{
-		m_FBO = std::make_shared<FrameBuffer>(viewportX, viewportY);
-	}
-
+	virtual void buildFBO(unsigned viewportX, unsigned viewportY);
+	
 	std::shared_ptr<FrameBuffer> getFBO() const { return m_FBO; }
 protected:
 	std::shared_ptr<FrameBuffer> m_FBO;

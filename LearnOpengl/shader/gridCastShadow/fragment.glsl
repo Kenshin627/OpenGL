@@ -3,7 +3,7 @@
 uniform vec3 lightDirection;
 uniform sampler2D shadowMap;
 
-in vec3 vPos;
+in vec3 vPosition;
 in vec3 vNormal;
 in vec4 fragPosLightSpace;
 
@@ -14,7 +14,7 @@ float calcShadow()
     float closetDepth = texture(shadowMap, fragCoords.xy).r;
     vec3 n = normalize(vNormal);
     vec3 lightDirectionReverse = -normalize(lightDirection);
-    float shadowBias = min(0.005, (1.0 - max(dot(lightDirectionReverse, vNormal), 0.0)) * 0.05);
+    float shadowBias = min(0.005, (1.0 - max(dot(lightDirectionReverse, n), 0.0)) * 0.05);
     return (fragCoords.z - shadowBias) > closetDepth? 1.0 : 0.0;
 }
 

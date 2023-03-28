@@ -171,10 +171,12 @@
     <ClCompile Include="src\mesh\BasicMeshes\Quad\Quad.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\SkyBox\SkyBox.cpp" />
     <ClCompile Include="src\myApplication.cpp" />
+    <ClCompile Include="src\program\BlinnPhongCastShadow\BlinnPhongCastShadow.cpp" />
     <ClCompile Include="src\program\BlinnPhong\BlinnPhong.cpp" />
     <ClCompile Include="src\program\Depth\Depth.cpp" />
     <ClCompile Include="src\program\EnvironmentMapReflect\environmentMapReflect.cpp" />
     <ClCompile Include="src\program\EnvironmentMapRefract\environmentMapRefract.cpp" />
+    <ClCompile Include="src\program\GridCastShadow\GridCastShadow.cpp" />
     <ClCompile Include="src\program\Shader.cpp" />
     <ClCompile Include="src\program\ShadowMap\ShadowMap.cpp" />
     <ClCompile Include="src\program\WireFrame\WireFrame.cpp" />
@@ -183,6 +185,7 @@
     <ClCompile Include="src\renderer\postProcess\GrayScale\GrayScale.cpp" />
     <ClCompile Include="src\renderer\postProcess\Inversion\Inversion.cpp" />
     <ClCompile Include="src\renderer\postProcess\NuClear\NuClear.cpp" />
+    <ClCompile Include="src\renderer\postProcess\PostProcess.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
     <ClCompile Include="src\sceneLoader\SceneLoader.cpp" />
     <ClCompile Include="src\Texture\Texture.cpp" />
@@ -586,10 +589,12 @@
     <ClInclude Include="src\mesh\BasicMeshes\Quad\Quad.h" />
     <ClInclude Include="src\mesh\BasicMeshes\SkyBox\SkyBox.h" />
     <ClInclude Include="src\mesh\Mesh.h" />
+    <ClInclude Include="src\program\BlinnPhongCastShadow\BlinnPhongCastShadow.h" />
     <ClInclude Include="src\program\BlinnPhong\BlinnPhong.h" />
     <ClInclude Include="src\program\Depth\Depth.h" />
     <ClInclude Include="src\program\EnvironmentMapReflect\environmentMapReflect.h" />
     <ClInclude Include="src\program\EnvironmentMapRefract\environmentMapRefract.h" />
+    <ClInclude Include="src\program\GridCastShadow\GridCastShadow.h" />
     <ClInclude Include="src\program\Shader.h" />
     <ClInclude Include="src\program\ShadowMap\ShadowMap.h" />
     <ClInclude Include="src\program\WireFrame\WireFrame.h" />

@@ -18,17 +18,17 @@ void ShadowMapShader::bind() const
 {
 	glCullFace(GL_FRONT);
 	glUseProgram(m_RendererID);
-	m_FBO->bind();
+	//m_FBO->bind();
 }
 
 void ShadowMapShader::unbind() const
 {
-	glCullFace(GL_BACK);
 	glUseProgram(0);
-	m_FBO->unbind();
+	//m_FBO->unbind();
+	glCullFace(GL_BACK);
 }
 
 void ShadowMapShader::buildFBO(unsigned viewportX, unsigned viewportY)
 {
-	m_FBO = std::make_shared<ShadowFrameBuffer>(1.0f, 1.0f);
+	m_FBO = std::make_shared<ShadowFrameBuffer>(viewportX, viewportY);
 }

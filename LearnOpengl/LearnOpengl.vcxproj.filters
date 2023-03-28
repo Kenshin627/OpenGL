@@ -138,6 +138,15 @@
     <ClCompile Include="src\program\ShadowMap\ShadowMap.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\renderer\postProcess\PostProcess.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\program\BlinnPhongCastShadow\BlinnPhongCastShadow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\program\GridCastShadow\GridCastShadow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1389,6 +1398,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\program\ShadowMap\ShadowMap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\program\BlinnPhongCastShadow\BlinnPhongCastShadow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\program\GridCastShadow\GridCastShadow.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
