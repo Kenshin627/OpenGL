@@ -75,4 +75,5 @@ private:
 	unsigned outputTextureID;
 	std::shared_ptr<ShadowFrameBuffer> m_ShadowFBO;
 	bool enableShadows;
+	bool visiualNormal;
 };

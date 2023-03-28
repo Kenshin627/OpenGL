@@ -12,6 +12,7 @@
 #include "../program/ShadowMap/ShadowMap.h"
 #include "../program/BlinnPhongCastShadow/BlinnPhongCastShadow.h"
 #include "../program/GridCastShadow/GridCastShadow.h"
+#include "../program/VisualNormal/VisualNormal.h"
 
 X_Renderer::X_Renderer():
 	camera(std::make_shared<Camera>(glm::vec3(0, 17, 35), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
@@ -40,7 +41,8 @@ X_Renderer::X_Renderer():
 	}),
 	outputTextureID(0),
 	m_ShadowFBO(std::make_shared<ShadowFrameBuffer>(1.0, 1.0)),
-	enableShadows(true)
+	enableShadows(true),
+	visiualNormal(true)
 {
 	lights.push_back(std::make_shared<DirectionLight>(glm::vec3(0.3f, -0.7f, -1.0f), glm::vec3(1.0f)));
 	compileShaders();
@@ -79,26 +81,23 @@ void X_Renderer::RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& vie
 }
 
 void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts)
-{
-	
+{	
 	if (enableShadows)
 	{
 		RenderShadow(sceneGraph, viewport, ts);
 	}
-	//ShadowMapShader& shadowShader = (ShadowMapShader&)*shaderLib.find(ShaderType::ShadowMap)->second;
-
 	clear();
 	glViewport(0.0f, 0.0f, viewport.x, viewport.y);
 
+	m_FBO->bind();
 	#pragma region scene Graph render
 	//std::shared_ptr<Shader> shader = shaderLib.find((ShaderType)mode)->second;
 	std::shared_ptr<Shader> shader = shaderLib.find(ShaderType::BlinnPhongCastShadow)->second;
 	
 	shader->bind();	
-	//uniforms 
 	shader->setCommonUniforms();
 
-	m_FBO->bind();
+	
 	clear();
 	for (const std::shared_ptr<Node>& node : sceneGraph.roots)
 	{
@@ -108,20 +107,18 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	#pragma endregion
 
 	#pragma region visual normal
-	//auto visualNormalProgram = shaders.find(RenderMode::visualNormal);
-	//visualNormalProgram->second->bind();
-	////visual Normal
-	//visualNormalProgram->second->setMatrix44("modelView", camera->viewMatrix() * modelMatrix);
-	//visualNormalProgram->second->setMatrix33("inverseModelView", glm::mat3x3(glm::transpose(glm::inverse(camera->viewMatrix() * modelMatrix))));
-	//visualNormalProgram->second->setMatrix44("projection", camera->projMatrix());
-	//visualNormalProgram->second->setFloat("magnitude", 0.5);
-	//visualNormalProgram->second->setVec3("lineColor", glm::vec3(0.3, 0.6, 0.8));
+	if (visiualNormal)
+	{
+		auto visualNormalShader = shaderLib.find(ShaderType::visualNormal)->second;
+		visualNormalShader->bind();
+		visualNormalShader->setCommonUniforms();
 
-	//for (const std::shared_ptr<Node>& node : sceneGraph.roots)
-	//{
-	//	Recursivedraw(node, *visualNormalProgram->second);
-	//}
-	//visualNormalProgram->second->unbind();
+		for (const std::shared_ptr<Node>& node : sceneGraph.roots)
+		{
+			Recursivedraw(node, visualNormalShader);
+		}
+		visualNormalShader->unbind();
+	}
 	#pragma endregion
 
 	#pragma region GRID ÒÑÍê³É
@@ -152,11 +149,11 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	#pragma region SkyBox
 	skybox.bind();
 	skybox.draw(*camera, 0);
-	skybox.unbind();
+	skybox.unbind();	
+	#pragma endregion
 
 	outputTextureID = m_FBO->GetTextureID();
 	m_FBO->unbind();
-	#pragma endregion
 		
 	#pragma region postProcess
 	//quad.bind();
@@ -235,7 +232,7 @@ void X_Renderer::compileShaders()
 	shaderLib.insert({ ShaderType::Grid, std::make_shared<Shader>(std::vector<std::string>{ "shader/grid/vertex.glsl", "shader/grid/fragment.glsl" }) });
 	shaderLib.insert({ ShaderType::EnvironmentMapReflect, std::make_shared<EnvironmentMapReflectShader>(std::vector<std::string>{ "shader/environmentMapReflect/vertex.glsl", "shader/environmentMapReflect/fragment.glsl" }, camera, skybox.getTextureID())});
 	shaderLib.insert({ ShaderType::EnvironmentMapRefract, std::make_shared<EnvironmentMapRefractShader>(std::vector<std::string>{ "shader/environmentMapRefract/vertex.glsl", "shader/environmentMapRefract/fragment.glsl" }, camera, skybox.getTextureID(), refractiveIndex.find("glass")->second)});
-	shaderLib.insert({ ShaderType::visualNormal, std::make_shared<Shader>(std::vector<std::string>{ "shader/visualNormal/vertex.glsl", "shader/visualNormal/fragment.glsl", "shader/visualNormal/geometry.glsl" }) });
+	shaderLib.insert({ ShaderType::visualNormal, std::make_shared<VisualNormalShader>(std::vector<std::string>{ "shader/visualNormal/vertex.glsl", "shader/visualNormal/fragment.glsl", "shader/visualNormal/geometry.glsl" }, camera, 0.7f, glm::vec3(0.2f, 0.5f, 0.6f)) });
 	shaderLib.insert({ ShaderType::ShadowMap, std::make_shared<ShadowMapShader>(std::vector<std::string>{ "shader/shadowMap/vertex.glsl", "shader/shadowMap/fragment.glsl" }, lights[0])});
 	shaderLib.insert({ ShaderType::BlinnPhongCastShadow, std::make_shared<BlinnPhongCastShadowShader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" }, camera, lights[0], m_ShadowFBO) });
 	shaderLib.insert({ ShaderType::GridCastShadow, std::make_shared<GridCastShadowShader>(std::vector<std::string>{ "shader/gridCastShadow/vertex.glsl", "shader/gridCastShadow/fragment.glsl" }, camera, lights[0], m_ShadowFBO) });
