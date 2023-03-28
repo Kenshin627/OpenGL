@@ -1,9 +1,10 @@
 #include "PostProcess.h"
 
-PostProcess::PostProcess(const std::vector<std::string>& paths) :
-	Shader(paths)
+PostProcess::PostProcess(const std::vector<std::string>& paths, std::shared_ptr<FrameBuffer> prev_buffer) :
+	Shader(paths),
+	prev_FBO(prev_buffer)
 {
-	buildFBO(1.0f, 1.0f);
+	buildFBO(1, 1);
 	type = ShaderCategory::PostProcessShader;
 }
 

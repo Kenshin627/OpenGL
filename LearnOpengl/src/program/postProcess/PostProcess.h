@@ -7,12 +7,12 @@
 class PostProcess: public Shader
 {
 public:
-	PostProcess(const std::vector<std::string>& paths);
+	PostProcess(const std::vector<std::string>& paths, std::shared_ptr<FrameBuffer> prev_buffer);
 	virtual ~PostProcess();
 
-	void bind() const override;
+	virtual void bind() const override;
 
-	void unbind() const override;
+	virtual void unbind() const override;
 
 	virtual void draw(unsigned slot) const;
 
@@ -23,6 +23,8 @@ public:
 	virtual void buildFBO(unsigned viewportX, unsigned viewportY);
 	
 	std::shared_ptr<FrameBuffer> getFBO() const { return m_FBO; }
+	std::shared_ptr<FrameBuffer> getPrevFBO() const { return prev_FBO; };
 protected:
 	std::shared_ptr<FrameBuffer> m_FBO;
+	std::shared_ptr<FrameBuffer> prev_FBO;
 };

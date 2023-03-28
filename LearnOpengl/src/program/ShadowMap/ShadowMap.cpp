@@ -1,7 +1,7 @@
 #include "ShadowMap.h"
 
-ShadowMapShader::ShadowMapShader(const std::vector<std::string>& paths, std::shared_ptr<DirectionLight> light) :
-	PostProcess(paths),
+ShadowMapShader::ShadowMapShader(const std::vector<std::string>& paths, std::shared_ptr<DirectionLight> light, std::shared_ptr<FrameBuffer> prev_buffer) :
+	PostProcess(paths, prev_buffer),
 	light(light) {  }
 
 void ShadowMapShader::setCommonUniforms() const

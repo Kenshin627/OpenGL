@@ -10,10 +10,11 @@ enum Direction
 class GlitchRGBSpliter : public PostProcess
 {
 public:
-	GlitchRGBSpliter(const std::vector<std::string>& paths, float speed, float intensity, Direction direct);
-	void draw(unsigned slot) const override;
+	GlitchRGBSpliter(const std::vector<std::string>& paths, std::shared_ptr<FrameBuffer> prevBuffer, float speed, float intensity, Direction direct);
 	void update(float ts) override;
 	void setTime(float t);
+	void setCommonUniforms() const override;
+	void unbind() const override;
 	void setSpeed(float s) { m_Speed = s; };
 	void setIntensity(float i) { m_Intensity = i; };
 private:

@@ -96,22 +96,22 @@
     <ClCompile Include="src\mesh\BasicMeshes\Quad\Quad.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\postProcess\GrayScale\GrayScale.cpp">
+    <ClCompile Include="src\program\postProcess\GrayScale\GrayScale.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.cpp">
+    <ClCompile Include="src\program\postProcess\GlitchRGBSplit\GlitchRGBSplit.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\mesh\BasicMeshes\Grid\Grid.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\postProcess\Inversion\Inversion.cpp">
+    <ClCompile Include="src\program\postProcess\Inversion\Inversion.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\postProcess\NuClear\NuClear.cpp">
+    <ClCompile Include="src\program\postProcess\NuClear\NuClear.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.cpp">
+    <ClCompile Include="src\program\postProcess\EdgeDetection\EdgeDetection.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\mesh\BasicMeshes\SkyBox\SkyBox.cpp">
@@ -138,7 +138,7 @@
     <ClCompile Include="src\program\ShadowMap\ShadowMap.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\postProcess\PostProcess.cpp">
+    <ClCompile Include="src\program\postProcess\PostProcess.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\program\BlinnPhongCastShadow\BlinnPhongCastShadow.cpp">
@@ -1358,28 +1358,28 @@
     <ClInclude Include="src\application\vendor\imGui\implot_internal.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\postProcess\PostProcess.h">
+    <ClInclude Include="src\program\postProcess\PostProcess.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\mesh\BasicMeshes\Quad\Quad.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\postProcess\GrayScale\GrayScale.h">
+    <ClInclude Include="src\program\postProcess\GrayScale\GrayScale.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\postProcess\GlitchRGBSplit\GlitchRGBSplit.h">
+    <ClInclude Include="src\program\postProcess\GlitchRGBSplit\GlitchRGBSplit.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\mesh\BasicMeshes\Grid\Grid.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\postProcess\Inversion\Inversion.h">
+    <ClInclude Include="src\program\postProcess\Inversion\Inversion.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\postProcess\NuClear\NuClear.h">
+    <ClInclude Include="src\program\postProcess\NuClear\NuClear.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\postProcess\EdgeDetection\EdgeDetection.h">
+    <ClInclude Include="src\program\postProcess\EdgeDetection\EdgeDetection.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\mesh\BasicMeshes\SkyBox\SkyBox.h">

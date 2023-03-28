@@ -8,7 +8,7 @@
 #include "../light/directionLight.h"
 #include "../program/Shader.h"
 #include "../Buffer/FrameBuffer.h"
-#include "postProcess/PostProcess.h"
+#include "../program/postProcess/PostProcess.h"
 #include "../mesh/BasicMeshes/Quad/Quad.h"
 #include "../mesh/BasicMeshes/Grid/Grid.h"
 #include "../mesh/BasicMeshes/SkyBox/SkyBox.h"
@@ -76,4 +76,5 @@ private:
 	std::shared_ptr<ShadowFrameBuffer> m_ShadowFBO;
 	bool enableShadows;
 	bool visiualNormal;
+	std::shared_ptr<PostProcess> postProcess;
 };
