@@ -6,7 +6,7 @@ class Light
 {
 public:
 	Light(const glm::vec3& c = glm::vec3(1.0f)) :color(c), lightSpaceMatrix(glm::identity<glm::mat4x4>()) {}
-	const glm::vec3& getColor() const
+	glm::vec3& getColor()
 	{
 		return color;
 	}

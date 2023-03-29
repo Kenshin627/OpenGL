@@ -59,6 +59,7 @@ public:
 	RenderMode getRenderMode() const { return mode; };
 	void compileShaders();
 	glm::vec3& getWireFrameColor() { return wireFrameColor; };
+	std::vector<std::shared_ptr<DirectionLight>>& getLights() { return lights; };
 private:
 	std::shared_ptr<Camera> camera;
 	std::vector<std::shared_ptr<DirectionLight>> lights;

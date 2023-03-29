@@ -60,6 +60,12 @@ public:
 	void onUpdate(const Kenshin::updatePayload& payload) override
 	{
 		std::shared_ptr<Camera> camera = renderer.getCamera();
+		std::shared_ptr<DirectionLight> light = renderer.getLights()[0];
+		auto pos = light->getPostion();
+		auto deltaX = sin((payload.ts)) * 0.1 * 2;
+		auto deltaZ = cos((payload.ts)) * 0.1 * 2;
+		auto dir = glm::vec3(0, 0, 0) - glm::vec3(deltaX + pos.x, pos.y, deltaZ + pos.z);
+		light->setDirection(dir);
 		if (m_viewportSize.x != payload.viewport.x || m_viewportSize.y != payload.viewport.y)
 		{
 			m_viewportSize.x = payload.viewport.x;
@@ -157,6 +163,18 @@ public:
 
 		ImGui::End();
 		#pragma endregion
+
+		#pragma region light
+		ImGui::Begin("light Direction");
+		//IMGUI_DEMO_MARKER("Widgets/Color/ColorEdit (float display)");
+
+		glm::vec3 lightDirection = renderer.getLights()[0]->getDirection();
+		ImGui::ColorEdit3("direction", /*(float*)&color */ (float*) &lightDirection, ImGuiColorEditFlags_Float);
+		renderer.getLights()[0]->setDirection(lightDirection);
+		ImGui::ColorEdit3("color", /*(float*)&color */ (float*)&renderer.getLights()[0]->getColor(), ImGuiColorEditFlags_Float);
+		ImGui::End();
+		#pragma endregion
+
 	}
 private:
 	X_Renderer renderer;
