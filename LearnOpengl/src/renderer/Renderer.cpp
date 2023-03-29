@@ -220,7 +220,7 @@ void X_Renderer::compileShaders()
 	shaderLib.insert({ ShaderType::visualNormal, std::make_shared<VisualNormalShader>(std::vector<std::string>{ "shader/visualNormal/vertex.glsl", "shader/visualNormal/fragment.glsl", "shader/visualNormal/geometry.glsl" }, camera, 0.7f, glm::vec3(0.2f, 0.5f, 0.6f)) });
 	shaderLib.insert({ ShaderType::ShadowMap, std::make_shared<ShadowMapShader>(std::vector<std::string>{ "shader/shadowMap/vertex.glsl", "shader/shadowMap/fragment.glsl" }, lights[0])});
 	shaderLib.insert({ ShaderType::BlinnPhongCastShadow, std::make_shared<BlinnPhongCastShadowShader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" }, camera, lights[0], m_ShadowFBO) });
-	shaderLib.insert({ ShaderType::GridCastShadow, std::make_shared<GridCastShadowShader>(std::vector<std::string>{ "shader/gridCastShadow/vertex.glsl", "shader/gridCastShadow/fragment.glsl" }, camera, lights[0], m_ShadowFBO) });
+	shaderLib.insert({ ShaderType::GridCastShadow, std::make_shared<GridCastShadowShader>(std::vector<std::string>{ "shader/gridCastShadow/vertex.glsl", "shader/gridCastShadow/fragment.glsl" }, camera, lights[0], glm::vec3(0.3, 0.3, 0.3), glm::vec3(0.6, 0.6, 0.6), glm::vec3(0, 0, 0), glm::vec4(1.0, 10, 0.33, .5), m_ShadowFBO) });
 
 	//POSTPROCESS
 	shaderLib.insert({ ShaderType::GrayScalize, std::make_shared<GrayScaleShader>(std::vector<std::string>{ "shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl" }, prevFBO) });

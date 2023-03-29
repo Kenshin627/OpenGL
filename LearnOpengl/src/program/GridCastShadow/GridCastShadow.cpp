@@ -1,10 +1,14 @@
 #include "GridCastShadow.h"
 
-GridCastShadowShader::GridCastShadowShader(const std::vector<std::string> paths, std::shared_ptr<Camera> cam, std::shared_ptr<DirectionLight> light, std::shared_ptr<ShadowFrameBuffer> shadowBuffer) :
+GridCastShadowShader::GridCastShadowShader(const std::vector<std::string> paths, std::shared_ptr<Camera> cam, std::shared_ptr<DirectionLight> light, glm::vec3 mainColor, glm::vec3 lineColor, glm::vec3 gridOffset, glm::vec4 gridControl, std::shared_ptr<ShadowFrameBuffer> shadowBuffer) :
 	Shader(paths),
 	camera(cam),
 	light(light),
-	shadowBuffer(shadowBuffer) { }
+	shadowBuffer(shadowBuffer), 
+	mainColor(mainColor),
+	lineColor(lineColor),
+	gridOffset(gridOffset),
+	gridControl(gridControl) { }
 
 void GridCastShadowShader::setCommonUniforms() const
 {
@@ -16,6 +20,11 @@ void GridCastShadowShader::setCommonUniforms() const
 	glBindTexture(GL_TEXTURE_2D, shadowBuffer->GetTextureID());
 	setInt("shadowMap", 7);
 	setMatrix44("lightPosSpace", light->getLightSpaceMatrix());
+	setVec3("mainColor", mainColor);
+	setVec3("lineColor", lineColor);
+	//gridRatio, majorUnitFrequency, minorUnitVisibility, opacity
+	setVec3("gridOffset", gridOffset);
+	setVec4("gridControl", gridControl);
 }
 
 void GridCastShadowShader::setMeshUniforms(std::shared_ptr<Mesh> mesh) const
