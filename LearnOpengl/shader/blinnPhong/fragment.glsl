@@ -36,6 +36,7 @@ struct Material
 	sampler2D ambientTexture;
 	sampler2D diffuseTexture;
 	sampler2D specularTexture;
+	sampler2D normalMap;
 };
 
 struct blinnPhongCoffient
@@ -48,50 +49,21 @@ struct blinnPhongCoffient
 in vec3 vPos;
 in vec3 vNormal;
 in vec2 vUv;
+in vec3 vPositionTangentSpace;
+in vec3 vCamPosTangentSpace;
+in vec3 vLightDirectTangentSpace;
 
 uniform DirectionLight directionLight;
-//uniform PointLight pointLight;
-//uniform SpotLight spotLight;
 uniform Material material;
-uniform vec3 cameraPosition;
 
 out vec4 outColor;
 
-blinnPhongCoffient calcBlinnphong(vec3 lightDirection);
-
-void main()
-{
-	//Direciton light
-	vec3 lightDirection = normalize(directionLight.direction);
-	blinnPhongCoffient coffient = calcBlinnphong(lightDirection);
-	vec3 directionColor = (coffient.ambient + coffient.diffuse + coffient.specular) * directionLight.color;
-
-//	//Pointlight calc
-//	lightDirection = normalize(vPos - pointLight.position);
-//	float d = distance(vPos, pointLight.position);
-//	float attenuation = 1.0 / (pointLight.kc + pointLight.kl * d + pointLight.kd * d * d);
-//	coffient = calcBlinnphong(lightDirection);
-//	vec3 pointColor =  (coffient.ambient + coffient.diffuse + coffient.specular) * pointLight.color * attenuation;
-//
-//	//SpotLight calc
-//	lightDirection = normalize(vPos - spotLight.position);
-//	d = distance(vPos, spotLight.position);
-//	attenuation = 1.0 / (spotLight.kc + spotLight.kl * d + spotLight.kd * d * d);
-//	coffient = calcBlinnphong(lightDirection);
-//
-//	float theta = dot(lightDirection, normalize(spotLight.direction));
-//	float epsilon = (spotLight.innerCutOff - spotLight.outterCutOff);
-//	float intensity = clamp((theta - spotLight.outterCutOff) / epsilon, 0.0, 1.0);
-//	
-//	vec3 spotColor = (coffient.ambient + coffient.diffuse * intensity + coffient.specular*intensity) * spotLight.color * attenuation;
-
-	outColor = vec4(directionColor, 1.0);
-}
-
 blinnPhongCoffient calcBlinnphong(vec3 lightDirection)
 {
-	vec3 normal = normalize(vNormal);
-	vec3 eyeDirection = normalize(cameraPosition - vPos);
+	vec3 normal = texture(material.normalMap, vUv).xyz;
+	normal = normal * 2.0 - 1.0;
+	normal = normalize(normal);
+	vec3 eyeDirection = normalize(vCamPosTangentSpace - vPositionTangentSpace);
 	vec3 lightDirectionReverse = -lightDirection;
 	//1. ambient
 
@@ -109,4 +81,34 @@ blinnPhongCoffient calcBlinnphong(vec3 lightDirection)
 	vec3 specular  = pow(max(dot(halfwayDir, normal), 0.0), material.shininess) * specularC;
 
 	return blinnPhongCoffient(ambient, diffuse, specular);
+}
+
+
+void main()
+{
+	//Direciton light
+	vec3 lightDirection = normalize(vLightDirectTangentSpace);
+	blinnPhongCoffient coffient = calcBlinnphong(lightDirection);
+	vec3 directionColor = (coffient.ambient + coffient.diffuse + coffient.specular) * directionLight.color;
+
+	//Pointlight calc
+	//lightDirection = normalize(vPos - pointLight.position);
+	//float d = distance(vPos, pointLight.position);
+	//float attenuation = 1.0 / (pointLight.kc + pointLight.kl * d + pointLight.kd * d * d);
+	//coffient = calcBlinnphong(lightDirection);
+	//vec3 pointColor =  (coffient.ambient + coffient.diffuse + coffient.specular) * pointLight.color * attenuation;
+	//
+	////SpotLight calc
+	//lightDirection = normalize(vPos - spotLight.position);
+	//d = distance(vPos, spotLight.position);
+	//attenuation = 1.0 / (spotLight.kc + spotLight.kl * d + spotLight.kd * d * d);
+	//coffient = calcBlinnphong(lightDirection);
+	//
+	//float theta = dot(lightDirection, normalize(spotLight.direction));
+	//float epsilon = (spotLight.innerCutOff - spotLight.outterCutOff);
+	//float intensity = clamp((theta - spotLight.outterCutOff) / epsilon, 0.0, 1.0);
+	//
+	//vec3 spotColor = (coffient.ambient + coffient.diffuse * intensity + coffient.specular*intensity) * spotLight.color * attenuation	;
+
+	outColor = vec4(directionColor, 1.0);
 }

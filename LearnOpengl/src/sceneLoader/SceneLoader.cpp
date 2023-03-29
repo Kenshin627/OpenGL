@@ -6,7 +6,7 @@ SceneLoader::~SceneLoader() = default;
 
 std::shared_ptr<Node> SceneLoader::loadModel(const std::string& path)
 {
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		std::cout << "ERROR:ASSIMP:: " << importer.GetErrorString() << std::endl;
@@ -71,6 +71,20 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 		//}
 		/*vertices.push_back(vertex);*/
 		//vertex.uvs.clear();
+
+		if (mesh->HasTangentsAndBitangents())
+		{
+			auto tangent = mesh->mTangents[i];
+			auto bitangent = mesh->mBitangents[i];
+
+			vertices.push_back(tangent.x);
+			vertices.push_back(tangent.y);
+			vertices.push_back(tangent.z);
+
+			vertices.push_back(bitangent.x);
+			vertices.push_back(bitangent.y);
+			vertices.push_back(bitangent.z);
+		}
 	}
 
 	if (mesh->HasFaces())
@@ -114,6 +128,7 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 			mat->ambientTextures = loadMaterialTextures(material, aiTextureType_AMBIENT, TEXTURE_TYPE::AMBIENT);
 			mat->diffuseTextures = loadMaterialTextures(material, aiTextureType_DIFFUSE, TEXTURE_TYPE::DIFFUSE);
 			mat->specularTextures = loadMaterialTextures(material, aiTextureType_SPECULAR, TEXTURE_TYPE::SPECULAR);
+			mat->normalMap = loadMaterialTextures(material, aiTextureType_NORMALS, TEXTURE_TYPE::NORMALMAP);
 
 			materialCache.insert({ materialIndex, mat });
 		}		
@@ -122,6 +137,8 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 	layout.push<float>(3);
 	layout.push<float>(3);
 	layout.push<float>(2);
+	layout.push<float>(3);
+	layout.push<float>(3);
 	return std::make_shared<Mesh>(mesh->mName.C_Str(), vertices, indices, mat, layout);
 }
 

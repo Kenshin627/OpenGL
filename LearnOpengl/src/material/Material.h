@@ -13,4 +13,5 @@ public:
 	std::vector<std::shared_ptr<Texture>> ambientTextures;
 	std::vector<std::shared_ptr<Texture>> diffuseTextures;
 	std::vector<std::shared_ptr<Texture>> specularTextures;
+	std::vector<std::shared_ptr<Texture>> normalMap;
 };

@@ -42,7 +42,7 @@ X_Renderer::X_Renderer():
 	}),
 	outputTextureID(0),
 	m_ShadowFBO(std::make_shared<ShadowFrameBuffer>(1.0, 1.0)),
-	enableShadows(true),
+	enableShadows(false),
 	visiualNormal(false),
 	postProcess(nullptr)
 {
@@ -97,7 +97,7 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	clear();
 
 	#pragma region scene Graph render
-	auto meshShaderType = enableShadows ? ShaderType::BlinnPhong : ShaderType::BlinnPhongCastShadow;
+	auto meshShaderType = enableShadows ? ShaderType::BlinnPhongCastShadow : ShaderType::BlinnPhong;
 	std::shared_ptr<Shader> shader = shaderLib.find(meshShaderType)->second;
 	shader->bind();	
 	shader->setCommonUniforms();
