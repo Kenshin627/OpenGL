@@ -42,14 +42,14 @@ X_Renderer::X_Renderer():
 	}),
 	outputTextureID(0),
 	m_ShadowFBO(std::make_shared<ShadowFrameBuffer>(1.0, 1.0)),
-	enableShadows(false),
+	enableShadows(true),
 	visiualNormal(false),
-	postProcess()
+	postProcess(nullptr)
 {
 	lights.push_back(std::make_shared<DirectionLight>(glm::vec3(0.3f, -0.7f, -1.0f), glm::vec3(1.0f)));
 	compileShaders();
 
-	postProcess = shaderLib.find(ShaderType::NuClear)->second;
+	//postProcess = shaderLib.find(ShaderType::NuClear)->second;
 
 	#pragma region faceCulling
 	glEnable(GL_DEPTH_TEST);

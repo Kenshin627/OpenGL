@@ -3,7 +3,6 @@
 uniform vec3 lightDirection;
 uniform sampler2D shadowMap;
 
-in vec3 vPosition;
 in vec3 vNormal;
 in vec4 fragPosLightSpace;
 
