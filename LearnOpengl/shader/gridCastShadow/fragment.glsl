@@ -14,11 +14,23 @@ float calcShadow()
     {
         return 0.0;
     }
-    float closetDepth = texture(shadowMap, fragCoords.xy).r;
+
+    //PCF
+    vec2 texel = 1.0 / textureSize(shadowMap, 0);
+    float shadow = 0.0;
     vec3 n = normalize(vNormal);
     vec3 lightDirectionReverse = -normalize(lightDirection);
-    float shadowBias = min(0.0005, (1.0 - max(dot(lightDirectionReverse, n), 0.0)) * 0.005);
-    return (fragCoords.z - shadowBias) > closetDepth? 1.0 : 0.0;
+    float shadowBias = max(0.002 * (1.0 - dot(lightDirectionReverse, n)), 0.0002);
+    for(int x = -1; x <= 1; x++ )
+    {
+        for(int y = -1; y <= 1; y++)
+        {
+            float closetDepth = texture(shadowMap, fragCoords.xy + vec2(x,y) * texel).r;
+            shadow += ((fragCoords.z  - shadowBias) > closetDepth? 1.0 : 0.0); 
+        }
+    }
+    shadow /= 9.0;
+    return shadow;
 }
 
 void main(void) {    

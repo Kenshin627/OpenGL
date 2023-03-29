@@ -62,9 +62,10 @@ public:
 		std::shared_ptr<Camera> camera = renderer.getCamera();
 		/*std::shared_ptr<DirectionLight> light = renderer.getLights()[0];
 		auto pos = light->getPostion();
-		auto deltaX = sin((payload.ts)) * 0.1 * 2;
-		auto deltaZ = cos((payload.ts)) * 0.1 * 2;
-		auto dir = glm::vec3(0, 0, 0) - glm::vec3(deltaX + pos.x, pos.y, deltaZ + pos.z);
+		auto deltaX = sin((payload.ts)) * 0.01 * 2;
+		auto deltaY = cos((payload.ts)) * 0.01 * 2;
+		auto deltaZ = cos((payload.ts)) * 0.01 * 2;
+		auto dir = glm::vec3(0, 0, 0) - glm::vec3(deltaX + pos.x, deltaY + pos.y, deltaZ + pos.z);
 		light->setDirection(dir);*/
 		if (m_viewportSize.x != payload.viewport.x || m_viewportSize.y != payload.viewport.y)
 		{

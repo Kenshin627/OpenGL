@@ -46,7 +46,7 @@ X_Renderer::X_Renderer():
 	visiualNormal(false),
 	postProcess(nullptr)
 {
-	lights.push_back(std::make_shared<DirectionLight>(glm::vec3(0.3f, -0.7f, -1.0f), glm::vec3(1.0f)));
+	lights.push_back(std::make_shared<DirectionLight>(glm::vec3(-1, -1, -1), glm::vec3(1.0f)));
 	compileShaders();
 
 	//postProcess = shaderLib.find(ShaderType::NuClear)->second;

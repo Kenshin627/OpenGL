@@ -29,8 +29,8 @@ private:
 	void calcLightSpaceMatrix()
 	{
 		auto center = glm::vec3(0.0f, 0.0f, 0.0f);
-		position = center - direction - direction;
-		float orthoSize = 5.0f;
+		position = center - direction - direction - direction - direction - direction - direction - direction - direction;
+		float orthoSize = 20.0f;
 
 		glm::mat4x4 lightProj = glm::ortho(-orthoSize, orthoSize, -orthoSize, orthoSize, 0.01f, 100.0f);
 		glm::mat4x4 lightView = glm::lookAt(position, center, glm::vec3(0.0f, 1.0f, 0.0f));
