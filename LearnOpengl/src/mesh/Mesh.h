@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "../Buffer/IndexBuffer.h"
 #include "../Buffer//VertexBuffer.h"
@@ -17,42 +18,55 @@ public:
 		name(name),
 		vertices(vertices), 
 		indices(indices),
-		vao(VertexArray()), 
-		vbo(VertexBuffer(vertices.data(), sizeof(float)* vertices.size())), 
-		ibo(indices.data(), indices.size()), 
+		vao(std::make_unique<VertexArray>()),
+		ibo(nullptr),
+		vbo(std::make_unique<VertexBuffer>(vertices.data(), sizeof(float)* vertices.size())),
 		layout(layout),
 		material(mat),
 		modelMatrix(glm::identity<glm::mat4x4>())
 	{
-		vao.bind();
-		vao.AddBuffer(vbo, layout);
-		vao.unbind();
+		if (!indices.empty())
+		{
+			isIndexed = true;
+			ibo = std::make_unique<IndexBuffer>(indices.data(), indices.size());
+		}
+		vao->bind();
+		vao->AddBuffer(*vbo, layout);
+		vao->unbind();
 	}
 	void bind() const
 	{
-		vao.bind();
-		ibo.bind();
+		vao->bind();
+		if (isIndexed)
+		{
+			ibo->bind();
+		}
 	}
 
 	void unbind() const 
 	{ 
-		ibo.unbind();
-		vao.unbind();
+		if (isIndexed)
+		{
+			ibo->unbind();
+		}
+		vao->unbind();
 	}
 	const std::shared_ptr<Material>& getMaterial() const { return material; };
-	const unsigned indicesCount() const { return ibo.indicesCount(); };
+	const unsigned indicesCount() const { return ibo->indicesCount(); };
 	const std::string getName() const { return name; };
 	const glm::mat4x4& getModelMatrix() const { return modelMatrix; };
 	virtual ~Mesh() {}
+	virtual void draw() const {  }
 protected:
 	std::string name;
 	std::vector<float> vertices;
 	std::vector<unsigned> indices;
 
-	VertexArray vao;
-	VertexBuffer vbo;
-	IndexBuffer ibo;
+	std::unique_ptr<VertexArray> vao;
+	std::unique_ptr<VertexBuffer> vbo;
+	std::unique_ptr<IndexBuffer> ibo;
 	VertexDataLayout layout;
 	std::shared_ptr<Material> material;
 	glm::mat4x4 modelMatrix;
-};
+	bool isIndexed;
+};   

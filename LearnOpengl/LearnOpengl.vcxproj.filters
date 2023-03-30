@@ -156,6 +156,12 @@
     <ClCompile Include="src\Buffer\HDRFrameBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\mesh\BasicMeshes\Box\Box.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\program\base\Base.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1424,6 +1430,12 @@
     <ClInclude Include="src\Buffer\HDRFrameBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\mesh\BasicMeshes\Box\Box.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\program\base\Base.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\triangle\vertex.glsl" />
@@ -1899,6 +1911,8 @@
     <None Include="shader\blinnPhongCastShadow\vertex.glsl" />
     <None Include="shader\gridCastShadow\fragment.glsl" />
     <None Include="shader\gridCastShadow\vertex.glsl" />
+    <None Include="shader\base\vertex.glsl" />
+    <None Include="shader\base\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">

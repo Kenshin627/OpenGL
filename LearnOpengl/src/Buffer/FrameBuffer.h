@@ -13,7 +13,7 @@ public:
 	inline unsigned int GetTextureID() const { return m_RenderTextureIDs[0]; };
 protected:
 	unsigned m_RendererID;
-	std::array<unsigned, 2> m_RenderTextureIDs;
+	unsigned m_RenderTextureIDs[2] = { 0, 0 };
 	unsigned m_RenderBufferID;
 	unsigned viewport_Width;
 	unsigned viewport_Height;

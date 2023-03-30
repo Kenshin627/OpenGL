@@ -3,7 +3,7 @@
 #include "renderer/Renderer.h"
 #include "application/vendor/imGui/implot.h"
 #include "application/vendor/imGui/imgui_internal.h"
-
+#include "mesh/BasicMeshes/Box/Box.h"
 
 struct ScrollingBuffer {
 	int MaxSize;
@@ -33,6 +33,11 @@ struct ScrollingBuffer {
 class ViewportLayer : public Kenshin::Layer
 {
 public:
+	enum MeshType
+	{
+		Box,
+		Sphere
+	};
 	void makeTree(const std::shared_ptr<Node>& node) const
 	{
 		if (ImGui::TreeNode(node->nodeName.c_str()))
@@ -48,6 +53,7 @@ public:
 			ImGui::TreePop();
 		}
 	}
+
 	void onAttach() override
 	{
 		auto root = sceneLoader.loadModel("resource/models/nanosuit/nanosuit.obj");
@@ -177,25 +183,37 @@ public:
 		#pragma endregion
 
 	}
+
+	void createMesh(MeshType type)
+	{
+		
+	}
+
+	SceneGraph& getSceneGraph() { return sceneGraph; };
+
 private:
 	X_Renderer renderer;
 	SceneGraph sceneGraph;
 	SceneLoader sceneLoader;
-	glm::vec2 m_viewportSize;
+	glm::vec2 m_viewportSize = { 800, 600 };
 };
 								
 Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 {
 	ApplicationSpecification spec { "X_Renderer", 1600, 900 };
 	Application* app = new Application(spec);
-	app->pushLayer<ViewportLayer>();
-	app->setMenuCallback([app]()
+	std::shared_ptr<ViewportLayer> viewportLayer = std::make_shared<ViewportLayer>();
+	app->pushLayer(viewportLayer);
+	app->setMenuCallback([app, viewportLayer]()
 	{
-		if (ImGui::BeginMenu("File"))
+		if (ImGui::BeginMenu("Mesh"))
 		{
-			if (ImGui::MenuItem("Exit"))
+			if (ImGui::MenuItem("createBox"))
 			{
-				app->close();
+				//createBox
+				auto node = std::make_shared<Node>();
+				node->meshes.push_back(std::make_shared<BoxMesh>("box", 1, 1, 1));
+				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
 			ImGui::EndMenu();
 		}

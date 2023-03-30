@@ -168,10 +168,12 @@
     <ClCompile Include="src\Buffer\ShadowFrameBuffer.cpp" />
     <ClCompile Include="src\camera\camera.cpp" />
     <ClCompile Include="src\light\pointLight.cpp" />
+    <ClCompile Include="src\mesh\BasicMeshes\Box\Box.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\Grid\Grid.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\Quad\Quad.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\SkyBox\SkyBox.cpp" />
     <ClCompile Include="src\myApplication.cpp" />
+    <ClCompile Include="src\program\base\Base.cpp" />
     <ClCompile Include="src\program\BlinnPhongCastShadow\BlinnPhongCastShadow.cpp" />
     <ClCompile Include="src\program\BlinnPhong\BlinnPhong.cpp" />
     <ClCompile Include="src\program\Depth\Depth.cpp" />
@@ -589,10 +591,12 @@
     <ClInclude Include="src\light\spotLight.h" />
     <ClInclude Include="src\material\BlinnPhongMaterial.h" />
     <ClInclude Include="src\material\Material.h" />
+    <ClInclude Include="src\mesh\BasicMeshes\Box\Box.h" />
     <ClInclude Include="src\mesh\BasicMeshes\Grid\Grid.h" />
     <ClInclude Include="src\mesh\BasicMeshes\Quad\Quad.h" />
     <ClInclude Include="src\mesh\BasicMeshes\SkyBox\SkyBox.h" />
     <ClInclude Include="src\mesh\Mesh.h" />
+    <ClInclude Include="src\program\base\Base.h" />
     <ClInclude Include="src\program\BlinnPhongCastShadow\BlinnPhongCastShadow.h" />
     <ClInclude Include="src\program\BlinnPhong\BlinnPhong.h" />
     <ClInclude Include="src\program\Depth\Depth.h" />
@@ -776,6 +780,8 @@
     <None Include="dependencies\GLM\glm\gtx\wrap.inl" />
     <None Include="imgui.ini" />
     <None Include="resource\fonts\msyh.ttc" />
+    <None Include="shader\base\fragment.glsl" />
+    <None Include="shader\base\vertex.glsl" />
     <None Include="shader\blinnPhongCastShadow\fragment.glsl" />
     <None Include="shader\blinnPhongCastShadow\vertex.glsl" />
     <None Include="shader\blinnPhong\fragment.glsl" />

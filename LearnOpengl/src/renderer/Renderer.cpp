@@ -14,6 +14,7 @@
 #include "../program/postProcess/GrayScale/GrayScale.h"
 #include "../program/postProcess/Inversion/Inversion.h"
 #include "../program/postProcess/NuClear/NuClear.h"
+#include "../program/base/Base.h"
 
 X_Renderer::X_Renderer():
 	camera(std::make_shared<Camera>(glm::vec3(0, 17, 35), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
@@ -49,7 +50,7 @@ X_Renderer::X_Renderer():
 	lights.push_back(std::make_shared<DirectionLight>(glm::vec3(-1, -1, -1), glm::vec3(1.0f)));
 	compileShaders();
 
-	postProcess = shaderLib.find(ShaderType::GlitchRGBSplit)->second;
+	//postProcess = shaderLib.find(ShaderType::GlitchRGBSplit)->second;
 
 	#pragma region faceCulling
 	glEnable(GL_DEPTH_TEST);
@@ -228,6 +229,7 @@ void X_Renderer::compileShaders()
 	shaderLib.insert({ ShaderType::Inversion, std::make_shared<InversionShader>(std::vector<std::string>{ "shader/inversion/vertex.glsl", "shader/inversion/fragment.glsl" }, prevFBO) });
 	shaderLib.insert({ ShaderType::NuClear, std::make_shared<NuClearShader>(std::vector<std::string>{ "shader/nuclear/vertex.glsl", "shader/nuclear/fragment.glsl" }, prevFBO) });
 	shaderLib.insert({ ShaderType::EdgeDetection, std::make_shared<EdgeDetectionShader>(std::vector<std::string>{ "shader/edgeDetection/vertex.glsl", "shader/edgeDetection/fragment.glsl" }, prevFBO) });
+	shaderLib.insert({ ShaderType::Base, std::make_shared<BaseShader>(std::vector<std::string>{ "shader/base/vertex.glsl", "shader/base/fragment.glsl" }, camera, lights[0])});
 }
 
 #pragma region lights

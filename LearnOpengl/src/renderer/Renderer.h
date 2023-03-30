@@ -32,7 +32,8 @@ enum ShaderType
 	GlitchRGBSplit,
 	Inversion,
 	NuClear,
-	EdgeDetection
+	EdgeDetection,
+	Base
 };
 
 enum RenderMode

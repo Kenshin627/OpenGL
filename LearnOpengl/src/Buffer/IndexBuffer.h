@@ -3,6 +3,7 @@
 class IndexBuffer
 {
 public:
+
 	IndexBuffer(const void* data, size_t count);
 	~IndexBuffer();
 	void bind() const;

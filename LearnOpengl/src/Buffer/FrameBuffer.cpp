@@ -10,7 +10,7 @@ FrameBuffer::FrameBuffer(unsigned width, unsigned height) :viewport_Width(width)
 FrameBuffer::~FrameBuffer()
 {
 	glDeleteFramebuffers(1, &m_RendererID);
-	glDeleteTextures(2, &m_RenderTextureIDs[0]);
+	glDeleteTextures(2, m_RenderTextureIDs);
 	glDeleteRenderbuffers(1, &m_RenderBufferID);
 }
 
@@ -30,13 +30,13 @@ void FrameBuffer::invalidate()
 	if (m_RendererID)
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
-		glDeleteTextures(2, &m_RenderTextureIDs[0]);
+		glDeleteTextures(2, m_RenderTextureIDs);
 		glDeleteRenderbuffers(1, &m_RenderBufferID);
 	}
 	glGenFramebuffers(1, &m_RendererID);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 
-	glGenTextures(1, &m_RenderTextureIDs[0]);
+	glGenTextures(2, m_RenderTextureIDs);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_RenderTextureIDs[0]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, viewport_Width, viewport_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
