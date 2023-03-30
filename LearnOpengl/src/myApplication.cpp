@@ -212,7 +212,7 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 			{
 				//createBox
 				auto node = std::make_shared<Node>();
-				node->meshes.push_back(std::make_shared<BoxMesh>("box", 1, 1, 1));
+				node->meshes.push_back(std::make_shared<BoxMesh>("box", 10, 10, 10));
 				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
 			ImGui::EndMenu();

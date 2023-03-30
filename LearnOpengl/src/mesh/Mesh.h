@@ -23,7 +23,8 @@ public:
 		vbo(std::make_unique<VertexBuffer>(vertices.data(), sizeof(float)* vertices.size())),
 		layout(layout),
 		material(mat),
-		modelMatrix(glm::identity<glm::mat4x4>())
+		modelMatrix(glm::identity<glm::mat4x4>()),
+		isIndexed(false)
 	{
 		if (!indices.empty())
 		{
@@ -55,8 +56,17 @@ public:
 	const unsigned indicesCount() const { return ibo->indicesCount(); };
 	const std::string getName() const { return name; };
 	const glm::mat4x4& getModelMatrix() const { return modelMatrix; };
-	virtual ~Mesh() {}
-	virtual void draw() const {  }
+	virtual ~Mesh() { }
+	virtual void draw() const 
+	{
+		if (isIndexed)
+		{
+			glDrawElements(GL_TRIANGLES, indicesCount(), GL_UNSIGNED_INT, (const void*)0);
+		}
+		else {
+			glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+		}
+	}
 protected:
 	std::string name;
 	std::vector<float> vertices;

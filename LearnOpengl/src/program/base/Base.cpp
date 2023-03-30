@@ -29,4 +29,8 @@ void BaseShader::setMeshUniforms(std::shared_ptr<Mesh> mesh) const
 	glm::mat3x3 normalMatrix = glm::mat3x3(glm::transpose(glm::inverse(modelMatrix)));
 	setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
 	setMatrix33("normalMatrix", normalMatrix);
+	setVec3("material.diffuseColor", glm::vec3(0.2, 0.6, 0.2));
+	setVec3("material.specularColor", glm::vec3(1.0, 1.0, 1.0));
+	setVec3("material.ambientColor", glm::vec3(0.2, 0.2, 0.2));
+	setFloat("material.shininess", 32.0f);
 }

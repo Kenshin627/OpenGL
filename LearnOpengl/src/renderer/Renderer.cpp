@@ -98,7 +98,8 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	clear();
 
 	#pragma region scene Graph render
-	auto meshShaderType = enableShadows ? ShaderType::BlinnPhongCastShadow : ShaderType::BlinnPhong;
+	//auto meshShaderType = enableShadows ? ShaderType::BlinnPhongCastShadow : ShaderType::BlinnPhong;
+	auto meshShaderType = ShaderType::Base;
 	std::shared_ptr<Shader> shader = shaderLib.find(meshShaderType)->second;
 	shader->bind();	
 	shader->setCommonUniforms();
@@ -175,7 +176,7 @@ void X_Renderer::Recursivedraw(const std::shared_ptr<Node>& node, std::shared_pt
 				shader->setMeshUniforms(mesh);
 			}
 			mesh->bind();
-			glDrawElements(GL_TRIANGLES, mesh->indicesCount(), GL_UNSIGNED_INT, (const void*)0);
+			mesh->draw();
 			mesh->unbind();
 		}
 	}
