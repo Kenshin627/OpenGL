@@ -14,15 +14,15 @@ void ShadowFrameBuffer::invalidate()
 	if (m_RendererID)
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
-		glDeleteTextures(1, &m_RenderTextureID);
+		glDeleteTextures(1, &m_RenderTextureIDs[0]);
 		glDeleteRenderbuffers(1, &m_RenderBufferID);
 	}
 	glGenFramebuffers(1, &m_RendererID);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 
-	glGenTextures(1, &m_RenderTextureID);
+	glGenTextures(1, &m_RenderTextureIDs[0]);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_RenderTextureID);
+	glBindTexture(GL_TEXTURE_2D, m_RenderTextureIDs[0]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, viewport_Width, viewport_Height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -30,7 +30,7 @@ void ShadowFrameBuffer::invalidate()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_RenderTextureID, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_RenderTextureIDs[0], 0);
 	glDrawBuffer(GL_NONE);
 	glDrawBuffer(GL_NONE);
 

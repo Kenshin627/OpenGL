@@ -49,7 +49,7 @@ X_Renderer::X_Renderer():
 	lights.push_back(std::make_shared<DirectionLight>(glm::vec3(-1, -1, -1), glm::vec3(1.0f)));
 	compileShaders();
 
-	//postProcess = shaderLib.find(ShaderType::NuClear)->second;
+	postProcess = shaderLib.find(ShaderType::GlitchRGBSplit)->second;
 
 	#pragma region faceCulling
 	glEnable(GL_DEPTH_TEST);

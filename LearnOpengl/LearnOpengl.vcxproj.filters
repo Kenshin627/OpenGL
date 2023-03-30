@@ -153,6 +153,9 @@
     <ClCompile Include="src\program\Grid\GridShader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Buffer\HDRFrameBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1416,6 +1419,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\program\Grid\GridShader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Buffer\HDRFrameBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

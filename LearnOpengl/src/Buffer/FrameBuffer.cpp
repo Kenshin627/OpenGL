@@ -10,7 +10,7 @@ FrameBuffer::FrameBuffer(unsigned width, unsigned height) :viewport_Width(width)
 FrameBuffer::~FrameBuffer()
 {
 	glDeleteFramebuffers(1, &m_RendererID);
-	glDeleteTextures(1, &m_RenderTextureID);
+	glDeleteTextures(2, &m_RenderTextureIDs[0]);
 	glDeleteRenderbuffers(1, &m_RenderBufferID);
 }
 
@@ -30,20 +30,22 @@ void FrameBuffer::invalidate()
 	if (m_RendererID)
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
-		glDeleteTextures(1, &m_RenderTextureID);
+		glDeleteTextures(2, &m_RenderTextureIDs[0]);
 		glDeleteRenderbuffers(1, &m_RenderBufferID);
 	}
 	glGenFramebuffers(1, &m_RendererID);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 
-	glGenTextures(1, &m_RenderTextureID);
+	glGenTextures(1, &m_RenderTextureIDs[0]);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_RenderTextureID);
+	glBindTexture(GL_TEXTURE_2D, m_RenderTextureIDs[0]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, viewport_Width, viewport_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_RenderTextureID, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_RenderTextureIDs[0], 0);
 
 	glGenRenderbuffers(1, &m_RenderBufferID);
 	glBindRenderbuffer(GL_RENDERBUFFER, m_RenderBufferID);

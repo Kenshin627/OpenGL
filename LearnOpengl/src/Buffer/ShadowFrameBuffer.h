@@ -4,7 +4,7 @@
 class ShadowFrameBuffer:public FrameBuffer
 {
 public:
-	ShadowFrameBuffer(unsigned width = 0.0f, unsigned height = 0.0f);
+	ShadowFrameBuffer(unsigned width = 0, unsigned height = 0);
 	~ShadowFrameBuffer();
 	void invalidate() override;
 };

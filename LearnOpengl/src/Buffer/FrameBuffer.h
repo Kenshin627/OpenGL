@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 
 class FrameBuffer
 {
@@ -9,11 +10,11 @@ public:
 	void unbind() const;
 	virtual void invalidate();
 	void resize(unsigned width, unsigned height);
-	inline unsigned int GetTextureID() const { return m_RenderTextureID; };
+	inline unsigned int GetTextureID() const { return m_RenderTextureIDs[0]; };
 protected:
-	unsigned int m_RendererID;
-	unsigned int m_RenderTextureID;
-	unsigned int m_RenderBufferID;
-	unsigned int viewport_Width;
-	unsigned int viewport_Height;
+	unsigned m_RendererID;
+	std::array<unsigned, 2> m_RenderTextureIDs;
+	unsigned m_RenderBufferID;
+	unsigned viewport_Width;
+	unsigned viewport_Height;
 };

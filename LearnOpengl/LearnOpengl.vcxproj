@@ -163,6 +163,7 @@
     <ClCompile Include="src\application\vendor\imGui\implot_demo.cpp" />
     <ClCompile Include="src\application\vendor\imGui\implot_items.cpp" />
     <ClCompile Include="src\Buffer\FrameBuffer.cpp" />
+    <ClCompile Include="src\Buffer\HDRFrameBuffer.cpp" />
     <ClCompile Include="src\Buffer\IndexBuffer.cpp" />
     <ClCompile Include="src\Buffer\ShadowFrameBuffer.cpp" />
     <ClCompile Include="src\camera\camera.cpp" />
@@ -578,6 +579,7 @@
     <ClInclude Include="src\application\vendor\imGui\implot.h" />
     <ClInclude Include="src\application\vendor\imGui\implot_internal.h" />
     <ClInclude Include="src\Buffer\FrameBuffer.h" />
+    <ClInclude Include="src\Buffer\HDRFrameBuffer.h" />
     <ClInclude Include="src\Buffer\IndexBuffer.h" />
     <ClInclude Include="src\Buffer\ShadowFrameBuffer.h" />
     <ClInclude Include="src\camera\camera.h" />
