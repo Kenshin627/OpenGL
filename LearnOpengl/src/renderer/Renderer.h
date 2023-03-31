@@ -39,6 +39,7 @@ public:
 	void setRenderMode(RenderMode _mode) { mode = _mode; };
 	RenderMode getRenderMode() const { return mode; };
 	void CompileShaders();
+	unsigned getSkyBoxTexture() const { return skybox.getTextureID(); };
 	glm::vec3& getWireFrameColor() { return wireFrameColor; };
 	const std::vector<std::shared_ptr<DirectionLight>>& getLights() const { return lights; };
 	std::shared_ptr<Shader> getShader(ShaderType type) const { return shaderLib.find(type)->second; };

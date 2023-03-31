@@ -171,6 +171,7 @@
     <ClCompile Include="src\material\base\BaseMaterial.cpp" />
     <ClCompile Include="src\material\blinnPhong\BlinnPhongMaterial.cpp" />
     <ClCompile Include="src\material\depth\DepthMaterial.cpp" />
+    <ClCompile Include="src\material\environmentReflect\EnvironmentReflectMaterial.cpp" />
     <ClCompile Include="src\material\grid\GridMaterial.cpp" />
     <ClCompile Include="src\material\Material.cpp" />
     <ClCompile Include="src\material\normalMap\NormalMaterial.cpp" />
@@ -583,6 +584,7 @@
     <ClInclude Include="src\material\base\BaseMaterial.h" />
     <ClInclude Include="src\material\blinnPhong\BlinnPhongMaterial.h" />
     <ClInclude Include="src\material\depth\DepthMaterial.h" />
+    <ClInclude Include="src\material\environmentReflect\EnvironmentReflectMaterial.h" />
     <ClInclude Include="src\material\grid\GridMaterial.h" />
     <ClInclude Include="src\material\Material.h" />
     <ClInclude Include="src\material\normalMap\NormalMaterial.h" />
