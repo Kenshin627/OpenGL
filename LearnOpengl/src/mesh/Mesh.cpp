@@ -25,8 +25,14 @@ Mesh::Mesh(const std::string& name, const std::vector<float>& vertices, const st
 
 void Mesh::draw()
 {
+	if (material->type == ShaderType::WireFrame)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	
 	material->bind();
 	vao->bind();
+	
 	if (isIndexed)
 	{
 		ibo->bind();
@@ -48,6 +54,11 @@ void Mesh::draw()
 	}
 	vao->unbind();
 	material->unbind();
+
+	if (material->type == ShaderType::WireFrame)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
 }
 
 

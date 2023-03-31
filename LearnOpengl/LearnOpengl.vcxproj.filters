@@ -129,6 +129,9 @@
     <ClCompile Include="src\material\depth\DepthMaterial.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\material\wireframe\WireFrameMaterial.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1359,6 +1362,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\material\depth\DepthMaterial.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\material\wireframe\WireFrameMaterial.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

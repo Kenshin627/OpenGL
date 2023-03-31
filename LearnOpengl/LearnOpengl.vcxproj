@@ -173,6 +173,7 @@
     <ClCompile Include="src\material\depth\DepthMaterial.cpp" />
     <ClCompile Include="src\material\grid\GridMaterial.cpp" />
     <ClCompile Include="src\material\Material.cpp" />
+    <ClCompile Include="src\material\wireframe\WireFrameMaterial.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\Box\Box.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\Grid\Grid.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\Quad\Quad.cpp" />
@@ -583,6 +584,7 @@
     <ClInclude Include="src\material\depth\DepthMaterial.h" />
     <ClInclude Include="src\material\grid\GridMaterial.h" />
     <ClInclude Include="src\material\Material.h" />
+    <ClInclude Include="src\material\wireframe\WireFrameMaterial.h" />
     <ClInclude Include="src\mesh\BasicMeshes\Box\Box.h" />
     <ClInclude Include="src\mesh\BasicMeshes\Grid\Grid.h" />
     <ClInclude Include="src\mesh\BasicMeshes\Quad\Quad.h" />

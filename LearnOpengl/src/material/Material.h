@@ -13,7 +13,7 @@ public:
 	virtual void setUniforms(const Mesh& mesh) { };
 	void bind() const { program->bind(); };
 	void unbind() const { program->unbind(); };
-private:
+public:
 	ShaderType type;		
 protected:
 	const X_Renderer& renderer;

@@ -13,6 +13,5 @@ void DepthMaterial::setUniforms(const Mesh& mesh)
 	program->setFloat("far", camera->getFar());
 	program->setVec3("nearColor", nearColor);
 	program->setVec3("farColor", farColor);
-	glm::mat4x4 modelMatrix = mesh.getModelMatrix();
-	program->setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
+	program->setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * mesh.getModelMatrix());
 }
