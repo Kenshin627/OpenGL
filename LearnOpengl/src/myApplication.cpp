@@ -197,7 +197,7 @@ private:
 	X_Renderer renderer;
 	SceneGraph sceneGraph;
 	SceneLoader sceneLoader;
-	glm::ivec2 m_viewportSize = { 800, 600 };
+	glm::vec2 m_viewportSize = { 800, 600 };
 };
 								
 Kenshin::Application* Kenshin::createApplication(int argc, char** argv)

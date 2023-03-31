@@ -22,11 +22,11 @@ X_Renderer::X_Renderer():
 	),
 	refractiveIndex(
 	{
-		{ "air", 1.00 },
-		{ "water", 1.33 },
-		{ "ice", 1.309 },
-		{ "glass", 1.52 },
-		{ "damon", 2.42 },
+		{ "air", 1.00f },
+		{ "water", 1.33f },
+		{ "ice", 1.309f },
+		{ "glass", 1.52f },
+		{ "damon", 2.42f },
 	}),
 	outputTextureID(0),
 	m_ShadowFBO(std::make_shared<ShadowFrameBuffer>(1.0, 1.0)),
@@ -83,16 +83,10 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::ivec2& viewport
 	clear();
 
 	#pragma region scene Graph render
-	//auto meshShaderType = enableShadows ? ShaderType::BlinnPhongCastShadow : ShaderType::BlinnPhong;
-	//auto meshShaderType = ShaderType::Base;
-	//std::shared_ptr<Shader> shader = shaderLib.find(meshShaderType)->second;
-	//shader->bind();	
-	//shader->setCommonUniforms();
 	for (const std::shared_ptr<Node>& node : sceneGraph.roots)
 	{
 		Recursivedraw(node);
 	}
-	//shader->unbind();
 	#pragma endregion
 
 	#pragma region visual normal

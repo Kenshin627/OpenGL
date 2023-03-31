@@ -6,6 +6,7 @@ BlinnPhongMaterial::BlinnPhongMaterial(std::vector<std::shared_ptr<Texture>> amb
 	ambientTexture(ambientTexture),
 	diffuseTexture(diffuseTexture),
 	specularTexture(specularTexture),
+	normalMap(normalMap),
 	shininess(shininess) {}
 
 void BlinnPhongMaterial::setUniforms(const Mesh& mesh)
@@ -24,7 +25,7 @@ void BlinnPhongMaterial::setUniforms(const Mesh& mesh)
 	glm::mat3x3 normalMatrix = glm::mat3x3(glm::transpose(glm::inverse(modelMatrix)));
 	program->setMatrix44("modelViewProjection", camera->projMatrix() * camera->viewMatrix() * modelMatrix);
 	program->setMatrix44("model", modelMatrix);
-	//program->setMatrix33("normalMatrix", normalMatrix);
+	program->setFloat("material.shininess", shininess);
 	if (!ambientTexture.empty())
 	{
 		ambientTexture[0]->bind(0);
@@ -49,5 +50,4 @@ void BlinnPhongMaterial::setUniforms(const Mesh& mesh)
 		program->setInt("material.normalMap", 3);
 	}
 
-	program->setFloat("material.shininess", shininess);
 }
