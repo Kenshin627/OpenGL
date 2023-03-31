@@ -3,6 +3,8 @@
 out vec4 outColor;
 uniform float near;
 uniform float far;
+uniform vec3 nearColor;
+uniform vec3 farColor;
 
 float LinearizeDepth(float depth) 
 {
@@ -13,5 +15,5 @@ float LinearizeDepth(float depth)
 void main()
 {
     float depth = LinearizeDepth(gl_FragCoord.z) / far;
-	outColor = vec4(vec3(depth), 1.0);
+	outColor = vec4(mix(nearColor, farColor, depth), 1.0);
 }

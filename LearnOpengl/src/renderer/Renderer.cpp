@@ -2,9 +2,10 @@
 #include "Renderer.h"
 #include "../mesh/BasicMeshes/Grid/Grid.h"
 #include "../material/grid/GridMaterial.h"
+#include "../material/depth/DepthMaterial.h"
 
 X_Renderer::X_Renderer():
-	camera(std::make_shared<Camera>(glm::vec3(0, 17, 35), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
+	camera(std::make_shared<Camera>(glm::vec3(0, 17, 35), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
 	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)), 
 	prevFBO(m_FBO),
 	clearColor(glm::vec4(0.0, 0.0, 0.0, 1.0)), 
@@ -38,6 +39,7 @@ X_Renderer::X_Renderer():
 	CompileShaders();
 
 	grid->setMaterial(std::make_shared<GridMaterial>(glm::vec3(0.3, 0.3, 0.3), glm::vec3(0.6, 0.6, 0.6), glm::vec3(0, 0, 0), glm::vec4(1.0, 10, 0.33, .5), *this));
+	
 	//postProcess = shaderLib.find(ShaderType::GlitchRGBSplit)->second;
 
 	#pragma region faceCulling
@@ -195,8 +197,8 @@ void X_Renderer::CompileShaders()
 	shaderLib.insert({ ShaderType::EdgeDetection, std::make_shared<Shader>(std::vector<std::string>{ "shader/edgeDetection/vertex.glsl", "shader/edgeDetection/fragment.glsl" })});
 	shaderLib.insert({ ShaderType::Base, std::make_shared<Shader>(std::vector<std::string>{ "shader/base/vertex.glsl", "shader/base/fragment.glsl" })});
 }
-#pragma region lights
 
+#pragma region lights
 //void setLight(const Shader& program)
 //{
 //	//Lights
@@ -222,5 +224,4 @@ void X_Renderer::CompileShaders()
 //	program.setFloat("spotLight.innerCutOff", glm::cos(glm::radians(sl.getInnerCutOff())));
 //	program.setFloat("spotLight.outterCutOff", glm::cos(glm::radians(sl.getOutterCutOff())));
 //}
-
 #pragma endregion

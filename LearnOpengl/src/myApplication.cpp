@@ -5,6 +5,7 @@
 #include "application/vendor/imGui/imgui_internal.h"
 #include "mesh/BasicMeshes/Box/Box.h"
 #include "material/base/BaseMaterial.h"
+#include "material/depth/DepthMaterial.h"
 
 struct ScrollingBuffer {
 	int MaxSize;
@@ -67,13 +68,13 @@ public:
 	void onUpdate(const Kenshin::updatePayload& payload) override
 	{
 		std::shared_ptr<Camera> camera = renderer.getCamera();
-		/*std::shared_ptr<DirectionLight> light = renderer.getLights()[0];
+		std::shared_ptr<DirectionLight> light = renderer.getLights()[0];
 		auto pos = light->getPostion();
-		auto deltaX = sin((payload.ts)) * 0.01 * 2;
-		auto deltaY = cos((payload.ts)) * 0.01 * 2;
-		auto deltaZ = cos((payload.ts)) * 0.01 * 2;
+		auto deltaX = sin((payload.ts)) * 0.05 * 2;
+		auto deltaY = cos((payload.ts)) * 0.05 * 2;
+		auto deltaZ = cos((payload.ts)) * 0.05 * 2;
 		auto dir = glm::vec3(0, 0, 0) - glm::vec3(deltaX + pos.x, deltaY + pos.y, deltaZ + pos.z);
-		light->setDirection(dir);*/
+		light->setDirection(dir);
 		if (m_viewportSize.x != payload.viewport.x || m_viewportSize.y != payload.viewport.y)
 		{
 			m_viewportSize.x = payload.viewport.x;
@@ -214,7 +215,9 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 			{
 				//createBox
 				auto node = std::make_shared<Node>();
-				node->meshes.push_back(std::make_shared<BoxMesh>("box", 10, 10, 10, std::make_shared<BaseMaterial>(glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.2, 0.3, 0.8), glm::vec3(1.0, 1.0, 1.0), 32.0f, viewportLayer->getRenderer())));
+				//std::make_shared<BaseMaterial>(glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.2, 0.3, 0.8), glm::vec3(1.0, 1.0, 1.0), 32.0f, viewportLayer->getRenderer())
+
+				node->meshes.push_back(std::make_shared<BoxMesh>("box", 10, 10, 50, std::make_shared<DepthMaterial>(viewportLayer->getRenderer())));
 				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
 			ImGui::EndMenu();
