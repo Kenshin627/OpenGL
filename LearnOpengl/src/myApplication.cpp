@@ -9,6 +9,16 @@
 #include "material/wireframe/WireFrameMaterial.h"
 #include "material/normalMap/NormalMaterial.h"
 #include "material/environmentReflect/EnvironmentReflectMaterial.h"
+#include "material/environmentRefract/EnvironmentRefractMaterial.h"
+
+static std::unordered_map<std::string, float> refractIndex
+{
+	{ "air", 1.00f },
+	{ "water", 1.33f },
+	{ "ice", 1.309f },
+	{ "glass", 1.52f },
+	{ "damon", 2.42f },
+};
 
 struct ScrollingBuffer {
 	int MaxSize;
@@ -224,8 +234,9 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 				auto wireframe = std::make_shared<WireFrameMaterial>(viewportLayer->getRenderer());
 				auto normal = std::make_shared<NormalMaterial>(viewportLayer->getRenderer());
 				auto environmentReflectMaterial = std::make_shared<EnvironmentReflectMaterial>(viewportLayer->getRenderer());
+				auto environmentRefractMaterial = std::make_shared<EnvironmentRefractMaterial>(viewportLayer->getRenderer(), refractIndex.find("glass")->second);
 
-				node->meshes.push_back(std::make_shared<BoxMesh>("box", 10, 10, 20, environmentReflectMaterial));
+				node->meshes.push_back(std::make_shared<BoxMesh>("box", 10, 10, 20, environmentRefractMaterial));
 				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
 			ImGui::EndMenu();

@@ -21,14 +21,6 @@ X_Renderer::X_Renderer():
 		"shader/skyBox/vertex.glsl", 
 		"shader/skyBox/fragment.glsl"
 	),
-	refractiveIndex(
-	{
-		{ "air", 1.00f },
-		{ "water", 1.33f },
-		{ "ice", 1.309f },
-		{ "glass", 1.52f },
-		{ "damon", 2.42f },
-	}),
 	outputTextureID(0),
 	m_ShadowFBO(std::make_shared<ShadowFrameBuffer>(1.0, 1.0)),
 	enableShadows(false),

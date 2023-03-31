@@ -55,7 +55,6 @@ private:
 	std::shared_ptr<GridMesh> grid;
 	Quad quad;
 	SkyBox skybox;
-	std::unordered_map<std::string, float> refractiveIndex;
 	unsigned outputTextureID;
 	std::shared_ptr<ShadowFrameBuffer> m_ShadowFBO;
 	bool enableShadows;
