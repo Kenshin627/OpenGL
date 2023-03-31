@@ -1,10 +1,12 @@
 #include <iostream>
+#include "../mesh/Mesh.h"
 #include "sceneLoader.h"
+#include "../material/blinnPhong/BlinnPhongMaterial.h"
 
 SceneLoader::SceneLoader() = default;
 SceneLoader::~SceneLoader() = default;
 
-std::shared_ptr<Node> SceneLoader::loadModel(const std::string& path)
+std::shared_ptr<Node> SceneLoader::loadModel(const std::string& path, std::shared_ptr<X_Renderer> renderer)
 {
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -13,10 +15,10 @@ std::shared_ptr<Node> SceneLoader::loadModel(const std::string& path)
 		return nullptr;
 	}
 	directory = path.substr(0, path.find_last_of('/'));
-	return processNode(scene->mRootNode, scene, nullptr);
+	return processNode(scene->mRootNode, scene, nullptr, renderer);
 }
 
-std::shared_ptr<Node> SceneLoader::processNode(aiNode* node, const aiScene* scene, std::shared_ptr<Node> parent)
+std::shared_ptr<Node> SceneLoader::processNode(aiNode* node, const aiScene* scene, std::shared_ptr<Node> parent, std::shared_ptr<X_Renderer> renderer)
 {
 	std::shared_ptr<Node> current = std::make_shared<Node>();
 	current->parent = parent;
@@ -27,16 +29,16 @@ std::shared_ptr<Node> SceneLoader::processNode(aiNode* node, const aiScene* scen
 	}
 	for (size_t i = 0; i < node->mNumMeshes; i++)
 	{
-		current->meshes.push_back(processMesh(scene->mMeshes[node->mMeshes[i]], scene));
+		current->meshes.push_back(processMesh(scene->mMeshes[node->mMeshes[i]], scene, renderer));
 	}
 	for (size_t i = 0; i < node->mNumChildren; i++)
 	{
-		current->children.push_back(processNode(node->mChildren[i], scene, current));
+		current->children.push_back(processNode(node->mChildren[i], scene, current, renderer));
 	}
 	return current;
 }
 
-std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scene)
+std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::shared_ptr<X_Renderer> renderer)
 {
 	std::vector<float> vertices;
 	std::vector<unsigned> indices;
@@ -101,7 +103,7 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 	}
 
 	unsigned materialIndex = mesh->mMaterialIndex;
-	std::shared_ptr<Material> mat = nullptr;
+	std::shared_ptr<BlinnPhongMaterial> mat = nullptr;
 	if (materialIndex >= 0)
 	{
 		auto cachedMaterial = materialCache.find(materialIndex);
@@ -111,25 +113,24 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 		}
 		else
 		{
-			mat = std::make_shared<Material>();
-			aiColor3D colorTemp;
+			
+			//aiColor3D colorTemp;
 			float shininess;
 			aiMaterial* material = scene->mMaterials[materialIndex];
-			material->Get(AI_MATKEY_COLOR_AMBIENT, colorTemp);
-			mat->ambient = glm::vec3(colorTemp.r, colorTemp.g, colorTemp.b);
-			material->Get(AI_MATKEY_COLOR_DIFFUSE, colorTemp);
-			mat->diffuse = glm::vec3(colorTemp.r, colorTemp.g, colorTemp.b);
-			material->Get(AI_MATKEY_COLOR_SPECULAR, colorTemp);
-			mat->specular = glm::vec3(colorTemp.r, colorTemp.g, colorTemp.b);
+			//material->Get(AI_MATKEY_COLOR_AMBIENT, colorTemp);
+			//mat->ambient = glm::vec3(colorTemp.r, colorTemp.g, colorTemp.b);
+			//material->Get(AI_MATKEY_COLOR_DIFFUSE, colorTemp);
+			//mat->diffuse = glm::vec3(colorTemp.r, colorTemp.g, colorTemp.b);
+			//material->Get(AI_MATKEY_COLOR_SPECULAR, colorTemp);
+			//mat->specular = glm::vec3(colorTemp.r, colorTemp.g, colorTemp.b);
 			material->Get(AI_MATKEY_SHININESS, shininess);
-			mat->shininess = shininess;
 
 			//textures
-			mat->ambientTextures = loadMaterialTextures(material, aiTextureType_AMBIENT, TEXTURE_TYPE::AMBIENT);
-			mat->diffuseTextures = loadMaterialTextures(material, aiTextureType_DIFFUSE, TEXTURE_TYPE::DIFFUSE);
-			mat->specularTextures = loadMaterialTextures(material, aiTextureType_SPECULAR, TEXTURE_TYPE::SPECULAR);
-			mat->normalMap = loadMaterialTextures(material, aiTextureType_NORMALS, TEXTURE_TYPE::NORMALMAP);
-
+			auto ambientTextures = loadMaterialTextures(material, aiTextureType_AMBIENT, TEXTURE_TYPE::AMBIENT);
+			auto diffuseTextures = loadMaterialTextures(material, aiTextureType_DIFFUSE, TEXTURE_TYPE::DIFFUSE);
+			auto specularTextures = loadMaterialTextures(material, aiTextureType_SPECULAR, TEXTURE_TYPE::SPECULAR);
+			auto normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, TEXTURE_TYPE::NORMALMAP);
+			mat = std::make_shared<BlinnPhongMaterial>(ambientTextures, diffuseTextures, specularTextures, normalMaps, shininess, renderer);
 			materialCache.insert({ materialIndex, mat });
 		}		
 	}

@@ -8,33 +8,13 @@
 #include "../light/directionLight.h"
 #include "../program/Shader.h"
 #include "../Buffer/FrameBuffer.h"
-#include "../program/postProcess/PostProcess.h"
+//#include "../program/postProcess/PostProcess.h"
 #include "../mesh/BasicMeshes/Quad/Quad.h"
-#include "../mesh/BasicMeshes/Grid/Grid.h"
+
 #include "../mesh/BasicMeshes/SkyBox/SkyBox.h"
 #include "../Buffer/ShadowFrameBuffer.h"
 
-enum ShaderType
-{
-	WireFrame,
-	BlinnPhong,
-	PBR,
-	Depth,
-	Normal,
-	Grid,
-	EnvironmentMapReflect,
-	EnvironmentMapRefract,
-	visualNormal,
-	ShadowMap,
-	BlinnPhongCastShadow,
-	GridCastShadow,
-	GrayScalize,
-	GlitchRGBSplit,
-	Inversion,
-	NuClear,
-	EdgeDetection,
-	Base
-};
+class GridMesh;
 
 enum RenderMode
 {
@@ -51,16 +31,17 @@ public:
 	~X_Renderer();
 	void Render(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts);
 	void RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts);
-	void Recursivedraw(const std::shared_ptr<Node>& node, std::shared_ptr<Shader> shader = nullptr);
+	void Recursivedraw(const std::shared_ptr<Node>& node);
 	std::shared_ptr<Camera> getCamera() { return camera; };
 	void resizeFBO(unsigned width, unsigned height);
 	void clear();
 	unsigned getFrameBufferTextureID() const { return outputTextureID; };
 	void setRenderMode(RenderMode _mode) { mode = _mode; };
 	RenderMode getRenderMode() const { return mode; };
-	void compileShaders();
+	void CompileShaders();
 	glm::vec3& getWireFrameColor() { return wireFrameColor; };
 	std::vector<std::shared_ptr<DirectionLight>>& getLights() { return lights; };
+	std::shared_ptr<Shader> getShader(ShaderType type) const { return shaderLib.find(type)->second; };
 private:
 	std::shared_ptr<Camera> camera;
 	std::vector<std::shared_ptr<DirectionLight>> lights;

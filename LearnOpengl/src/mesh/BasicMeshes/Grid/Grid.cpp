@@ -1,6 +1,3 @@
-#include <vector>;
-#include <memory>;
-#include "../../Mesh.h";
 #include "Grid.h";
 
 GridMesh::GridMesh(float size) :Mesh("grid",

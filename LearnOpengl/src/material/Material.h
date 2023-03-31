@@ -1,17 +1,21 @@
 #pragma once
 #include <glm/glm.hpp>
-#include "../Texture/Texture.h"
+#include "../program/Shader.h"
+#include "../renderer/Renderer.h"
+
+class X_Renderer;
 
 class Material
 {
 public:
-	Material():diffuse(glm::vec3()), specular(glm::vec3()) , ambient(glm::vec3()) , shininess(0.0f) {}
-	glm::vec3 diffuse;
-	glm::vec3 specular;
-	glm::vec3 ambient;
-	float shininess;
-	std::vector<std::shared_ptr<Texture>> ambientTextures;
-	std::vector<std::shared_ptr<Texture>> diffuseTextures;
-	std::vector<std::shared_ptr<Texture>> specularTextures;
-	std::vector<std::shared_ptr<Texture>> normalMap;
+	Material(ShaderType type, std::shared_ptr<X_Renderer> renderer);
+	virtual ~Material();
+	virtual void setUniforms(const Mesh& mesh) { };
+	void bind() const { program->bind(); };
+	void unbind() const { program->unbind(); };
+private:
+	ShaderType type;		
+protected:
+	std::shared_ptr<X_Renderer> renderer;
+	std::shared_ptr<Shader> program;
 };

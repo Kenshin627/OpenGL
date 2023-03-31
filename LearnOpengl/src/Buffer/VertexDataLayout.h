@@ -1,6 +1,12 @@
 #pragma once
 #include <vector>
-#include <glad/gl.h>
+
+#define GL_FLOAT 0x1406
+#define GL_FALSE 0
+#define GL_TRUE 1
+#define GL_INT 0x1404
+#define GL_UNSIGNED_BYTE 0x1401
+
 
 struct Attribute
 {

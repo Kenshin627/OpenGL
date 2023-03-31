@@ -96,22 +96,7 @@
     <ClCompile Include="src\mesh\BasicMeshes\Quad\Quad.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\program\postProcess\GrayScale\GrayScale.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\postProcess\GlitchRGBSplit\GlitchRGBSplit.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\mesh\BasicMeshes\Grid\Grid.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\postProcess\Inversion\Inversion.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\postProcess\NuClear\NuClear.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\postProcess\EdgeDetection\EdgeDetection.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\mesh\BasicMeshes\SkyBox\SkyBox.cpp">
@@ -120,46 +105,25 @@
     <ClCompile Include="src\Buffer\ShadowFrameBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\program\BlinnPhong\BlinnPhong.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\EnvironmentMapReflect\environmentMapReflect.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\EnvironmentMapRefract\environmentMapRefract.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\Depth\Depth.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\WireFrame\WireFrame.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\ShadowMap\ShadowMap.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\postProcess\PostProcess.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\BlinnPhongCastShadow\BlinnPhongCastShadow.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\GridCastShadow\GridCastShadow.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\VisualNormal\VisualNormal.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\program\Grid\GridShader.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\Buffer\HDRFrameBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\mesh\BasicMeshes\Box\Box.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\program\base\Base.cpp">
+    <ClCompile Include="src\material\Material.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\material\base\BaseMaterial.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\material\blinnPhong\BlinnPhongMaterial.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\material\grid\GridMaterial.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mesh\Mesh.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1046,9 +1010,6 @@
     <ClInclude Include="src\light\pointLight.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\material\BlinnPhongMaterial.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\light\spotLight.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -1367,28 +1328,10 @@
     <ClInclude Include="src\application\vendor\imGui\implot_internal.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\program\postProcess\PostProcess.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\mesh\BasicMeshes\Quad\Quad.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\program\postProcess\GrayScale\GrayScale.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\program\postProcess\GlitchRGBSplit\GlitchRGBSplit.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\mesh\BasicMeshes\Grid\Grid.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\program\postProcess\Inversion\Inversion.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\program\postProcess\NuClear\NuClear.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\program\postProcess\EdgeDetection\EdgeDetection.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\mesh\BasicMeshes\SkyBox\SkyBox.h">
@@ -1397,43 +1340,19 @@
     <ClInclude Include="src\Buffer\ShadowFrameBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\program\BlinnPhong\BlinnPhong.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\program\EnvironmentMapReflect\environmentMapReflect.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\program\EnvironmentMapRefract\environmentMapRefract.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\program\Depth\Depth.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\program\WireFrame\WireFrame.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\program\ShadowMap\ShadowMap.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\program\BlinnPhongCastShadow\BlinnPhongCastShadow.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\program\GridCastShadow\GridCastShadow.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\program\VisualNormal\VisualNormal.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\program\Grid\GridShader.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\Buffer\HDRFrameBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\mesh\BasicMeshes\Box\Box.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\program\base\Base.h">
+    <ClInclude Include="src\material\base\BaseMaterial.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\material\blinnPhong\BlinnPhongMaterial.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\material\grid\GridMaterial.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

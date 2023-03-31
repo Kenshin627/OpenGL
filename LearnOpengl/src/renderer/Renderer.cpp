@@ -1,20 +1,7 @@
+#include <glad/gl.h>
 #include "Renderer.h"
-#include "../program/BlinnPhong/BlinnPhong.h"
-#include "../program/EnvironmentMapReflect/environmentMapReflect.h"
-#include "../program/EnvironmentMapRefract/environmentMapRefract.h"
-#include "../program/Depth/Depth.h"
-#include "../program/WireFrame/WireFrame.h"
-#include "../program/ShadowMap/ShadowMap.h"
-#include "../program/BlinnPhongCastShadow/BlinnPhongCastShadow.h"
-#include "../program/GridCastShadow/GridCastShadow.h"
-#include "../program/Grid/GridShader.h"
-#include "../program/VisualNormal/VisualNormal.h"
-#include "../program/postProcess/EdgeDetection/EdgeDetection.h"
-#include "../program/postProcess/GlitchRGBSplit/GlitchRGBSplit.h"
-#include "../program/postProcess/GrayScale/GrayScale.h"
-#include "../program/postProcess/Inversion/Inversion.h"
-#include "../program/postProcess/NuClear/NuClear.h"
-#include "../program/base/Base.h"
+#include "../mesh/BasicMeshes/Grid/Grid.h"
+#include "../material/grid/GridMaterial.h"
 
 X_Renderer::X_Renderer():
 	camera(std::make_shared<Camera>(glm::vec3(0, 17, 35), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
@@ -48,8 +35,9 @@ X_Renderer::X_Renderer():
 	postProcess(nullptr)
 {
 	lights.push_back(std::make_shared<DirectionLight>(glm::vec3(-1, -1, -1), glm::vec3(1.0f)));
-	compileShaders();
+	CompileShaders();
 
+	grid->setMaterial(std::make_shared<GridMaterial>(glm::vec3(0.3, 0.3, 0.3), glm::vec3(0.6, 0.6, 0.6), glm::vec3(0, 0, 0), glm::vec4(1.0, 10, 0.33, .5), std::shared_ptr<X_Renderer>(this)));
 	//postProcess = shaderLib.find(ShaderType::GlitchRGBSplit)->second;
 
 	#pragma region faceCulling
@@ -71,16 +59,13 @@ void X_Renderer::RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& vie
 	std::shared_ptr<Shader> shadowShader = shaderLib.find(ShaderType::ShadowMap)->second;
 	shadowShader->bind();	
 	m_ShadowFBO->bind();
-	shadowShader->setCommonUniforms();
+	//shadowShader->setCommonUniforms();
 	clear();
 	for (const std::shared_ptr<Node>& node : sceneGraph.roots)
 	{
 		Recursivedraw(node);
 	}
-	grid->bind();
-	shadowShader->setMeshUniforms(grid);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
-	grid->unbind();	
+	grid->draw();
 	m_ShadowFBO->unbind();
 	shadowShader->unbind();
 }
@@ -99,15 +84,15 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 
 	#pragma region scene Graph render
 	//auto meshShaderType = enableShadows ? ShaderType::BlinnPhongCastShadow : ShaderType::BlinnPhong;
-	auto meshShaderType = ShaderType::Base;
-	std::shared_ptr<Shader> shader = shaderLib.find(meshShaderType)->second;
-	shader->bind();	
-	shader->setCommonUniforms();
+	//auto meshShaderType = ShaderType::Base;
+	//std::shared_ptr<Shader> shader = shaderLib.find(meshShaderType)->second;
+	//shader->bind();	
+	//shader->setCommonUniforms();
 	for (const std::shared_ptr<Node>& node : sceneGraph.roots)
 	{
-		Recursivedraw(node, shader);
+		Recursivedraw(node);
 	}
-	shader->unbind();
+	//shader->unbind();
 	#pragma endregion
 
 	#pragma region visual normal
@@ -115,10 +100,10 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	{
 		auto visualNormalShader = shaderLib.find(ShaderType::visualNormal)->second;
 		visualNormalShader->bind();
-		visualNormalShader->setCommonUniforms();
+		//visualNormalShader->setCommonUniforms();
 		for (const std::shared_ptr<Node>& node : sceneGraph.roots)
 		{
-			Recursivedraw(node, visualNormalShader);
+			Recursivedraw(node);
 		}
 		visualNormalShader->unbind();
 	}
@@ -126,15 +111,7 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 
 	#pragma region GRID 已完成
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	auto gridShaderType = enableShadows ? ShaderType::GridCastShadow : ShaderType::Grid;
-	auto gridShader = shaderLib.find(gridShaderType)->second;
-	gridShader->bind();
-	grid->bind();	
-	gridShader->setCommonUniforms();
-	gridShader->setMeshUniforms(grid);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
-	grid->unbind();
-	gridShader->unbind();
+	grid->draw();
 	#pragma endregion
 
 	#pragma region SkyBox
@@ -153,7 +130,7 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 		postProcess->bind();
 		clear();
 		postProcess->update(ts);
-		postProcess->setCommonUniforms();
+		//postProcess->setCommonUniforms();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
 		prevFBO = postProcess->getFBO();
 		postProcess->unbind();
@@ -165,26 +142,20 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport,
 	#pragma endregion
 }
 
-void X_Renderer::Recursivedraw(const std::shared_ptr<Node>& node, std::shared_ptr<Shader> shader)
+void X_Renderer::Recursivedraw(const std::shared_ptr<Node>& node)
 {
 	if (!node->meshes.empty())
 	{
 		for (const std::shared_ptr<Mesh>& mesh : node->meshes)
 		{			
-			if (shader != nullptr)
-			{
-				shader->setMeshUniforms(mesh);
-			}
-			mesh->bind();
 			mesh->draw();
-			mesh->unbind();
 		}
 	}
 	if (!node->children.empty())
 	{
 		for (auto& node : node->children)
 		{
-			Recursivedraw(node, shader);
+			Recursivedraw(node);
 		}
 	}
 }
@@ -203,36 +174,33 @@ void X_Renderer::resizeFBO(unsigned width, unsigned height)
 	{
 		if (shader.second->getType() == ShaderCategory::PostProcessShader)
 		{
-			((PostProcess&)(*shader.second)).resetFBO(width, height);
+			//((PostProcess&)(*shader.second)).resetFBO(width, height);
 		}
 	}
 }
 
-void X_Renderer::compileShaders()
+void X_Renderer::CompileShaders()
 {
-	shaderLib.insert({ ShaderType::WireFrame, std::make_shared<WireFrameShader>(std::vector<std::string>{ "shader/wireFrame/vertex.glsl", "shader/wireFrame/fragment.glsl" }, camera, wireFrameColor)});
-	shaderLib.insert({ ShaderType::BlinnPhong, std::make_shared<BlinnPhongShader>(std::vector<std::string>{ "shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl" }, camera, lights[0])});
-	//PBR暂未实现
-	//shaderLib.insert({ ShaderType::PBR, std::make_shared<BlinnPhongShader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" }, camera, lights[0]) });
-	shaderLib.insert({ ShaderType::Depth, std::make_shared<DepthShader>(std::vector<std::string>{ "shader/depthRender/vertex.glsl", "shader/depthRender/fragment.glsl" }, camera) });
-	shaderLib.insert({ ShaderType::Normal, std::make_shared<Shader>(std::vector<std::string>{ "shader/normal/vertex.glsl", "shader/normal/fragment.glsl" }) });
-	shaderLib.insert({ ShaderType::Grid, std::make_shared<GridShader>(std::vector<std::string>{ "shader/grid/vertex.glsl", "shader/grid/fragment.glsl" }, camera, glm::vec3(0.3, 0.3, 0.3), glm::vec3(0.6, 0.6, 0.6), glm::vec3(0, 0, 0), glm::vec4(1.0, 10, 0.33, .5)) });
-	shaderLib.insert({ ShaderType::EnvironmentMapReflect, std::make_shared<EnvironmentMapReflectShader>(std::vector<std::string>{ "shader/environmentMapReflect/vertex.glsl", "shader/environmentMapReflect/fragment.glsl" }, camera, skybox.getTextureID())});
-	shaderLib.insert({ ShaderType::EnvironmentMapRefract, std::make_shared<EnvironmentMapRefractShader>(std::vector<std::string>{ "shader/environmentMapRefract/vertex.glsl", "shader/environmentMapRefract/fragment.glsl" }, camera, skybox.getTextureID(), refractiveIndex.find("glass")->second)});
-	shaderLib.insert({ ShaderType::visualNormal, std::make_shared<VisualNormalShader>(std::vector<std::string>{ "shader/visualNormal/vertex.glsl", "shader/visualNormal/fragment.glsl", "shader/visualNormal/geometry.glsl" }, camera, 0.7f, glm::vec3(0.2f, 0.5f, 0.6f)) });
-	shaderLib.insert({ ShaderType::ShadowMap, std::make_shared<ShadowMapShader>(std::vector<std::string>{ "shader/shadowMap/vertex.glsl", "shader/shadowMap/fragment.glsl" }, lights[0])});
-	shaderLib.insert({ ShaderType::BlinnPhongCastShadow, std::make_shared<BlinnPhongCastShadowShader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" }, camera, lights[0], m_ShadowFBO) });
-	shaderLib.insert({ ShaderType::GridCastShadow, std::make_shared<GridCastShadowShader>(std::vector<std::string>{ "shader/gridCastShadow/vertex.glsl", "shader/gridCastShadow/fragment.glsl" }, camera, lights[0], glm::vec3(0.3, 0.3, 0.3), glm::vec3(0.6, 0.6, 0.6), glm::vec3(0, 0, 0), glm::vec4(1.0, 10, 0.33, .5), m_ShadowFBO) });
+	shaderLib.insert({ ShaderType::WireFrame, std::make_shared<Shader>(std::vector<std::string>{ "shader/wireFrame/vertex.glsl", "shader/wireFrame/fragment.glsl" })});
+	shaderLib.insert({ ShaderType::BlinnPhong, std::make_shared<Shader>(std::vector<std::string>{ "shader/blinnPhong/vertex.glsl", "shader/blinnPhong/fragment.glsl"})});
+	shaderLib.insert({ ShaderType::Depth, std::make_shared<Shader>(std::vector<std::string>{ "shader/depthRender/vertex.glsl", "shader/depthRender/fragment.glsl" })});
+	shaderLib.insert({ ShaderType::Normal, std::make_shared<Shader>(std::vector<std::string>{ "shader/normal/vertex.glsl", "shader/normal/fragment.glsl"})});
+	shaderLib.insert({ ShaderType::Grid, std::make_shared<Shader>(std::vector<std::string>{ "shader/grid/vertex.glsl", "shader/grid/fragment.glsl"})});
+	shaderLib.insert({ ShaderType::EnvironmentMapReflect, std::make_shared<Shader>(std::vector<std::string>{ "shader/environmentMapReflect/vertex.glsl", "shader/environmentMapReflect/fragment.glsl" })});
+	shaderLib.insert({ ShaderType::EnvironmentMapRefract, std::make_shared<Shader>(std::vector<std::string>{ "shader/environmentMapRefract/vertex.glsl", "shader/environmentMapRefract/fragment.glsl" })});
+	shaderLib.insert({ ShaderType::visualNormal, std::make_shared<Shader>(std::vector<std::string>{ "shader/visualNormal/vertex.glsl", "shader/visualNormal/fragment.glsl", "shader/visualNormal/geometry.glsl" })});
+	shaderLib.insert({ ShaderType::ShadowMap, std::make_shared<Shader>(std::vector<std::string>{ "shader/shadowMap/vertex.glsl", "shader/shadowMap/fragment.glsl" })});
+	shaderLib.insert({ ShaderType::BlinnPhongCastShadow, std::make_shared<Shader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" })});
+	shaderLib.insert({ ShaderType::GridCastShadow, std::make_shared<Shader>(std::vector<std::string>{ "shader/gridCastShadow/vertex.glsl", "shader/gridCastShadow/fragment.glsl" })});
 
 	//POSTPROCESS
-	shaderLib.insert({ ShaderType::GrayScalize, std::make_shared<GrayScaleShader>(std::vector<std::string>{ "shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl" }, prevFBO) });
-	shaderLib.insert({ ShaderType::GlitchRGBSplit, std::make_shared<GlitchRGBSpliter>(std::vector<std::string>{ "shader/glitchRGBSplit/vertex.glsl", "shader/glitchRGBSplit/fragment.glsl" }, prevFBO, 10.0f, 0.2f, Direction::Horizontal) });
-	shaderLib.insert({ ShaderType::Inversion, std::make_shared<InversionShader>(std::vector<std::string>{ "shader/inversion/vertex.glsl", "shader/inversion/fragment.glsl" }, prevFBO) });
-	shaderLib.insert({ ShaderType::NuClear, std::make_shared<NuClearShader>(std::vector<std::string>{ "shader/nuclear/vertex.glsl", "shader/nuclear/fragment.glsl" }, prevFBO) });
-	shaderLib.insert({ ShaderType::EdgeDetection, std::make_shared<EdgeDetectionShader>(std::vector<std::string>{ "shader/edgeDetection/vertex.glsl", "shader/edgeDetection/fragment.glsl" }, prevFBO) });
-	shaderLib.insert({ ShaderType::Base, std::make_shared<BaseShader>(std::vector<std::string>{ "shader/base/vertex.glsl", "shader/base/fragment.glsl" }, camera, lights[0])});
+	shaderLib.insert({ ShaderType::GrayScalize, std::make_shared<Shader>(std::vector<std::string>{ "shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl" })});
+	shaderLib.insert({ ShaderType::GlitchRGBSplit, std::make_shared<Shader>(std::vector<std::string>{ "shader/glitchRGBSplit/vertex.glsl", "shader/glitchRGBSplit/fragment.glsl" })});
+	shaderLib.insert({ ShaderType::Inversion, std::make_shared<Shader>(std::vector<std::string>{ "shader/inversion/vertex.glsl", "shader/inversion/fragment.glsl" })});
+	shaderLib.insert({ ShaderType::NuClear, std::make_shared<Shader>(std::vector<std::string>{ "shader/nuclear/vertex.glsl", "shader/nuclear/fragment.glsl" })});
+	shaderLib.insert({ ShaderType::EdgeDetection, std::make_shared<Shader>(std::vector<std::string>{ "shader/edgeDetection/vertex.glsl", "shader/edgeDetection/fragment.glsl" })});
+	shaderLib.insert({ ShaderType::Base, std::make_shared<Shader>(std::vector<std::string>{ "shader/base/vertex.glsl", "shader/base/fragment.glsl" })});
 }
-
 #pragma region lights
 
 //void setLight(const Shader& program)

@@ -4,6 +4,7 @@
 #include "application/vendor/imGui/implot.h"
 #include "application/vendor/imGui/imgui_internal.h"
 #include "mesh/BasicMeshes/Box/Box.h"
+#include "material/base/BaseMaterial.h"
 
 struct ScrollingBuffer {
 	int MaxSize;
@@ -33,6 +34,8 @@ struct ScrollingBuffer {
 class ViewportLayer : public Kenshin::Layer
 {
 public:
+	ViewportLayer() :Kenshin::Layer(),
+		renderer(std::make_shared<X_Renderer>()) {}
 	enum MeshType
 	{
 		Box,
@@ -56,7 +59,7 @@ public:
 
 	void onAttach() override
 	{
-		auto root = sceneLoader.loadModel("resource/models/nanosuit/nanosuit.obj");
+		auto root = sceneLoader.loadModel("resource/models/nanosuit/nanosuit.obj", renderer);
 		if (root)
 		{
 			sceneGraph.roots.push_back(root);
@@ -65,7 +68,7 @@ public:
 
 	void onUpdate(const Kenshin::updatePayload& payload) override
 	{
-		std::shared_ptr<Camera> camera = renderer.getCamera();
+		std::shared_ptr<Camera> camera = renderer->getCamera();
 		/*std::shared_ptr<DirectionLight> light = renderer.getLights()[0];
 		auto pos = light->getPostion();
 		auto deltaX = sin((payload.ts)) * 0.01 * 2;
@@ -78,7 +81,7 @@ public:
 			m_viewportSize.x = payload.viewport.x;
 			m_viewportSize.y = payload.viewport.y;
 			camera->setRatio(payload.viewport.x / payload.viewport.y);
-			renderer.resizeFBO(m_viewportSize.x, m_viewportSize.y);
+			renderer->resizeFBO(m_viewportSize.x, m_viewportSize.y);
 		}
 
 		if (payload.isHover && payload.io.MouseDown[1])
@@ -98,8 +101,8 @@ public:
 			}
 		}
 
-		renderer.Render(sceneGraph, m_viewportSize, payload.ts);
-		ImGui::Image((void*)(intptr_t)(renderer.getFrameBufferTextureID()), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
+		renderer->Render(sceneGraph, m_viewportSize, payload.ts);
+		ImGui::Image((void*)(intptr_t)(renderer->getFrameBufferTextureID()), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
 	};
 
 	void onUIRender(float fps, float deltaTime) override
@@ -161,11 +164,11 @@ public:
 		static int item_current = 1;
 		if (ImGui::Combo(" ", &item_current, items, IM_ARRAYSIZE(items)))
 		{
-			renderer.setRenderMode((RenderMode)item_current);
+			renderer->setRenderMode((RenderMode)item_current);
 		}
 		if (item_current == 0)
 		{
-			ImGui::ColorPicker3("wireFrameColor", &renderer.getWireFrameColor().x);
+			ImGui::ColorPicker3("wireFrameColor", &renderer->getWireFrameColor().x);
 		}
 
 		ImGui::End();
@@ -175,10 +178,10 @@ public:
 		ImGui::Begin("light Direction");
 		//IMGUI_DEMO_MARKER("Widgets/Color/ColorEdit (float display)");
 
-		glm::vec3 lightDirection = renderer.getLights()[0]->getDirection();
+		glm::vec3 lightDirection = renderer->getLights()[0]->getDirection();
 		ImGui::ColorEdit3("direction", /*(float*)&color */ (float*) &lightDirection, ImGuiColorEditFlags_Float);
-		renderer.getLights()[0]->setDirection(lightDirection);
-		ImGui::ColorEdit3("color", /*(float*)&color */ (float*)&renderer.getLights()[0]->getColor(), ImGuiColorEditFlags_Float);
+		renderer->getLights()[0]->setDirection(lightDirection);
+		ImGui::ColorEdit3("color", /*(float*)&color */ (float*)&renderer->getLights()[0]->getColor(), ImGuiColorEditFlags_Float);
 		ImGui::End();
 		#pragma endregion
 
@@ -190,9 +193,10 @@ public:
 	}
 
 	SceneGraph& getSceneGraph() { return sceneGraph; };
+	std::shared_ptr<X_Renderer> getRenderer() const { return renderer; };
 
 private:
-	X_Renderer renderer;
+	std::shared_ptr<X_Renderer> renderer;
 	SceneGraph sceneGraph;
 	SceneLoader sceneLoader;
 	glm::vec2 m_viewportSize = { 800, 600 };
@@ -212,7 +216,7 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 			{
 				//createBox
 				auto node = std::make_shared<Node>();
-				node->meshes.push_back(std::make_shared<BoxMesh>("box", 10, 10, 10));
+				node->meshes.push_back(std::make_shared<BoxMesh>("box", 10, 10, 10, std::make_shared<BaseMaterial>(glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.2, 0.3, 0.8), glm::vec3(1.0, 1.0, 1.0), 32.0f, viewportLayer->getRenderer())));
 				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
 			ImGui::EndMenu();

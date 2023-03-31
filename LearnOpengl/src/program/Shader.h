@@ -8,8 +8,29 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "../mesh/Mesh.h"
 #include "../Buffer/FrameBuffer.h"
+
+enum ShaderType
+{
+	WireFrame,
+	BlinnPhong,
+	PBR,
+	Depth,
+	Normal,
+	Grid,
+	EnvironmentMapReflect,
+	EnvironmentMapRefract,
+	visualNormal,
+	ShadowMap,
+	BlinnPhongCastShadow,
+	GridCastShadow,
+	GrayScalize,
+	GlitchRGBSplit,
+	Inversion,
+	NuClear,
+	EdgeDetection,
+	Base
+};
 
 enum ShaderCategory
 {
@@ -25,7 +46,7 @@ public:
 	virtual void bind() const;
 	virtual void unbind() const;
 
-	virtual void update(float ts);
+	virtual void update(float ts) { };
 	virtual std::shared_ptr<FrameBuffer> getFBO() const { return nullptr; };
 	virtual std::shared_ptr<FrameBuffer> getPrevFBO() const { return nullptr; };
 
@@ -36,8 +57,7 @@ public:
 	void setFloat(const std::string& name, float fv) const;
 	void setMatrix44(const std::string& name, const glm::mat4x4& mat44) const;
 	void setMatrix33(const std::string& name, const glm::mat3x3& mat33) const;
-	virtual void setCommonUniforms() const {  }
-	virtual void setMeshUniforms(std::shared_ptr<Mesh> mesh) const {  }
+
 	ShaderCategory getType() const { return type; };
 private:
 	int getUniformLocation(const std::string& name) const;

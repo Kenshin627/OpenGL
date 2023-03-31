@@ -1,9 +1,5 @@
 #pragma once
-class VertexArray;
-class IndexBuffer;
-class VertexBuffer;
-class VertexDataLayout;
-class Mesh;
+#include "../../Mesh.h"
 
 class GridMesh:public Mesh
 {
