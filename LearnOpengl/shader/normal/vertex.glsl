@@ -5,12 +5,12 @@ layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec2 aCoords;
 
 uniform mat4 modelViewProjection;
-uniform mat3 modelInverseTranspose;
+uniform mat3 normalMatrix;
 
 out vec3 vNormal;
 
 void main()
 {
-	vNormal = modelInverseTranspose * aNormal;
+	vNormal = normalMatrix * aNormal;
 	gl_Position = modelViewProjection * vec4(aPosition, 1.0);
 }

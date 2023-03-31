@@ -7,6 +7,7 @@
 #include "material/base/BaseMaterial.h"
 #include "material/depth/DepthMaterial.h"
 #include "material/wireframe/WireFrameMaterial.h"
+#include "material/normalMap/NormalMaterial.h"
 
 struct ScrollingBuffer {
 	int MaxSize;
@@ -220,8 +221,9 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 				auto base = std::make_shared<BaseMaterial>(glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.2, 0.3, 0.8), glm::vec3(1.0, 1.0, 1.0), 32.0f, viewportLayer->getRenderer());
 				auto depth = std::make_shared<DepthMaterial>(viewportLayer->getRenderer());
 				auto wireframe = std::make_shared<WireFrameMaterial>(viewportLayer->getRenderer());
+				auto normal = std::make_shared<NormalMaterial>(viewportLayer->getRenderer());
 
-				node->meshes.push_back(std::make_shared<BoxMesh>("box", 10, 10, 50, wireframe));
+				node->meshes.push_back(std::make_shared<BoxMesh>("box", 10, 10, 20, normal));
 				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
 			ImGui::EndMenu();
