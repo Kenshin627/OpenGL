@@ -181,6 +181,7 @@
     <ClCompile Include="src\mesh\BasicMeshes\Grid\Grid.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\Quad\Quad.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\SkyBox\SkyBox.cpp" />
+    <ClCompile Include="src\mesh\BasicMeshes\Sphere\Sphere.cpp" />
     <ClCompile Include="src\mesh\Mesh.cpp" />
     <ClCompile Include="src\myApplication.cpp" />
     <ClCompile Include="src\program\Shader.cpp" />
@@ -595,6 +596,7 @@
     <ClInclude Include="src\mesh\BasicMeshes\Grid\Grid.h" />
     <ClInclude Include="src\mesh\BasicMeshes\Quad\Quad.h" />
     <ClInclude Include="src\mesh\BasicMeshes\SkyBox\SkyBox.h" />
+    <ClInclude Include="src\mesh\BasicMeshes\Sphere\Sphere.h" />
     <ClInclude Include="src\mesh\Mesh.h" />
     <ClInclude Include="src\program\Shader.h" />
     <ClInclude Include="src\renderer\Renderer.h" />

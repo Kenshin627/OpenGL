@@ -5,7 +5,7 @@
 #include "../material/depth/DepthMaterial.h"
 
 X_Renderer::X_Renderer():
-	camera(std::make_shared<Camera>(glm::vec3(0, 17, 35), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 100.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
+	camera(std::make_shared<Camera>(glm::vec3(0, 17, 35), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
 	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)), 
 	prevFBO(m_FBO),
 	clearColor(glm::vec4(0.0, 0.0, 0.0, 1.0)), 
@@ -36,9 +36,9 @@ X_Renderer::X_Renderer():
 
 	#pragma region faceCulling
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
-	glCullFace(GL_BACK);
+	//glEnable(GL_CULL_FACE);
+	//glFrontFace(GL_CCW);
+	//glCullFace(GL_BACK);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	#pragma endregion
 }

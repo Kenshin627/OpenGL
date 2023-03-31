@@ -1,9 +1,11 @@
+#include <glm/gtc/matrix_transform.hpp>
 #include "application/application.h"
 #include "application/entityPoint.h"
 #include "renderer/Renderer.h"
 #include "application/vendor/imGui/implot.h"
 #include "application/vendor/imGui/imgui_internal.h"
 #include "mesh/BasicMeshes/Box/Box.h"
+#include "mesh/BasicMeshes/Sphere/Sphere.h"
 #include "material/base/BaseMaterial.h"
 #include "material/depth/DepthMaterial.h"
 #include "material/wireframe/WireFrameMaterial.h"
@@ -199,11 +201,6 @@ public:
 
 	}
 
-	void createMesh(MeshType type)
-	{
-		
-	}
-
 	SceneGraph& getSceneGraph() { return sceneGraph; };
 	const X_Renderer& getRenderer() const { return renderer; };
 
@@ -224,7 +221,7 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 	{
 		if (ImGui::BeginMenu("Mesh"))
 		{
-			if (ImGui::MenuItem("createBox"))
+			if (ImGui::MenuItem("Box"))
 			{
 				//createBox
 				auto node = std::make_shared<Node>();
@@ -239,6 +236,25 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 				node->meshes.push_back(std::make_shared<BoxMesh>("box", 10, 10, 20, environmentRefractMaterial));
 				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
+
+			if (ImGui::MenuItem("Sphere"))
+			{
+				// createSphere
+					auto node = std::make_shared<Node>();
+				//MATERIAL TEST
+				auto base = std::make_shared<BaseMaterial>(glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.2, 0.3, 0.8), glm::vec3(1.0, 1.0, 1.0), 32.0f, viewportLayer->getRenderer());
+				auto depth = std::make_shared<DepthMaterial>(viewportLayer->getRenderer());
+				auto wireframe = std::make_shared<WireFrameMaterial>(viewportLayer->getRenderer());
+				auto normal = std::make_shared<NormalMaterial>(viewportLayer->getRenderer());
+				auto environmentReflectMaterial = std::make_shared<EnvironmentReflectMaterial>(viewportLayer->getRenderer());
+				auto environmentRefractMaterial = std::make_shared<EnvironmentRefractMaterial>(viewportLayer->getRenderer(), refractIndex.find("damon")->second);
+
+				auto sphere = std::make_shared<Sphere>("sphere");
+				sphere->setMaterial(environmentRefractMaterial);
+				node->meshes.push_back(sphere);
+				viewportLayer->getSceneGraph().roots.push_back(node);
+			}
+
 			ImGui::EndMenu();
 		}
 	});
