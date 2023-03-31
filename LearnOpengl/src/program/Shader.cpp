@@ -79,6 +79,7 @@ unsigned Shader::compileShader(const std::string& path, unsigned shaderType)
 	catch (const std::exception& e)
 	{
 		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ:" << e.what() << std::endl;
+		return -1;
 	}
 }
 

@@ -100,7 +100,7 @@ public:
 		}
 
 		renderer.Render(sceneGraph, m_viewportSize, payload.ts);
-		ImGui::Image((void*)(intptr_t)(renderer.getFrameBufferTextureID()), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((void*)(intptr_t)(renderer.getFrameBufferTextureID()), ImVec2((float)m_viewportSize.x, (float)m_viewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
 	};
 
 	void onUIRender(float fps, float deltaTime) override
@@ -197,7 +197,7 @@ private:
 	X_Renderer renderer;
 	SceneGraph sceneGraph;
 	SceneLoader sceneLoader;
-	glm::vec2 m_viewportSize = { 800, 600 };
+	glm::ivec2 m_viewportSize = { 800, 600 };
 };
 								
 Kenshin::Application* Kenshin::createApplication(int argc, char** argv)

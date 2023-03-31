@@ -259,7 +259,7 @@ namespace Kenshin
 
 	void Application::setTime()
 	{
-		double currentTime = getTime();
+		float currentTime = getTime();
 		m_FrameTime = currentTime - m_LastFrameTime;
 		m_LastFrameTime = currentTime;
 		m_TimeStep = std::min<float>(m_FrameTime, 0.0333f);

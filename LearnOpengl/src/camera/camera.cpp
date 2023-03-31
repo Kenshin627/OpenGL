@@ -109,7 +109,7 @@ void Camera::buildAnglesAndRadius()
 		alpha = glm::half_pi<float>();
 	}
 	else {
-		alpha = acos(computationVec.x / sqrtf(pow(computationVec.x, 2) + pow(computationVec.z, 2)));
+		alpha = acos(computationVec.x / sqrtf(powf(computationVec.x, 2) + powf(computationVec.z, 2)));
 	}
 
 	if (computationVec.z < 0)

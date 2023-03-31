@@ -7,7 +7,7 @@ namespace Kenshin
 
 	struct updatePayload
 	{
-		glm::vec2 viewport;
+		glm::ivec2 viewport;
 		float deltaTime;
 		ImGuiIO io;
 		bool isHover;

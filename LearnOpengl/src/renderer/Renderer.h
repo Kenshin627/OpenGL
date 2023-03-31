@@ -29,7 +29,7 @@ class X_Renderer
 public:
 	X_Renderer();
 	~X_Renderer();
-	void Render(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts);
+	void Render(const SceneGraph& sceneGraph, const glm::ivec2& viewport, float ts);
 	void RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts);
 	void Recursivedraw(const std::shared_ptr<Node>& node);
 	const std::shared_ptr<Camera> getCamera() const { return camera; };

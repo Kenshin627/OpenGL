@@ -1,4 +1,4 @@
-#include "Grid.h";
+#include "Grid.h"
 
 GridMesh::GridMesh(float size) :Mesh("grid",
 	{

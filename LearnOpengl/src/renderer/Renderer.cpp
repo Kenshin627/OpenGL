@@ -54,7 +54,7 @@ X_Renderer::~X_Renderer() = default;
 void X_Renderer::RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts)
 {	
 	clear();
-	glViewport(0.0f, 0.0f, viewport.x, viewport.y);	
+	glViewport(0, 0, viewport.x, viewport.y);	
 
 	std::shared_ptr<Shader> shadowShader = shaderLib.find(ShaderType::ShadowMap)->second;
 	shadowShader->bind();	
@@ -70,10 +70,10 @@ void X_Renderer::RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& vie
 	shadowShader->unbind();
 }
 
-void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts)
+void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::ivec2& viewport, float ts)
 {	
 	clear();
-	glViewport(0.0f, 0.0f, viewport.x, viewport.y);
+	glViewport(0, 0, viewport.x, viewport.y);
 	if (enableShadows)
 	{
 		RenderShadow(sceneGraph, viewport, ts);
