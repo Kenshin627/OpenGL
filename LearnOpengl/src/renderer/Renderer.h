@@ -32,7 +32,7 @@ public:
 	void Render(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts);
 	void RenderShadow(const SceneGraph& sceneGraph, const glm::vec2& viewport, float ts);
 	void Recursivedraw(const std::shared_ptr<Node>& node);
-	std::shared_ptr<Camera> getCamera() { return camera; };
+	const std::shared_ptr<Camera> getCamera() const { return camera; };
 	void resizeFBO(unsigned width, unsigned height);
 	void clear();
 	unsigned getFrameBufferTextureID() const { return outputTextureID; };
@@ -40,7 +40,7 @@ public:
 	RenderMode getRenderMode() const { return mode; };
 	void CompileShaders();
 	glm::vec3& getWireFrameColor() { return wireFrameColor; };
-	std::vector<std::shared_ptr<DirectionLight>>& getLights() { return lights; };
+	const std::vector<std::shared_ptr<DirectionLight>>& getLights() const { return lights; };
 	std::shared_ptr<Shader> getShader(ShaderType type) const { return shaderLib.find(type)->second; };
 private:
 	std::shared_ptr<Camera> camera;

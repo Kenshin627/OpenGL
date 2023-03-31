@@ -34,8 +34,6 @@ struct ScrollingBuffer {
 class ViewportLayer : public Kenshin::Layer
 {
 public:
-	ViewportLayer() :Kenshin::Layer(),
-		renderer(std::make_shared<X_Renderer>()) {}
 	enum MeshType
 	{
 		Box,
@@ -68,7 +66,7 @@ public:
 
 	void onUpdate(const Kenshin::updatePayload& payload) override
 	{
-		std::shared_ptr<Camera> camera = renderer->getCamera();
+		std::shared_ptr<Camera> camera = renderer.getCamera();
 		/*std::shared_ptr<DirectionLight> light = renderer.getLights()[0];
 		auto pos = light->getPostion();
 		auto deltaX = sin((payload.ts)) * 0.01 * 2;
@@ -81,7 +79,7 @@ public:
 			m_viewportSize.x = payload.viewport.x;
 			m_viewportSize.y = payload.viewport.y;
 			camera->setRatio(payload.viewport.x / payload.viewport.y);
-			renderer->resizeFBO(m_viewportSize.x, m_viewportSize.y);
+			renderer.resizeFBO(m_viewportSize.x, m_viewportSize.y);
 		}
 
 		if (payload.isHover && payload.io.MouseDown[1])
@@ -101,8 +99,8 @@ public:
 			}
 		}
 
-		renderer->Render(sceneGraph, m_viewportSize, payload.ts);
-		ImGui::Image((void*)(intptr_t)(renderer->getFrameBufferTextureID()), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
+		renderer.Render(sceneGraph, m_viewportSize, payload.ts);
+		ImGui::Image((void*)(intptr_t)(renderer.getFrameBufferTextureID()), ImVec2(m_viewportSize.x, m_viewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
 	};
 
 	void onUIRender(float fps, float deltaTime) override
@@ -164,11 +162,11 @@ public:
 		static int item_current = 1;
 		if (ImGui::Combo(" ", &item_current, items, IM_ARRAYSIZE(items)))
 		{
-			renderer->setRenderMode((RenderMode)item_current);
+			renderer.setRenderMode((RenderMode)item_current);
 		}
 		if (item_current == 0)
 		{
-			ImGui::ColorPicker3("wireFrameColor", &renderer->getWireFrameColor().x);
+			ImGui::ColorPicker3("wireFrameColor", &renderer.getWireFrameColor().x);
 		}
 
 		ImGui::End();
@@ -178,10 +176,10 @@ public:
 		ImGui::Begin("light Direction");
 		//IMGUI_DEMO_MARKER("Widgets/Color/ColorEdit (float display)");
 
-		glm::vec3 lightDirection = renderer->getLights()[0]->getDirection();
+		glm::vec3 lightDirection = renderer.getLights()[0]->getDirection();
 		ImGui::ColorEdit3("direction", /*(float*)&color */ (float*) &lightDirection, ImGuiColorEditFlags_Float);
-		renderer->getLights()[0]->setDirection(lightDirection);
-		ImGui::ColorEdit3("color", /*(float*)&color */ (float*)&renderer->getLights()[0]->getColor(), ImGuiColorEditFlags_Float);
+		renderer.getLights()[0]->setDirection(lightDirection);
+		ImGui::ColorEdit3("color", /*(float*)&color */ (float*)&renderer.getLights()[0]->getColor(), ImGuiColorEditFlags_Float);
 		ImGui::End();
 		#pragma endregion
 
@@ -193,10 +191,10 @@ public:
 	}
 
 	SceneGraph& getSceneGraph() { return sceneGraph; };
-	std::shared_ptr<X_Renderer> getRenderer() const { return renderer; };
+	const X_Renderer& getRenderer() const { return renderer; };
 
 private:
-	std::shared_ptr<X_Renderer> renderer;
+	X_Renderer renderer;
 	SceneGraph sceneGraph;
 	SceneLoader sceneLoader;
 	glm::vec2 m_viewportSize = { 800, 600 };

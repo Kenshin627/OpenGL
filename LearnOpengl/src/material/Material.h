@@ -8,7 +8,7 @@ class X_Renderer;
 class Material
 {
 public:
-	Material(ShaderType type, std::shared_ptr<X_Renderer> renderer);
+	Material(ShaderType type, const X_Renderer& renderer);
 	virtual ~Material();
 	virtual void setUniforms(const Mesh& mesh) { };
 	void bind() const { program->bind(); };
@@ -16,6 +16,6 @@ public:
 private:
 	ShaderType type;		
 protected:
-	std::shared_ptr<X_Renderer> renderer;
+	const X_Renderer& renderer;
 	std::shared_ptr<Shader> program;
 };

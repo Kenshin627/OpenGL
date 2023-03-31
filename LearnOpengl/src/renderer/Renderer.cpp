@@ -37,7 +37,7 @@ X_Renderer::X_Renderer():
 	lights.push_back(std::make_shared<DirectionLight>(glm::vec3(-1, -1, -1), glm::vec3(1.0f)));
 	CompileShaders();
 
-	grid->setMaterial(std::make_shared<GridMaterial>(glm::vec3(0.3, 0.3, 0.3), glm::vec3(0.6, 0.6, 0.6), glm::vec3(0, 0, 0), glm::vec4(1.0, 10, 0.33, .5), std::shared_ptr<X_Renderer>(this)));
+	grid->setMaterial(std::make_shared<GridMaterial>(glm::vec3(0.3, 0.3, 0.3), glm::vec3(0.6, 0.6, 0.6), glm::vec3(0, 0, 0), glm::vec4(1.0, 10, 0.33, .5), *this));
 	//postProcess = shaderLib.find(ShaderType::GlitchRGBSplit)->second;
 
 	#pragma region faceCulling

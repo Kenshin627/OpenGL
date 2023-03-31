@@ -1,7 +1,7 @@
 #include "../../mesh/Mesh.h"
 #include "BlinnPhongMaterial.h"
 
-BlinnPhongMaterial::BlinnPhongMaterial(std::vector<std::shared_ptr<Texture>> ambientTexture, std::vector<std::shared_ptr<Texture>> diffuseTexture, std::vector<std::shared_ptr<Texture>> specularTexture, std::vector<std::shared_ptr<Texture>> normalMap, float shininess, std::shared_ptr<X_Renderer> renderer):
+BlinnPhongMaterial::BlinnPhongMaterial(std::vector<std::shared_ptr<Texture>> ambientTexture, std::vector<std::shared_ptr<Texture>> diffuseTexture, std::vector<std::shared_ptr<Texture>> specularTexture, std::vector<std::shared_ptr<Texture>> normalMap, float shininess,const X_Renderer& renderer):
 	Material(ShaderType::BlinnPhong, renderer),
 	ambientTexture(ambientTexture),
 	diffuseTexture(diffuseTexture),
@@ -11,12 +11,12 @@ BlinnPhongMaterial::BlinnPhongMaterial(std::vector<std::shared_ptr<Texture>> amb
 void BlinnPhongMaterial::setUniforms(const Mesh& mesh)
 {
 	//lights
-	auto light = renderer->getLights()[0];
+	auto light = renderer.getLights()[0];
 	program->setVec3("directionLight.color", light->getColor());
 	program->setVec3("directionLight.direction", light->getDirection());
 
 	//camera
-	auto camera = renderer->getCamera();
+	auto camera = renderer.getCamera();
 	program->setVec3("cameraPosition", camera->getPosition());
 
 	//mvp

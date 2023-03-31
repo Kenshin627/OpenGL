@@ -1,7 +1,7 @@
 #include "../../mesh/Mesh.h"
 #include "GridMaterial.h"
 
-GridMaterial::GridMaterial(glm::vec3 mainColor, glm::vec3 lineColor, glm::vec3 gridOffset, glm::vec4 gridControl, std::shared_ptr<X_Renderer> renderer) :
+GridMaterial::GridMaterial(glm::vec3 mainColor, glm::vec3 lineColor, glm::vec3 gridOffset, glm::vec4 gridControl, const X_Renderer& renderer) :
 	Material(ShaderType::Grid, renderer),
 	mainColor(mainColor),
 	lineColor(lineColor),
@@ -10,7 +10,7 @@ GridMaterial::GridMaterial(glm::vec3 mainColor, glm::vec3 lineColor, glm::vec3 g
 
 void GridMaterial::setUniforms(const Mesh& mesh)
 {
-	auto camera = renderer->getCamera();
+	auto camera = renderer.getCamera();
 	program->setVec3("mainColor", mainColor);
 	program->setVec3("lineColor", lineColor);
 	//gridRatio, majorUnitFrequency, minorUnitVisibility, opacity

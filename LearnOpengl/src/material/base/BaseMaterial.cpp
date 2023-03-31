@@ -1,7 +1,7 @@
 #include "../../mesh/Mesh.h"
 #include "BaseMaterial.h"
 
-BaseMaterial::BaseMaterial(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, float shininess, std::shared_ptr<X_Renderer> renderer):
+BaseMaterial::BaseMaterial(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, float shininess, const X_Renderer& renderer):
 	Material(ShaderType::Base, renderer),
 	ambient(ambient),
 	diffuse(diffuse),
@@ -11,12 +11,12 @@ BaseMaterial::BaseMaterial(const glm::vec3& ambient, const glm::vec3& diffuse, c
 void BaseMaterial::setUniforms(const Mesh& mesh)
 {
 	//lights
-	auto light = renderer->getLights()[0];
+	auto light = renderer.getLights()[0];
 	program->setVec3("directionLight.color", light->getColor());
 	program->setVec3("directionLight.direction", light->getDirection());
 
 	//camera
-	auto camera = renderer->getCamera();
+	auto camera = renderer.getCamera();
 	program->setVec3("cameraPosition", camera->getPosition());
 
 	//mvp

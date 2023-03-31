@@ -6,7 +6,7 @@
 SceneLoader::SceneLoader() = default;
 SceneLoader::~SceneLoader() = default;
 
-std::shared_ptr<Node> SceneLoader::loadModel(const std::string& path, std::shared_ptr<X_Renderer> renderer)
+std::shared_ptr<Node> SceneLoader::loadModel(const std::string& path, const X_Renderer& renderer)
 {
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -18,7 +18,7 @@ std::shared_ptr<Node> SceneLoader::loadModel(const std::string& path, std::share
 	return processNode(scene->mRootNode, scene, nullptr, renderer);
 }
 
-std::shared_ptr<Node> SceneLoader::processNode(aiNode* node, const aiScene* scene, std::shared_ptr<Node> parent, std::shared_ptr<X_Renderer> renderer)
+std::shared_ptr<Node> SceneLoader::processNode(aiNode* node, const aiScene* scene, std::shared_ptr<Node> parent, const X_Renderer& renderer)
 {
 	std::shared_ptr<Node> current = std::make_shared<Node>();
 	current->parent = parent;
@@ -38,7 +38,7 @@ std::shared_ptr<Node> SceneLoader::processNode(aiNode* node, const aiScene* scen
 	return current;
 }
 
-std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scene, std::shared_ptr<X_Renderer> renderer)
+std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scene, const X_Renderer& renderer)
 {
 	std::vector<float> vertices;
 	std::vector<unsigned> indices;
