@@ -176,6 +176,7 @@
     <ClCompile Include="src\material\grid\GridMaterial.cpp" />
     <ClCompile Include="src\material\Material.cpp" />
     <ClCompile Include="src\material\normalMap\NormalMaterial.cpp" />
+    <ClCompile Include="src\material\pbr2\PBR2Material.cpp" />
     <ClCompile Include="src\material\pbr\PBRMaterial.cpp" />
     <ClCompile Include="src\material\wireframe\WireFrameMaterial.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\Box\Box.cpp" />
@@ -592,6 +593,7 @@
     <ClInclude Include="src\material\grid\GridMaterial.h" />
     <ClInclude Include="src\material\Material.h" />
     <ClInclude Include="src\material\normalMap\NormalMaterial.h" />
+    <ClInclude Include="src\material\pbr2\PBR2Material.h" />
     <ClInclude Include="src\material\pbr\PBRMaterial.h" />
     <ClInclude Include="src\material\wireframe\WireFrameMaterial.h" />
     <ClInclude Include="src\mesh\BasicMeshes\Box\Box.h" />
@@ -795,6 +797,8 @@
     <None Include="shader\grayScale\vertex.glsl" />
     <None Include="shader\nuclear\fragment.glsl" />
     <None Include="shader\nuclear\vertex.glsl" />
+    <None Include="shader\pbr2\fragment.glsl" />
+    <None Include="shader\pbr2\vertex.glsl" />
     <None Include="shader\pbr\fragment.glsl" />
     <None Include="shader\pbr\vertex.glsl" />
     <None Include="shader\shadowMap\fragment.glsl" />
@@ -811,6 +815,10 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg" />
+    <Image Include="resource\textures\pbr\albedo.png" />
+    <Image Include="resource\textures\pbr\metallic.png" />
+    <Image Include="resource\textures\pbr\normal.png" />
+    <Image Include="resource\textures\pbr\roughness.png" />
     <Image Include="resource\textures\skyBox\back.jpg" />
     <Image Include="resource\textures\skyBox\bottom.jpg" />
     <Image Include="resource\textures\skyBox\front.jpg" />

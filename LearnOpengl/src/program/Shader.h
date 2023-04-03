@@ -15,6 +15,7 @@ enum ShaderType
 	WireFrame,
 	BlinnPhong,
 	PBR,
+	PBR2,
 	Depth,
 	Normal,
 	Grid,

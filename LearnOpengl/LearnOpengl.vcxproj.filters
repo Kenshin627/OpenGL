@@ -147,6 +147,9 @@
     <ClCompile Include="src\material\pbr\PBRMaterial.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\material\pbr2\PBR2Material.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1397,6 +1400,9 @@
     <ClInclude Include="src\material\pbr\PBRMaterial.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\material\pbr2\PBR2Material.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\triangle\vertex.glsl" />
@@ -1876,6 +1882,8 @@
     <None Include="shader\base\fragment.glsl" />
     <None Include="shader\pbr\vertex.glsl" />
     <None Include="shader\pbr\fragment.glsl" />
+    <None Include="shader\pbr2\vertex.glsl" />
+    <None Include="shader\pbr2\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">
@@ -1897,6 +1905,18 @@
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="resource\textures\skyBox\top.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\textures\pbr\roughness.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\textures\pbr\albedo.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\textures\pbr\metallic.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\textures\pbr\normal.png">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

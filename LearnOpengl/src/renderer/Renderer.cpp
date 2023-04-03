@@ -5,7 +5,7 @@
 #include "../material/depth/DepthMaterial.h"
 
 X_Renderer::X_Renderer():
-	camera(std::make_shared<Camera>(glm::vec3(0, 17, 35), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
+	camera(std::make_shared<Camera>(glm::vec3(0, 25, 15), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
 	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)), 
 	prevFBO(m_FBO),
 	clearColor(glm::vec4(0.0, 0.0, 0.0, 1.0)), 
@@ -186,6 +186,7 @@ void X_Renderer::CompileShaders()
 	shaderLib.insert({ ShaderType::BlinnPhongCastShadow, std::make_shared<Shader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" })});
 	shaderLib.insert({ ShaderType::GridCastShadow, std::make_shared<Shader>(std::vector<std::string>{ "shader/gridCastShadow/vertex.glsl", "shader/gridCastShadow/fragment.glsl" })});
 	shaderLib.insert({ ShaderType::PBR, std::make_shared<Shader>(std::vector<std::string>{ "shader/pbr/vertex.glsl", "shader/pbr/fragment.glsl"}) });
+	shaderLib.insert({ ShaderType::PBR2, std::make_shared<Shader>(std::vector<std::string>{ "shader/pbr2/vertex.glsl", "shader/pbr2/fragment.glsl"}) });
 
 	//POSTPROCESS
 	shaderLib.insert({ ShaderType::GrayScalize, std::make_shared<Shader>(std::vector<std::string>{ "shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl" })});

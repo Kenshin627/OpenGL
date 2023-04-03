@@ -13,6 +13,7 @@
 #include "material/environmentReflect/EnvironmentReflectMaterial.h"
 #include "material/environmentRefract/EnvironmentRefractMaterial.h"
 #include "material/pbr/PBRMaterial.h"
+#include "material/pbr2/PBR2Material.h"
 
 static std::unordered_map<std::string, float> refractIndex
 {
@@ -74,11 +75,11 @@ public:
 
 	void onAttach() override
 	{
-		auto root = sceneLoader.loadModel("resource/models/nanosuit/nanosuit.obj", renderer);
+	/*	auto root = sceneLoader.loadModel("resource/models/nanosuit/nanosuit.obj", renderer);
 		if (root)
 		{
 			sceneGraph.roots.push_back(root);
-		}
+		}*/
 	}
 
 	void onUpdate(const Kenshin::updatePayload& payload) override
@@ -191,15 +192,12 @@ public:
 
 		#pragma region light
 		ImGui::Begin("light Direction");
-		//IMGUI_DEMO_MARKER("Widgets/Color/ColorEdit (float display)");
-
 		glm::vec3 lightDirection = renderer.getLights()[0]->getDirection();
 		ImGui::ColorEdit3("direction", /*(float*)&color */ (float*) &lightDirection, ImGuiColorEditFlags_Float);
 		renderer.getLights()[0]->setDirection(lightDirection);
 		ImGui::ColorEdit3("color", /*(float*)&color */ (float*)&renderer.getLights()[0]->getColor(), ImGuiColorEditFlags_Float);
 		ImGui::End();
 		#pragma endregion
-
 	}
 
 	SceneGraph& getSceneGraph() { return sceneGraph; };
@@ -258,26 +256,53 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 
 			if (ImGui::MenuItem("PBRSphere"))
 			{
-				//test
-				auto base = std::make_shared<BaseMaterial>(glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.2, 0.3, 0.8), glm::vec3(1.0, 1.0, 1.0), 32.0f, viewportLayer->getRenderer());			
 				auto node = std::make_shared<Node>();
-				int nrRows = 10;
-				int nrColumns = 10;
-				float spacing = 5.0f;
+				int nrRows = 7;
+				int nrColumns = 7;
+				float spacing = 3.5f;
 				glm::mat4x4 model = glm::identity<glm::mat4x4>();
-				for (unsigned i = 0; i < nrRows; i++)
+				for (size_t i = 0; i < nrRows; i++)
 				{
 					float metallic = (float)i / (float)nrRows;
-					for (unsigned j = 0; j < nrColumns; j++)
+					for (size_t j = 0; j < nrColumns; j++)
 					{
-						float roughness = glm::clamp((float)j / (float)nrColumns, 0.05f, 1.0f);
-						auto sphere = std::make_shared<Sphere>("sphere" + std::to_string(i) + std::to_string(j), 1.5f);
+						float roughness = glm::clamp((float)j / (float)nrColumns, 0.05f, 2.0f);
+						auto sphere = std::make_shared<Sphere>("sphere" + std::to_string(i) + std::to_string(j), 1.0f);
 						auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(0.5f, 0.0f, 0.0f), metallic, roughness, 1.0f, viewportLayer->getRenderer());
 						sphere->setMaterial(pbrmaterial);
 						model = glm::identity<glm::mat4x4>();
 						model = glm::translate(model, glm::vec3(
-							(j - (nrColumns / 2)) * spacing - 3.0f,
-							(i - (nrRows / 2)) * spacing + 3.0f,
+							(j - (nrColumns / 2.0f)) * spacing + 2.0f,
+							(i - (nrRows / 2.0f)) * spacing + 15.0f,
+							0.0f
+						));
+						sphere->setModelMatrix(model);
+						node->meshes.push_back(sphere);
+					}
+				}
+				viewportLayer->getSceneGraph().roots.push_back(node);
+			}
+
+			if (ImGui::MenuItem("PBRSphere With textures"))
+			{
+				auto node = std::make_shared<Node>();
+				int nrRows = 7;
+				int nrColumns = 7;
+				float spacing = 3.5f;
+				glm::mat4x4 model = glm::identity<glm::mat4x4>();
+				for (size_t i = 0; i < nrRows; i++)
+				{
+					float metallic = (float)i / (float)nrRows;
+					for (size_t j = 0; j < nrColumns; j++)
+					{
+						float roughness = glm::clamp((float)j / (float)nrColumns, 0.05f, 2.0f);
+						auto sphere = std::make_shared<Sphere>("sphere" + std::to_string(i) + std::to_string(j), 1.0f);
+						auto pbrmaterial = std::make_shared<Pbr2Material>(std::make_shared<Texture>("resource/textures/pbr/albedo.png", TEXTURE_TYPE::SPECULAR), std::make_shared<Texture>("resource/textures/pbr/metallic.png", TEXTURE_TYPE::SPECULAR), std::make_shared<Texture>("resource/textures/pbr/roughness.png", TEXTURE_TYPE::SPECULAR), std::make_shared<Texture>("resource/textures/pbr/normal.png", TEXTURE_TYPE::SPECULAR), viewportLayer->getRenderer());
+						sphere->setMaterial(pbrmaterial);
+						model = glm::identity<glm::mat4x4>();
+						model = glm::translate(model, glm::vec3(
+							(j - (nrColumns / 2.0f)) * spacing + 2.0f,
+							(i - (nrRows / 2.0f)) * spacing + 15.0f,
 							0.0f
 						));
 						sphere->setModelMatrix(model);
