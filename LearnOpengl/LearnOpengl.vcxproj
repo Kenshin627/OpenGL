@@ -176,6 +176,7 @@
     <ClCompile Include="src\material\grid\GridMaterial.cpp" />
     <ClCompile Include="src\material\Material.cpp" />
     <ClCompile Include="src\material\normalMap\NormalMaterial.cpp" />
+    <ClCompile Include="src\material\pbr\PBRMaterial.cpp" />
     <ClCompile Include="src\material\wireframe\WireFrameMaterial.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\Box\Box.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\Grid\Grid.cpp" />
@@ -591,6 +592,7 @@
     <ClInclude Include="src\material\grid\GridMaterial.h" />
     <ClInclude Include="src\material\Material.h" />
     <ClInclude Include="src\material\normalMap\NormalMaterial.h" />
+    <ClInclude Include="src\material\pbr\PBRMaterial.h" />
     <ClInclude Include="src\material\wireframe\WireFrameMaterial.h" />
     <ClInclude Include="src\mesh\BasicMeshes\Box\Box.h" />
     <ClInclude Include="src\mesh\BasicMeshes\Grid\Grid.h" />
@@ -793,6 +795,8 @@
     <None Include="shader\grayScale\vertex.glsl" />
     <None Include="shader\nuclear\fragment.glsl" />
     <None Include="shader\nuclear\vertex.glsl" />
+    <None Include="shader\pbr\fragment.glsl" />
+    <None Include="shader\pbr\vertex.glsl" />
     <None Include="shader\shadowMap\fragment.glsl" />
     <None Include="shader\shadowMap\vertex.glsl" />
     <None Include="shader\skyBox\fragment.glsl" />

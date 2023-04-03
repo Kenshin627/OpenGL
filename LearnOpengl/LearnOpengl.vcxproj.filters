@@ -144,6 +144,9 @@
     <ClCompile Include="src\mesh\BasicMeshes\Sphere\Sphere.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\material\pbr\PBRMaterial.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1391,6 +1394,9 @@
     <ClInclude Include="src\mesh\BasicMeshes\Sphere\Sphere.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\material\pbr\PBRMaterial.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\triangle\vertex.glsl" />
@@ -1868,6 +1874,8 @@
     <None Include="shader\gridCastShadow\vertex.glsl" />
     <None Include="shader\base\vertex.glsl" />
     <None Include="shader\base\fragment.glsl" />
+    <None Include="shader\pbr\vertex.glsl" />
+    <None Include="shader\pbr\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">

@@ -13,6 +13,7 @@
 
 #include "../mesh/BasicMeshes/SkyBox/SkyBox.h"
 #include "../Buffer/ShadowFrameBuffer.h"
+#include "../light/pointLight.h"
 
 class GridMesh;
 
@@ -41,11 +42,13 @@ public:
 	void CompileShaders();
 	unsigned getSkyBoxTexture() const { return skybox.getTextureID(); };
 	glm::vec3& getWireFrameColor() { return wireFrameColor; };
-	const std::vector<std::shared_ptr<DirectionLight>>& getLights() const { return lights; };
+	const std::vector<std::shared_ptr<DirectionLight>>& getLights() const { return directionLights; };
+	const std::vector<std::shared_ptr<PointLight>>& getPointLights() const { return pointLights; };
 	std::shared_ptr<Shader> getShader(ShaderType type) const { return shaderLib.find(type)->second; };
 private:
 	std::shared_ptr<Camera> camera;
-	std::vector<std::shared_ptr<DirectionLight>> lights;
+	std::vector<std::shared_ptr<DirectionLight>> directionLights;
+	std::vector<std::shared_ptr<PointLight>> pointLights;
 	std::shared_ptr<FrameBuffer> m_FBO;
 	std::shared_ptr<FrameBuffer> prevFBO;
 	std::unordered_map<ShaderType, std::shared_ptr<Shader>> shaderLib;

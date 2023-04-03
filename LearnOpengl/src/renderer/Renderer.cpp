@@ -27,8 +27,13 @@ X_Renderer::X_Renderer():
 	visiualNormal(false),
 	postProcess(nullptr)
 {
-	lights.push_back(std::make_shared<DirectionLight>(glm::vec3(-1, -1, -1), glm::vec3(1.0f)));
+	directionLights.push_back(std::make_shared<DirectionLight>(glm::vec3(-1, -1, -1), glm::vec3(1.0f)));
 	CompileShaders();
+
+	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(-10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f), 32));
+	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f), 32));
+	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(-10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f), 32));
+	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f), 32));
 
 	grid->setMaterial(std::make_shared<GridMaterial>(glm::vec3(0.3, 0.3, 0.3), glm::vec3(0.6, 0.6, 0.6), glm::vec3(0, 0, 0), glm::vec4(1.0, 10, 0.33, .5), *this));
 	
@@ -180,6 +185,7 @@ void X_Renderer::CompileShaders()
 	shaderLib.insert({ ShaderType::ShadowMap, std::make_shared<Shader>(std::vector<std::string>{ "shader/shadowMap/vertex.glsl", "shader/shadowMap/fragment.glsl" })});
 	shaderLib.insert({ ShaderType::BlinnPhongCastShadow, std::make_shared<Shader>(std::vector<std::string>{ "shader/blinnPhongCastShadow/vertex.glsl", "shader/blinnPhongCastShadow/fragment.glsl" })});
 	shaderLib.insert({ ShaderType::GridCastShadow, std::make_shared<Shader>(std::vector<std::string>{ "shader/gridCastShadow/vertex.glsl", "shader/gridCastShadow/fragment.glsl" })});
+	shaderLib.insert({ ShaderType::PBR, std::make_shared<Shader>(std::vector<std::string>{ "shader/pbr/vertex.glsl", "shader/pbr/fragment.glsl"}) });
 
 	//POSTPROCESS
 	shaderLib.insert({ ShaderType::GrayScalize, std::make_shared<Shader>(std::vector<std::string>{ "shader/grayScale/vertex.glsl", "shader/grayScale/fragment.glsl" })});

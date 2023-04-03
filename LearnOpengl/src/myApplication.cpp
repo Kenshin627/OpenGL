@@ -12,6 +12,7 @@
 #include "material/normalMap/NormalMaterial.h"
 #include "material/environmentReflect/EnvironmentReflectMaterial.h"
 #include "material/environmentRefract/EnvironmentRefractMaterial.h"
+#include "material/pbr/PBRMaterial.h"
 
 static std::unordered_map<std::string, float> refractIndex
 {
@@ -252,6 +253,37 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 				auto sphere = std::make_shared<Sphere>("sphere");
 				sphere->setMaterial(environmentRefractMaterial);
 				node->meshes.push_back(sphere);
+				viewportLayer->getSceneGraph().roots.push_back(node);
+			}
+
+			if (ImGui::MenuItem("PBRSphere"))
+			{
+				//test
+				auto base = std::make_shared<BaseMaterial>(glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.2, 0.3, 0.8), glm::vec3(1.0, 1.0, 1.0), 32.0f, viewportLayer->getRenderer());			
+				auto node = std::make_shared<Node>();
+				int nrRows = 10;
+				int nrColumns = 10;
+				float spacing = 5.0f;
+				glm::mat4x4 model = glm::identity<glm::mat4x4>();
+				for (unsigned i = 0; i < nrRows; i++)
+				{
+					float metallic = (float)i / (float)nrRows;
+					for (unsigned j = 0; j < nrColumns; j++)
+					{
+						float roughness = glm::clamp((float)j / (float)nrColumns, 0.05f, 1.0f);
+						auto sphere = std::make_shared<Sphere>("sphere" + std::to_string(i) + std::to_string(j), 1.5f);
+						auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(0.5f, 0.0f, 0.0f), metallic, roughness, 1.0f, viewportLayer->getRenderer());
+						sphere->setMaterial(pbrmaterial);
+						model = glm::identity<glm::mat4x4>();
+						model = glm::translate(model, glm::vec3(
+							(j - (nrColumns / 2)) * spacing - 3.0f,
+							(i - (nrRows / 2)) * spacing + 3.0f,
+							0.0f
+						));
+						sphere->setModelMatrix(model);
+						node->meshes.push_back(sphere);
+					}
+				}
 				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
 
