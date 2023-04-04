@@ -16,6 +16,7 @@ public:
 	void bind();
 	void unbind();
 	unsigned getTextureID() const;
+	unsigned getFormat(unsigned nrChannels) const;
 private:
 	std::unique_ptr<VertexArray> m_VAO;
 	std::unique_ptr<VertexBuffer> m_VBO;

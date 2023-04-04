@@ -69,9 +69,10 @@ SkyBox::SkyBox(const std::vector<std::string>& faces, const std::string& vertexS
     for (unsigned i = 0; i < faces.size(); i++)
     {
         unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nChannels, 0);
+        auto format = getFormat(nChannels);
         if (data)
         {
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
             stbi_image_free(data);
         }
         else {
@@ -114,4 +115,16 @@ void SkyBox::draw(const Camera& camera, unsigned slot)
 
 unsigned SkyBox::getTextureID() const {
     return m_TextureID;
+}
+
+unsigned SkyBox::getFormat(unsigned nrChannels) const
+{
+    switch (nrChannels)
+    {
+    case 1: return GL_RED;
+    case 2:	return GL_RG16;
+    case 3: return GL_RGB;
+    case 4: return GL_RGBA;
+    }
+    return 0;
 }
