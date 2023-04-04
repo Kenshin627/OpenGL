@@ -117,6 +117,11 @@ unsigned SkyBox::getTextureID() const {
     return m_TextureID;
 }
 
+void SkyBox::setTextureID(unsigned id) 
+{
+    m_TextureID = id;
+}
+
 unsigned SkyBox::getFormat(unsigned nrChannels) const
 {
     switch (nrChannels)

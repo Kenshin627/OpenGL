@@ -47,6 +47,7 @@ public:
 	const std::vector<std::shared_ptr<PointLight>>& getPointLights() const { return pointLights; };
 	std::shared_ptr<Shader> getShader(ShaderType type) const { return shaderLib.find(type)->second; };
 	const std::shared_ptr<IBL>& getIBL() const { return ibl; };
+	void setSkyBoxTexture(unsigned textureID) { skybox.setTextureID(textureID); };
 private:
 	std::shared_ptr<Camera> camera;
 	std::vector<std::shared_ptr<DirectionLight>> directionLights;

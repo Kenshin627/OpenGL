@@ -201,7 +201,7 @@ public:
 	}
 
 	SceneGraph& getSceneGraph() { return sceneGraph; };
-	const X_Renderer& getRenderer() const { return renderer; };
+	X_Renderer& getRenderer() { return renderer; };
 
 private:
 	X_Renderer renderer;
@@ -320,9 +320,9 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 			{
 				auto ibl = viewportLayer->getRenderer().getIBL();
 				ibl->buildIrradianceMap();
-				
+				//viewportLayer->getRenderer().setSkyBoxTexture(ibl->getIrradiancemap());
+				viewportLayer->getRenderer().setSkyBoxTexture(ibl->getENVCubemap());
 			}
-
 			ImGui::EndMenu();
 		}
 	});
