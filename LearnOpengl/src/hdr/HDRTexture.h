@@ -4,7 +4,7 @@
 class HDRTexture
 {
 public:
-	HDRTexture(const std::string& path, bool flip_vertically = false);
+	HDRTexture(const std::string& path, bool flip_vertically = true);
 	~HDRTexture();
 	void bind(unsigned slot = 0) const;
 	void unbind() const;

@@ -286,33 +286,23 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 			if (ImGui::MenuItem("PBRSphere With textures"))
 			{
 				auto node = std::make_shared<Node>();
-				int nrRows = 7;
-				int nrColumns = 7;
-				float spacing = 3.5f;
-				glm::mat4x4 model = glm::identity<glm::mat4x4>();
 				std::vector<std::shared_ptr<Texture>> textures = {
 					std::make_shared<Texture>("resource/textures/pbr/albedo.png", TEXTURE_TYPE::SPECULAR),
 					std::make_shared<Texture>("resource/textures/pbr/metallic.png", TEXTURE_TYPE::SPECULAR),
 					std::make_shared<Texture>("resource/textures/pbr/roughness.png", TEXTURE_TYPE::SPECULAR),
 					std::make_shared<Texture>("resource/textures/pbr/normal.png", TEXTURE_TYPE::SPECULAR)
-				};
-				for (size_t i = 0; i < nrRows; i++)
-				{
-					for (size_t j = 0; j < nrColumns; j++)
-					{
-						auto sphere = std::make_shared<Sphere>("sphere" + std::to_string(i) + std::to_string(j), 1.0f);
-						auto pbr2material = std::make_shared<Pbr2Material>(textures[0], textures[1], textures[2], textures[3], viewportLayer->getRenderer());
-						sphere->setMaterial(pbr2material);
-						model = glm::identity<glm::mat4x4>();
-						model = glm::translate(model, glm::vec3(
-							(j - (nrColumns / 2.0f)) * spacing + 2.0f,
-							(i - (nrRows / 2.0f)) * spacing + 15.0f,
-							0.0f
-						));
-						sphere->setModelMatrix(model);
-						node->meshes.push_back(sphere);
-					}
-				}
+				};				
+				auto sphere = std::make_shared<Sphere>("metallicSphere", 3.0f);
+				auto pbr2material = std::make_shared<Pbr2Material>(textures[0], textures[1], textures[2], textures[3], viewportLayer->getRenderer());
+				sphere->setMaterial(pbr2material);
+				glm::mat4x4 model = glm::identity<glm::mat4x4>();
+				model = glm::translate(model, glm::vec3(
+					0.0f,
+					3.0f,
+					0.0f
+				));
+				sphere->setModelMatrix(model);
+				node->meshes.push_back(sphere);		
 				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
 
@@ -323,6 +313,8 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 				//viewportLayer->getRenderer().setSkyBoxTexture(ibl->getIrradiancemap());
 				viewportLayer->getRenderer().setSkyBoxTexture(ibl->getENVCubemap());
 			}
+
+
 			ImGui::EndMenu();
 		}
 	});
