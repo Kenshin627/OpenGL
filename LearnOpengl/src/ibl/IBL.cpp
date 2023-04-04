@@ -1,13 +1,12 @@
 #include <glad/gl.h>
 #include "IBL.h"
 #include "../mesh/BasicMeshes/Box/Box.h"
-#include "../vendor/stb_image/stb_image.h"
 
-IBL::IBL(const std::string& path, unsigned cubeMapwidth, unsigned cubeMapheight, unsigned irradiancewidth, unsigned irradianceheight, float sampleDelta):
-cubeMapWidth(cubeMapwidth),
-cubeMapHeight(cubeMapheight),
-irradianceWidth(irradiancewidth),
-irradianceHeight(irradianceheight),
+IBL::IBL(const std::string& path, unsigned cubeMapWidth, unsigned cubeMapHeight, unsigned irradianceWidth, unsigned irradianceHeight, float sampleDelta):
+cubeMapWidth(cubeMapWidth),
+cubeMapHeight(cubeMapHeight),
+irradianceWidth(irradianceWidth),
+irradianceHeight(irradianceHeight),
 sampleDelta(sampleDelta),
 path(path),
 hdrTexture(std::make_shared<HDRTexture>(path)),
@@ -51,7 +50,7 @@ captureProjection(glm::perspective(glm::half_pi<float>(), 1.0f, 0.1f, 10.0f))
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     //irradianceamap
-    /*glGenTextures(1, &irradiancemap);
+    glGenTextures(1, &irradiancemap);
     glBindTexture(GL_TEXTURE_CUBE_MAP, irradiancemap);
     for (unsigned i = 0; i < 6; i++)
     {
@@ -61,17 +60,11 @@ captureProjection(glm::perspective(glm::half_pi<float>(), 1.0f, 0.1f, 10.0f))
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);*/
-
-   
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);   
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
-IBL::~IBL()
-{
-    
-}
-
-
+IBL::~IBL() { }
 
 void IBL::buildIrradianceMap()
 {
@@ -97,7 +90,7 @@ void IBL::buildIrradianceMap()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     #pragma endregion
 
-  /*  #pragma region cubemap -> irradiancemap
+    #pragma region cubemap -> irradiancemap
     glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
     glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, irradianceWidth, irradianceHeight);
@@ -109,18 +102,18 @@ void IBL::buildIrradianceMap()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
 
-
     glViewport(0, 0, irradianceWidth, irradianceHeight);
     glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
     for (unsigned i = 0; i < 6; i++)
     {
+        cube->getVAO()->bind();
         cubemaptoirradiancemapShader->setMatrix44("captureview", captureViews[i]);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_NEGATIVE_X + i, irradiancemap, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irradiancemap, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+        cube->getVAO()->unbind();
     }
-
-    cube->getVAO()->unbind();
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);*/
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     #pragma endregion
 }

@@ -310,11 +310,9 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 			{
 				auto ibl = viewportLayer->getRenderer().getIBL();
 				ibl->buildIrradianceMap();
-				//viewportLayer->getRenderer().setSkyBoxTexture(ibl->getIrradiancemap());
-				viewportLayer->getRenderer().setSkyBoxTexture(ibl->getENVCubemap());
+				//viewportLayer->getRenderer().setSkyBoxTexture(ibl->getENVCubemap());
+				viewportLayer->getRenderer().setSkyBoxTexture(ibl->getIrradiancemap());
 			}
-
-
 			ImGui::EndMenu();
 		}
 	});

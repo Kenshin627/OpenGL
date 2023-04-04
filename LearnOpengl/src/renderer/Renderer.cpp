@@ -4,8 +4,6 @@
 #include "../material/grid/GridMaterial.h"
 #include "../material/depth/DepthMaterial.h"
 
-#include "../vendor/stb_image/stb_image.h"
-
 X_Renderer::X_Renderer() :
 	camera(std::make_shared<Camera>(glm::vec3(0, 25, 15), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)),
 	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)),
@@ -28,7 +26,7 @@ X_Renderer::X_Renderer() :
 	enableShadows(false),
 	visiualNormal(false),
 	postProcess(nullptr),
-	ibl(std::make_shared<IBL>("resource/textures/hdr/forest.hdr"))
+	ibl(std::make_shared<IBL>("resource/textures/hdr/night.hdr"))
 {
 	directionLights.push_back(std::make_shared<DirectionLight>(glm::vec3(-1, -1, -1), glm::vec3(1.0f)));
 	CompileShaders();
@@ -47,6 +45,8 @@ X_Renderer::X_Renderer() :
 	//glCullFace(GL_BACK);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	#pragma endregion
+
+	//ibl->buildIrradianceMap();
 }
 
 X_Renderer::~X_Renderer() = default;

@@ -27,6 +27,9 @@ uniform vec3 camPosition;
 uniform PointLight pls[4];
 uniform PBRMaterial material;
 
+//irradiance map
+uniform samplerCube irradianceMap;
+
 float DistributionGGX(vec3 N, vec3 H, float roughness);
 float GeometrySchlickGGX(float NdotV, float roughness);
 float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness);
@@ -67,7 +70,14 @@ void main()
 		lo += (kD * material.albedo/PI + specBRDF) * radiance * NdotL;
 	}
 
-	vec3 ambient = vec3(0.03) * material.albedo * material.ao;
+	//vec3 ambient = vec3(0.03) * material.albedo * material.ao;
+	vec3 kS = fresnelSchlick(max(dot(N, V), 0.0), F0);
+	vec3 kD = 1.0 - kS;
+	kD *= 1.0 - material.metallic;
+
+	vec3 irradiance = texture(irradianceMap, N).rgb;
+	vec3 diffuse = irradiance * material.albedo;
+	vec3 ambient = (kD * diffuse) * material.ao;
 
 	vec3 color = ambient + lo;
 

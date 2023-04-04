@@ -1,3 +1,4 @@
+#include <glad/gl.h>
 #include "../../mesh/Mesh.h"
 #include "PBRMaterial.h"
 
@@ -20,6 +21,12 @@ void PbrMaterial::setUniforms(const Mesh& mesh)
 	program->setFloat("material.roughness", roughness);
 	program->setFloat("material.metallic", metallic);
 	program->setFloat("material.ao", ao);
+
+	//irradianceMap
+	auto ibl = renderer.getIBL();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, ibl->getIrradiancemap());
+	program->setInt("irradianceMap", 0);
 
 	auto pointLights = renderer.getPointLights();
 	unsigned pointLightSize = pointLights.size();
