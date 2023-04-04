@@ -316,6 +316,13 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
 
+			if (ImGui::MenuItem("ibl"))
+			{
+				auto ibl = viewportLayer->getRenderer().getIBL();
+				ibl->buildIrradianceMap();
+				
+			}
+
 			ImGui::EndMenu();
 		}
 	});

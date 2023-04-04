@@ -150,6 +150,12 @@
     <ClCompile Include="src\material\pbr2\PBR2Material.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\hdr\HDRTexture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ibl\IBL.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1403,6 +1409,12 @@
     <ClInclude Include="src\material\pbr2\PBR2Material.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\hdr\HDRTexture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ibl\IBL.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\triangle\vertex.glsl" />
@@ -1884,6 +1896,14 @@
     <None Include="shader\pbr\fragment.glsl" />
     <None Include="shader\pbr2\vertex.glsl" />
     <None Include="shader\pbr2\fragment.glsl" />
+    <None Include="shader\ibl\envCubemap\vertex.glsl" />
+    <None Include="shader\ibl\envCubemap\fragment.glsl" />
+    <None Include="shader\ibl\irradiancemap\vertex.glsl" />
+    <None Include="shader\ibl\irradiancemap\fragment.glsl" />
+    <None Include="resource\textures\hdr\country.hdr" />
+    <None Include="resource\textures\hdr\forest.hdr" />
+    <None Include="resource\textures\hdr\night.hdr" />
+    <None Include="resource\textures\hdr\room.hdr" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">

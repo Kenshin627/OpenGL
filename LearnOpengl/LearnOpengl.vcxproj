@@ -167,6 +167,8 @@
     <ClCompile Include="src\Buffer\IndexBuffer.cpp" />
     <ClCompile Include="src\Buffer\ShadowFrameBuffer.cpp" />
     <ClCompile Include="src\camera\camera.cpp" />
+    <ClCompile Include="src\hdr\HDRTexture.cpp" />
+    <ClCompile Include="src\ibl\IBL.cpp" />
     <ClCompile Include="src\light\pointLight.cpp" />
     <ClCompile Include="src\material\base\BaseMaterial.cpp" />
     <ClCompile Include="src\material\blinnPhong\BlinnPhongMaterial.cpp" />
@@ -581,6 +583,8 @@
     <ClInclude Include="src\Buffer\IndexBuffer.h" />
     <ClInclude Include="src\Buffer\ShadowFrameBuffer.h" />
     <ClInclude Include="src\camera\camera.h" />
+    <ClInclude Include="src\hdr\HDRTexture.h" />
+    <ClInclude Include="src\ibl\IBL.h" />
     <ClInclude Include="src\light\baseLight.h" />
     <ClInclude Include="src\light\directionLight.h" />
     <ClInclude Include="src\light\pointLight.h" />
@@ -769,6 +773,10 @@
     <None Include="dependencies\GLM\glm\gtx\wrap.inl" />
     <None Include="imgui.ini" />
     <None Include="resource\fonts\msyh.ttc" />
+    <None Include="resource\textures\hdr\country.hdr" />
+    <None Include="resource\textures\hdr\forest.hdr" />
+    <None Include="resource\textures\hdr\night.hdr" />
+    <None Include="resource\textures\hdr\room.hdr" />
     <None Include="shader\base\fragment.glsl" />
     <None Include="shader\base\vertex.glsl" />
     <None Include="shader\blinnPhongCastShadow\fragment.glsl" />
@@ -789,6 +797,10 @@
     <None Include="shader\gridCastShadow\vertex.glsl" />
     <None Include="shader\grid\fragment.glsl" />
     <None Include="shader\grid\vertex.glsl" />
+    <None Include="shader\ibl\envCubemap\fragment.glsl" />
+    <None Include="shader\ibl\envCubemap\vertex.glsl" />
+    <None Include="shader\ibl\irradiancemap\fragment.glsl" />
+    <None Include="shader\ibl\irradiancemap\vertex.glsl" />
     <None Include="shader\inversion\fragment.glsl" />
     <None Include="shader\inversion\vertex.glsl" />
     <None Include="shader\normal\fragment.glsl" />

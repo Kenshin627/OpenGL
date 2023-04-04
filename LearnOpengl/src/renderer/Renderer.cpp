@@ -4,36 +4,37 @@
 #include "../material/grid/GridMaterial.h"
 #include "../material/depth/DepthMaterial.h"
 
-X_Renderer::X_Renderer():
-	camera(std::make_shared<Camera>(glm::vec3(0, 25, 15), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)), 
-	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)), 
+X_Renderer::X_Renderer() :
+	camera(std::make_shared<Camera>(glm::vec3(0, 25, 15), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)),
+	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)),
 	prevFBO(m_FBO),
-	clearColor(glm::vec4(0.0, 0.0, 0.0, 1.0)), 
-	mode(RenderMode::_BlinnPhong), 
+	clearColor(glm::vec4(0.0, 0.0, 0.0, 1.0)),
+	mode(RenderMode::_BlinnPhong),
 	wireFrameColor(glm::vec3(0.5, 0.7, 0.2)),
 	grid(std::make_shared<GridMesh>(200.0f)),
 	quad(),
 	skybox(
-		{ "resource/textures/skyBox/right.jpg", "resource/textures/skyBox/left.jpg", 
-		  "resource/textures/skyBox/top.jpg",   "resource/textures/skyBox/bottom.jpg", 
-		  "resource/textures/skyBox/front.jpg", "resource/textures/skyBox/back.jpg" 
-		}, 
-		"shader/skyBox/vertex.glsl", 
+		{ "resource/textures/skyBox/right.jpg", "resource/textures/skyBox/left.jpg",
+		  "resource/textures/skyBox/top.jpg",   "resource/textures/skyBox/bottom.jpg",
+		  "resource/textures/skyBox/front.jpg", "resource/textures/skyBox/back.jpg"
+		},
+		"shader/skyBox/vertex.glsl",
 		"shader/skyBox/fragment.glsl"
 	),
 	outputTextureID(0),
 	m_ShadowFBO(std::make_shared<ShadowFrameBuffer>(1.0, 1.0)),
 	enableShadows(false),
 	visiualNormal(false),
-	postProcess(nullptr)
+	postProcess(nullptr),
+	ibl(std::make_shared<IBL>("resource/textures/hdr/country.hdr"))
 {
 	directionLights.push_back(std::make_shared<DirectionLight>(glm::vec3(-1, -1, -1), glm::vec3(1.0f)));
 	CompileShaders();
 
-	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(-10.0f, 10.0f, 10.0f), glm::vec3(150.0f, 150.0f, 150.0f), 32));
-	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(150.0f, 150.0f, 150.0f), 32));
-	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(-10.0f, -10.0f, 10.0f), glm::vec3(150.0f, 150.0f, 150.0f), 32));
-	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(10.0f, -10.0f, 10.0f), glm::vec3(150.0f, 150.0f, 150.0f), 32));
+	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(-10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f), 32));
+	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f), 32));
+	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(-10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f), 32));
+	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f), 32));
 
 	grid->setMaterial(std::make_shared<GridMaterial>(glm::vec3(0.3, 0.3, 0.3), glm::vec3(0.6, 0.6, 0.6), glm::vec3(0, 0, 0), glm::vec4(1.0, 10, 0.33, .5), *this));
 	

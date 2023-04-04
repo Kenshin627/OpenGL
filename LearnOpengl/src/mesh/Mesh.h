@@ -18,6 +18,7 @@ public:
 	const unsigned indicesCount() const { return ibo->indicesCount(); };
 	const std::string getName() const { return name; };
 	const glm::mat4x4& getModelMatrix() const { return modelMatrix; };
+	const std::unique_ptr<VertexArray>& getVAO() const { return vao; };
 	void setModelMatrix(const glm::mat4x4& mat) { modelMatrix = mat; };
 	void setMaterial(std::shared_ptr<Material> mat);
 	virtual ~Mesh() { }

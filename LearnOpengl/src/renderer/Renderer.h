@@ -14,6 +14,7 @@
 #include "../mesh/BasicMeshes/SkyBox/SkyBox.h"
 #include "../Buffer/ShadowFrameBuffer.h"
 #include "../light/pointLight.h"
+#include "../ibl/IBL.h"
 
 class GridMesh;
 
@@ -45,6 +46,7 @@ public:
 	const std::vector<std::shared_ptr<DirectionLight>>& getLights() const { return directionLights; };
 	const std::vector<std::shared_ptr<PointLight>>& getPointLights() const { return pointLights; };
 	std::shared_ptr<Shader> getShader(ShaderType type) const { return shaderLib.find(type)->second; };
+	const std::shared_ptr<IBL>& getIBL() const { return ibl; };
 private:
 	std::shared_ptr<Camera> camera;
 	std::vector<std::shared_ptr<DirectionLight>> directionLights;
@@ -63,4 +65,5 @@ private:
 	bool enableShadows;
 	bool visiualNormal;
 	std::shared_ptr<Shader> postProcess;
+	std::shared_ptr<IBL> ibl;
 };
