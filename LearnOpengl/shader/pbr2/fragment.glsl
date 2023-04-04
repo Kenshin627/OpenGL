@@ -58,7 +58,7 @@ void main()
 		//cook-torrance brdf
 		float NDF = DistributionGGX(N, H, roughness);
 		float G = GeometrySmith(N, V, L, roughness);
-		vec3 F = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
+		vec3 F = fresnelSchlick(max(dot(H, V), 0.0), F0);
 
 		vec3 numerator = NDF * F * G;
 		float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;

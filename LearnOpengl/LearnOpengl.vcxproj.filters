@@ -1907,6 +1907,18 @@
     <Image Include="resource\textures\skyBox\top.jpg">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="resource\textures\pbr\albedo.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\textures\pbr\metallic.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\textures\pbr\normal.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\textures\pbr\roughness.png">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="dependencies\GLM\glm\CMakeLists.txt" />

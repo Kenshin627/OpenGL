@@ -49,6 +49,8 @@ unsigned Texture::getFormat() const
 {
 	switch (nrChannels)
 	{
+	case 1: return GL_RED;
+	case 2:	return GL_RG16;
 	case 3: return GL_RGB;
 	case 4: return GL_RGBA;
 	}

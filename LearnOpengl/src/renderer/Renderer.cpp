@@ -30,10 +30,10 @@ X_Renderer::X_Renderer():
 	directionLights.push_back(std::make_shared<DirectionLight>(glm::vec3(-1, -1, -1), glm::vec3(1.0f)));
 	CompileShaders();
 
-	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(-10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f), 32));
-	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f), 32));
-	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(-10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f), 32));
-	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(10.0f, -10.0f, 10.0f), glm::vec3(300.0f, 300.0f, 300.0f), 32));
+	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(-10.0f, 10.0f, 10.0f), glm::vec3(150.0f, 150.0f, 150.0f), 32));
+	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(150.0f, 150.0f, 150.0f), 32));
+	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(-10.0f, -10.0f, 10.0f), glm::vec3(150.0f, 150.0f, 150.0f), 32));
+	pointLights.push_back(std::make_shared<PointLight>(glm::vec3(10.0f, -10.0f, 10.0f), glm::vec3(150.0f, 150.0f, 150.0f), 32));
 
 	grid->setMaterial(std::make_shared<GridMaterial>(glm::vec3(0.3, 0.3, 0.3), glm::vec3(0.6, 0.6, 0.6), glm::vec3(0, 0, 0), glm::vec4(1.0, 10, 0.33, .5), *this));
 	

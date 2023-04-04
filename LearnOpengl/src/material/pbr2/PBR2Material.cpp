@@ -1,7 +1,7 @@
 #include "../../mesh/Mesh.h"
 #include "PBR2Material.h"
 
-Pbr2Material::Pbr2Material(std::shared_ptr<Texture> albedo, std::shared_ptr<Texture> metallic, std::shared_ptr<Texture> roughness, std::shared_ptr<Texture> normalMap, const X_Renderer& renderer) :Material(ShaderType::PBR, renderer),
+Pbr2Material::Pbr2Material(std::shared_ptr<Texture> albedo, std::shared_ptr<Texture> metallic, std::shared_ptr<Texture> roughness, std::shared_ptr<Texture> normalMap, const X_Renderer& renderer) :Material(ShaderType::PBR2, renderer),
 albedo(albedo),
 metallic(metallic),
 roughness(roughness),
