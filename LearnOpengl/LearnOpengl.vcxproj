@@ -831,10 +831,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg" />
-    <Image Include="resource\textures\pbr\albedo.png" />
-    <Image Include="resource\textures\pbr\metallic.png" />
-    <Image Include="resource\textures\pbr\normal.png" />
-    <Image Include="resource\textures\pbr\roughness.png" />
     <Image Include="resource\textures\skyBox\back.jpg" />
     <Image Include="resource\textures\skyBox\bottom.jpg" />
     <Image Include="resource\textures\skyBox\front.jpg" />
