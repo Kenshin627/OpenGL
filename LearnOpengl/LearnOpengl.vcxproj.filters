@@ -1904,6 +1904,10 @@
     <None Include="resource\textures\hdr\forest.hdr" />
     <None Include="resource\textures\hdr\night.hdr" />
     <None Include="resource\textures\hdr\room.hdr" />
+    <None Include="shader\ibl\prefiltermap\vertex.glsl" />
+    <None Include="shader\ibl\prefiltermap\fragment.glsl" />
+    <None Include="shader\ibl\brdfLut\vertex.glsl" />
+    <None Include="shader\ibl\brdfLut\fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">

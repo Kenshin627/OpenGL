@@ -22,11 +22,21 @@ void PbrMaterial::setUniforms(const Mesh& mesh)
 	program->setFloat("material.metallic", metallic);
 	program->setFloat("material.ao", ao);
 
-	//irradianceMap
+	//IBL
+	//uniform samplerCube irradianceMap;
+	//uniform samplerCube prefilterMap;
+	//uniform sampler2D brdfLUT;
+
 	auto ibl = renderer.getIBL();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, ibl->getIrradiancemap());
 	program->setInt("irradianceMap", 0);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, ibl->getPrefiltermap());
+	program->setInt("prefilterMap", 1);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, ibl->getBrdfLUT());
+	program->setInt("brdfLUT", 2);
 
 	auto pointLights = renderer.getPointLights();
 	unsigned pointLightSize = pointLights.size();

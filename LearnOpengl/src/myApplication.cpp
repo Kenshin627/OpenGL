@@ -268,7 +268,7 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 					{
 						float roughness = glm::clamp((float)j / (float)nrColumns, 0.05f, 2.0f);
 						auto sphere = std::make_shared<Sphere>("sphere" + std::to_string(i) + std::to_string(j), 1.0f);
-						auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(0.5f, 0.0f, 0.0f), metallic, roughness, 1.0f, viewportLayer->getRenderer());
+						auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(1.0f, 1.0f, 1.0f), metallic, roughness, 1.0f, viewportLayer->getRenderer());
 						sphere->setMaterial(pbrmaterial);
 						model = glm::identity<glm::mat4x4>();
 						model = glm::translate(model, glm::vec3(
@@ -308,10 +308,22 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 
 			if (ImGui::MenuItem("ibl"))
 			{
+				auto node = std::make_shared<Node>();
 				auto ibl = viewportLayer->getRenderer().getIBL();
 				ibl->buildIrradianceMap();
-				//viewportLayer->getRenderer().setSkyBoxTexture(ibl->getENVCubemap());
-				viewportLayer->getRenderer().setSkyBoxTexture(ibl->getIrradiancemap());
+				viewportLayer->getRenderer().setSkyBoxTexture(ibl->getPrefiltermap());
+				auto sphere = std::make_shared<Sphere>("METALsphere", 5.0f);
+				auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(0.2f, 0.2f, 0.2f), 1.0f, 0.0f, 1.0f, viewportLayer->getRenderer());
+				sphere->setMaterial(pbrmaterial);
+				glm::mat4x4 model = glm::identity<glm::mat4x4>();
+				model = glm::translate(model, glm::vec3(
+					0.0f,
+					5.0f,
+					0.0f
+				));
+				sphere->setModelMatrix(model);
+				node->meshes.push_back(sphere);
+				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
 			ImGui::EndMenu();
 		}

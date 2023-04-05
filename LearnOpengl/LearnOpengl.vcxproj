@@ -797,10 +797,14 @@
     <None Include="shader\gridCastShadow\vertex.glsl" />
     <None Include="shader\grid\fragment.glsl" />
     <None Include="shader\grid\vertex.glsl" />
+    <None Include="shader\ibl\brdfLut\fragment.glsl" />
+    <None Include="shader\ibl\brdfLut\vertex.glsl" />
     <None Include="shader\ibl\envCubemap\fragment.glsl" />
     <None Include="shader\ibl\envCubemap\vertex.glsl" />
     <None Include="shader\ibl\irradiancemap\fragment.glsl" />
     <None Include="shader\ibl\irradiancemap\vertex.glsl" />
+    <None Include="shader\ibl\prefiltermap\fragment.glsl" />
+    <None Include="shader\ibl\prefiltermap\vertex.glsl" />
     <None Include="shader\inversion\fragment.glsl" />
     <None Include="shader\inversion\vertex.glsl" />
     <None Include="shader\normal\fragment.glsl" />

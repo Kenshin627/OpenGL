@@ -16,6 +16,8 @@ public:
 	void buildIrradianceMap();
 	unsigned getENVCubemap() const { return envCubemap; };
 	unsigned getIrradiancemap() const { return irradiancemap; };
+	unsigned getPrefiltermap() const { return prefiltermap; };
+	unsigned getBrdfLUT() const { return brdfLUTTexture; };
 private:
 	unsigned cubeMapWidth;
 	unsigned cubeMapHeight;
@@ -27,7 +29,12 @@ private:
 	unsigned captureFBO;
 	unsigned captureRBO;
 	unsigned envCubemap;
+	//ambient diffuse
 	unsigned irradiancemap;
+	//ambient specular
+	unsigned prefiltermap;
+	unsigned brdfLUTTexture;
+	unsigned quadVAO;
 	std::shared_ptr<BoxMesh> cube;
 	glm::mat4x4 captureProjection;
 	std::vector<glm::mat4x4> captureViews;
