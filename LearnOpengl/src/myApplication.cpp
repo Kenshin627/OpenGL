@@ -283,47 +283,73 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
 
-			if (ImGui::MenuItem("PBRSphere With textures"))
+			if (ImGui::MenuItem("GlassSphere"))
 			{
 				auto node = std::make_shared<Node>();
-				std::vector<std::shared_ptr<Texture>> textures = {
-					std::make_shared<Texture>("resource/textures/pbr/dull-brass-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
-					std::make_shared<Texture>("resource/textures/pbr/dull-brass-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
-					std::make_shared<Texture>("resource/textures/pbr/dull-brass-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
-					std::make_shared<Texture>("resource/textures/pbr/dull-brass-bl/normal.png", TEXTURE_TYPE::SPECULAR),
-					std::make_shared<Texture>("resource/textures/pbr/dull-brass-bl/ao.png", TEXTURE_TYPE::SPECULAR)
-				};				
-				auto sphere = std::make_shared<Sphere>("metallicSphere", 3.0f);
-				auto pbr2material = std::make_shared<Pbr2Material>(textures[0], textures[1], textures[2], textures[3], textures[4], viewportLayer->getRenderer());
-				sphere->setMaterial(pbr2material);
-				glm::mat4x4 model = glm::identity<glm::mat4x4>();
-				model = glm::translate(model, glm::vec3(
-					0.0f,
-					3.0f,
-					0.0f
-				));
-				sphere->setModelMatrix(model);
-				node->meshes.push_back(sphere);		
-				viewportLayer->getSceneGraph().roots.push_back(node);
-			}
-
-			if (ImGui::MenuItem("ibl"))
-			{
-				auto node = std::make_shared<Node>();
-				auto ibl = viewportLayer->getRenderer().getIBL();
-				ibl->buildIrradianceMap();
-				viewportLayer->getRenderer().setSkyBoxTexture(ibl->getENVCubemap());
-				auto sphere = std::make_shared<Sphere>("METALsphere", 5.0f);
-				auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(0.2f, 0.2f, 0.2f), 1.0f, 0.2f, 1.0f, viewportLayer->getRenderer());
+				auto sphere = std::make_shared<Sphere>("metallicSphere", 4.5f);
+				auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(0.1f, 0.1f, 0.1f), 1.0f, 0.1f, 1.0f, viewportLayer->getRenderer());
 				sphere->setMaterial(pbrmaterial);
 				glm::mat4x4 model = glm::identity<glm::mat4x4>();
 				model = glm::translate(model, glm::vec3(
 					0.0f,
-					5.0f,
+					4.5f,
 					0.0f
 				));
 				sphere->setModelMatrix(model);
 				node->meshes.push_back(sphere);
+				viewportLayer->getSceneGraph().roots.push_back(node);
+			}
+
+			if (ImGui::MenuItem("PBRSpheres"))
+			{
+				auto node = std::make_shared<Node>();
+				std::vector<std::vector<std::shared_ptr<Texture>>> textures = {
+					{
+						std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/normal.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/ao.png", TEXTURE_TYPE::SPECULAR)
+					},
+					{
+						std::make_shared<Texture>("resource/textures/pbr/reinforced-metal-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/reinforced-metal-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/reinforced-metal-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/reinforced-metal-bl/normal.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/reinforced-metal-bl/ao.png", TEXTURE_TYPE::SPECULAR)
+					},
+					{
+						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/normal.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/ao.png", TEXTURE_TYPE::SPECULAR)
+					},
+					{
+						std::make_shared<Texture>("resource/textures/pbr/r/albedo.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/r/metallic.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/r/roughness.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/r/normal.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/r/ao.png", TEXTURE_TYPE::SPECULAR)
+					}
+				};
+				std::vector<std::shared_ptr<Pbr2Material>> mats;
+				unsigned index = 0;
+				for (auto& vecTex : textures)
+				{
+					auto mat = std::make_shared<Pbr2Material>(vecTex[0], vecTex[1], vecTex[2], vecTex[3], vecTex[4], viewportLayer->getRenderer());
+					auto sphere = std::make_shared<Sphere>("metallicSphere", 3.0f);
+					sphere->setMaterial(mat);
+					glm::mat4x4 model = glm::identity<glm::mat4x4>();
+					model = glm::translate(model, glm::vec3(
+						-10.0f + index * 7.0f,
+						3.0f,
+						0.0f
+					));
+					sphere->setModelMatrix(model);
+					node->meshes.push_back(sphere);
+					index++;
+				}							
 				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
 			ImGui::EndMenu();

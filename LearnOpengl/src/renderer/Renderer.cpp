@@ -46,7 +46,8 @@ X_Renderer::X_Renderer() :
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	#pragma endregion
 
-	//ibl->buildIrradianceMap();
+	ibl->buildIrradianceMap();
+	setSkyBoxTexture(ibl->getENVCubemap());
 }
 
 X_Renderer::~X_Renderer() = default;

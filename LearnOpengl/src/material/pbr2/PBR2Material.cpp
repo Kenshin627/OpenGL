@@ -1,3 +1,4 @@
+#include <glad/gl.h>
 #include "../../mesh/Mesh.h"
 #include "PBR2Material.h"
 
@@ -29,10 +30,22 @@ void Pbr2Material::setUniforms(const Mesh& mesh)
 	ao->bind(4);
 	program->setInt("material.ao", 4);
 
-	auto pointLights = renderer.getPointLights();
-	unsigned pointLightSize = pointLights.size();
+	//albedo
+	auto ibl = renderer.getIBL();
+	glActiveTexture(GL_TEXTURE0 + 5);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, ibl->getIrradiancemap());
+	program->setInt("irradianceMap", 5);
+	glActiveTexture(GL_TEXTURE0 + 6);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, ibl->getPrefiltermap());
+	program->setInt("prefilterMap", 6);
+	glActiveTexture(GL_TEXTURE0 + 7);
+	glBindTexture(GL_TEXTURE_2D, ibl->getBrdfLUT());
+	program->setInt("brdfLUT", 7);
 
-	for (unsigned i = 0; i < pointLightSize; i++)
+	auto pointLights = renderer.getPointLights();
+	size_t pointLightSize = pointLights.size();
+
+	for (size_t i = 0; i < pointLightSize; i++)
 	{
 		program->setVec3("pls[" + std::to_string(i) + "].color", pointLights[i]->getColor());
 		program->setVec3("pls[" + std::to_string(i) + "].position", pointLights[i]->getPosition());
