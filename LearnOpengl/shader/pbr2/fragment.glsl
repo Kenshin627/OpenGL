@@ -16,6 +16,7 @@ struct PBRMaterial
 	sampler2D metallic;
 	sampler2D roughness;
 	sampler2D normalMap;
+	sampler2D ao;
 };
 
 in vec3 fragWorldPos;
@@ -37,7 +38,7 @@ void main()
 	vec3 albedo = pow(texture(material.albedo, vCoords).rgb, vec3(2.2));
 	float metallic = texture(material.metallic, vCoords).r;
 	float roughness = texture(material.roughness, vCoords).r;
-	float ao = 1.0;
+	float ao = texture(material.ao, vCoords).r;
 
 	vec3 N = getNormalFromMap();
 	vec3 V = normalize(camPosition - fragWorldPos);

@@ -287,13 +287,14 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 			{
 				auto node = std::make_shared<Node>();
 				std::vector<std::shared_ptr<Texture>> textures = {
-					std::make_shared<Texture>("resource/textures/pbr/albedo.png", TEXTURE_TYPE::SPECULAR),
-					std::make_shared<Texture>("resource/textures/pbr/metallic.png", TEXTURE_TYPE::SPECULAR),
-					std::make_shared<Texture>("resource/textures/pbr/roughness.png", TEXTURE_TYPE::SPECULAR),
-					std::make_shared<Texture>("resource/textures/pbr/normal.png", TEXTURE_TYPE::SPECULAR)
+					std::make_shared<Texture>("resource/textures/pbr/dull-brass-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
+					std::make_shared<Texture>("resource/textures/pbr/dull-brass-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
+					std::make_shared<Texture>("resource/textures/pbr/dull-brass-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
+					std::make_shared<Texture>("resource/textures/pbr/dull-brass-bl/normal.png", TEXTURE_TYPE::SPECULAR),
+					std::make_shared<Texture>("resource/textures/pbr/dull-brass-bl/ao.png", TEXTURE_TYPE::SPECULAR)
 				};				
 				auto sphere = std::make_shared<Sphere>("metallicSphere", 3.0f);
-				auto pbr2material = std::make_shared<Pbr2Material>(textures[0], textures[1], textures[2], textures[3], viewportLayer->getRenderer());
+				auto pbr2material = std::make_shared<Pbr2Material>(textures[0], textures[1], textures[2], textures[3], textures[4], viewportLayer->getRenderer());
 				sphere->setMaterial(pbr2material);
 				glm::mat4x4 model = glm::identity<glm::mat4x4>();
 				model = glm::translate(model, glm::vec3(
@@ -311,9 +312,9 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 				auto node = std::make_shared<Node>();
 				auto ibl = viewportLayer->getRenderer().getIBL();
 				ibl->buildIrradianceMap();
-				viewportLayer->getRenderer().setSkyBoxTexture(ibl->getPrefiltermap());
+				viewportLayer->getRenderer().setSkyBoxTexture(ibl->getENVCubemap());
 				auto sphere = std::make_shared<Sphere>("METALsphere", 5.0f);
-				auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(0.2f, 0.2f, 0.2f), 1.0f, 0.0f, 1.0f, viewportLayer->getRenderer());
+				auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(0.2f, 0.2f, 0.2f), 1.0f, 0.2f, 1.0f, viewportLayer->getRenderer());
 				sphere->setMaterial(pbrmaterial);
 				glm::mat4x4 model = glm::identity<glm::mat4x4>();
 				model = glm::translate(model, glm::vec3(

@@ -1,11 +1,12 @@
 #include "../../mesh/Mesh.h"
 #include "PBR2Material.h"
 
-Pbr2Material::Pbr2Material(std::shared_ptr<Texture> albedo, std::shared_ptr<Texture> metallic, std::shared_ptr<Texture> roughness, std::shared_ptr<Texture> normalMap, const X_Renderer& renderer) :Material(ShaderType::PBR2, renderer),
+Pbr2Material::Pbr2Material(std::shared_ptr<Texture> albedo, std::shared_ptr<Texture> metallic, std::shared_ptr<Texture> roughness, std::shared_ptr<Texture> normalMap, std::shared_ptr<Texture> ao, const X_Renderer& renderer) :Material(ShaderType::PBR2, renderer),
 albedo(albedo),
 metallic(metallic),
 roughness(roughness),
-normalMap(normalMap) { }
+normalMap(normalMap),
+ao(ao) { }
 
 void Pbr2Material::setUniforms(const Mesh& mesh)
 {
@@ -25,6 +26,8 @@ void Pbr2Material::setUniforms(const Mesh& mesh)
 	program->setInt("material.roughness", 2);
 	normalMap->bind(3);
 	program->setInt("material.normalMap", 3);
+	ao->bind(4);
+	program->setInt("material.ao", 4);
 
 	auto pointLights = renderer.getPointLights();
 	unsigned pointLightSize = pointLights.size();

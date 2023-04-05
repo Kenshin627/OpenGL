@@ -26,7 +26,7 @@ X_Renderer::X_Renderer() :
 	enableShadows(false),
 	visiualNormal(false),
 	postProcess(nullptr),
-	ibl(std::make_shared<IBL>("resource/textures/hdr/forest.hdr"))
+	ibl(std::make_shared<IBL>("resource/textures/hdr/night.hdr"))
 {
 	directionLights.push_back(std::make_shared<DirectionLight>(glm::vec3(-1, -1, -1), glm::vec3(1.0f)));
 	CompileShaders();
@@ -104,8 +104,8 @@ void X_Renderer::Render(const SceneGraph& sceneGraph, const glm::ivec2& viewport
 	#pragma endregion
 
 	#pragma region GRID ÒÑÍê³É
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	grid->draw();
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//grid->draw();
 	#pragma endregion
 
 	#pragma region SkyBox
