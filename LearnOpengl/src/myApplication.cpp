@@ -75,11 +75,11 @@ public:
 
 	void onAttach() override
 	{
-	/*	auto root = sceneLoader.loadModel("resource/models/nanosuit/nanosuit.obj", renderer);
+		auto root = sceneLoader.loadModel("resource/models/Cerberus/Cerberus.obj", renderer);
 		if (root)
 		{
 			sceneGraph.roots.push_back(root);
-		}*/
+		}
 	}
 
 	void onUpdate(const Kenshin::updatePayload& payload) override

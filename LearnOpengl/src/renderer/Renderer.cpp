@@ -5,7 +5,7 @@
 #include "../material/depth/DepthMaterial.h"
 
 X_Renderer::X_Renderer() :
-	camera(std::make_shared<Camera>(glm::vec3(0, 25, 15), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)),
+	camera(std::make_shared<Camera>(glm::vec3(0, 0, 25), glm::vec3(0, 0, 0), glm::vec3{ 0,1,0 }, 800.0f / 600.0f, 0.1f, 500.0f, glm::radians(45.0f), 10.0f, 0.00006)),
 	m_FBO(std::make_shared<FrameBuffer>(1.0, 1.0)),
 	prevFBO(m_FBO),
 	clearColor(glm::vec4(0.0, 0.0, 0.0, 1.0)),
@@ -143,6 +143,7 @@ void X_Renderer::Recursivedraw(const std::shared_ptr<Node>& node)
 	{
 		for (const std::shared_ptr<Mesh>& mesh : node->meshes)
 		{			
+			
 			mesh->draw();
 		}
 	}

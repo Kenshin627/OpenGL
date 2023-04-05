@@ -2,6 +2,7 @@
 #include "../mesh/Mesh.h"
 #include "sceneLoader.h"
 #include "../material/blinnPhong/BlinnPhongMaterial.h"
+#include "../material/pbr2/PBR2Material.h"
 
 SceneLoader::SceneLoader() = default;
 SceneLoader::~SceneLoader() = default;
@@ -103,7 +104,7 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 	}
 
 	unsigned materialIndex = mesh->mMaterialIndex;
-	std::shared_ptr<BlinnPhongMaterial> mat = nullptr;
+	std::shared_ptr<Pbr2Material> mat = nullptr;
 	if (materialIndex >= 0)
 	{
 		auto cachedMaterial = materialCache.find(materialIndex);
@@ -115,23 +116,29 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 		{
 			
 			//aiColor3D colorTemp;
-			float shininess;
-			aiMaterial* material = scene->mMaterials[materialIndex];
+			//float shininess;
+			//aiMaterial* material = scene->mMaterials[materialIndex];
 			//material->Get(AI_MATKEY_COLOR_AMBIENT, colorTemp);
 			//mat->ambient = glm::vec3(colorTemp.r, colorTemp.g, colorTemp.b);
 			//material->Get(AI_MATKEY_COLOR_DIFFUSE, colorTemp);
 			//mat->diffuse = glm::vec3(colorTemp.r, colorTemp.g, colorTemp.b);
 			//material->Get(AI_MATKEY_COLOR_SPECULAR, colorTemp);
 			//mat->specular = glm::vec3(colorTemp.r, colorTemp.g, colorTemp.b);
-			material->Get(AI_MATKEY_SHININESS, shininess);
+			//material->Get(AI_MATKEY_SHININESS, shininess);
 
 			//textures
-			auto ambientTextures = loadMaterialTextures(material, aiTextureType_AMBIENT, TEXTURE_TYPE::AMBIENT);
+		/*	auto ambientTextures = loadMaterialTextures(material, aiTextureType_AMBIENT, TEXTURE_TYPE::AMBIENT);
 			auto diffuseTextures = loadMaterialTextures(material, aiTextureType_DIFFUSE, TEXTURE_TYPE::DIFFUSE);
 			auto specularTextures = loadMaterialTextures(material, aiTextureType_SPECULAR, TEXTURE_TYPE::SPECULAR);
 			auto normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, TEXTURE_TYPE::NORMALMAP);
 			mat = std::make_shared<BlinnPhongMaterial>(ambientTextures, diffuseTextures, specularTextures, normalMaps, shininess, renderer);
-			materialCache.insert({ materialIndex, mat });
+			materialCache.insert({ materialIndex, mat });*/
+			auto albedo = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_A.jpg", TEXTURE_TYPE::SPECULAR);
+			auto metallic = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_M.jpg", TEXTURE_TYPE::SPECULAR);
+			auto roughness = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_R.jpg", TEXTURE_TYPE::SPECULAR);
+			auto normalmap = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_N.jpg", TEXTURE_TYPE::SPECULAR);
+			auto ao = std::make_shared<Texture>("resource/models/Cerberus/ao.png", TEXTURE_TYPE::SPECULAR);
+			mat = std::make_shared<Pbr2Material>(albedo, metallic, roughness, normalmap, ao, renderer);
 		}		
 	}
 	VertexDataLayout layout;
@@ -140,7 +147,12 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 	layout.push<float>(2);
 	layout.push<float>(3);
 	layout.push<float>(3);
-	return std::make_shared<Mesh>(mesh->mName.C_Str(), vertices, indices, mat, layout);
+	auto m = std::make_shared<Mesh>(mesh->mName.C_Str(), vertices, indices, mat, layout);
+	glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
+	modelMatrix = glm::rotate(modelMatrix, glm::radians(60.0f), glm::vec3(0, 1, 0));
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(20, 20, 20));
+	m->setModelMatrix(modelMatrix);
+	return m;
 }
 
 std::vector<std::shared_ptr<Texture>> SceneLoader::loadMaterialTextures(aiMaterial* mat, aiTextureType type, TEXTURE_TYPE tname)

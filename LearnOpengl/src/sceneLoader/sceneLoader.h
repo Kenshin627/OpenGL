@@ -14,6 +14,7 @@
 
 class Mesh;
 class BlinnPhongMaterial;
+class Pbr2Material;
 class X_Renderer;
 
 struct Node
@@ -48,6 +49,6 @@ private:
 private:
 	Assimp::Importer importer;
 	std::string directory;
-	std::unordered_map<unsigned, std::shared_ptr<BlinnPhongMaterial>> materialCache;
+	std::unordered_map<unsigned, std::shared_ptr<Pbr2Material>> materialCache;
 	std::unordered_map<std::string, std::shared_ptr<Texture>> textureCache;
 };
