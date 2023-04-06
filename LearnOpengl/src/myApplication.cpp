@@ -75,7 +75,7 @@ public:
 
 	void onAttach() override
 	{
-		auto root = sceneLoader.loadModel("resource/models/samurai/samurai.fbx", renderer);
+		auto root = sceneLoader.loadModel("resource/models/Cerberus/Cerberus.obj", renderer);
 
 		if (root)
 		{
@@ -207,7 +207,7 @@ public:
 
 	void autoRotate(std::shared_ptr<Node> node, float ts)
 	{
-		auto rotateMatrix = glm::rotate(glm::identity<glm::mat4x4>(), 0.005f, glm::vec3(0, 1, 0));
+		auto rotateMatrix = glm::rotate(glm::identity<glm::mat4x4>(), 0.003f, glm::vec3(0, 1, 0));
 		for (auto& mesh : node->meshes)
 		{
 			glm::mat4x4 modelMatrix = mesh->getModelMatrix() * rotateMatrix;
@@ -331,25 +331,25 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 						std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/ao.png", TEXTURE_TYPE::SPECULAR)
 					},
 					{
-						std::make_shared<Texture>("resource/textures/pbr/reinforced-metal-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/reinforced-metal-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/reinforced-metal-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/reinforced-metal-bl/normal.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/reinforced-metal-bl/ao.png", TEXTURE_TYPE::SPECULAR)
+						std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/normal.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/ao.png", TEXTURE_TYPE::SPECULAR)
 					},
 					{
-						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/albedo.jpg", TEXTURE_TYPE::SPECULAR),
 						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
 						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
 						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/normal.png", TEXTURE_TYPE::SPECULAR),
 						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/ao.png", TEXTURE_TYPE::SPECULAR)
 					},
 					{
-						std::make_shared<Texture>("resource/textures/pbr/r/albedo.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/r/metallic.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/r/roughness.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/r/normal.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/r/ao.png", TEXTURE_TYPE::SPECULAR)
+						std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/normal.png", TEXTURE_TYPE::SPECULAR),
+						std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/ao.png", TEXTURE_TYPE::SPECULAR)
 					}
 				};
 				std::vector<std::shared_ptr<Pbr2Material>> mats;

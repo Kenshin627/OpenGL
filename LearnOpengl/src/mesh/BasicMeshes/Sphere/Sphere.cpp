@@ -1,6 +1,6 @@
 #include "Sphere.h"
 
-Sphere::Sphere(const std::string& name, float radius, float widthSegments, float heightSegments, float phiStart, float phiLength, float thetaStart, float thetaLength, std::shared_ptr<Material> mat) :Mesh(name, {}, {}, nullptr, VertexDataLayout().push<float>(3).push<float>(3).push<float>(2)), radius(radius), widthSegments(widthSegments), heightSegments(heightSegments), thetaStart(thetaStart), thetaLength(thetaLength), phiStart(phiStart), phiLength(phiLength)
+Sphere::Sphere(const std::string& name, float radius, float widthSegments, float heightSegments, float phiStart, float phiLength, float thetaStart, float thetaLength, float uScale, float vScale, std::shared_ptr<Material> mat) :Mesh(name, {}, {}, nullptr, VertexDataLayout().push<float>(3).push<float>(3).push<float>(2)), radius(radius), widthSegments(widthSegments), heightSegments(heightSegments), thetaStart(thetaStart), thetaLength(thetaLength), phiStart(phiStart), phiLength(phiLength), uScale(uScale), vScale(vScale)
 {
 	ConstructorVertex();
 	isIndexed = true;
@@ -37,7 +37,7 @@ void Sphere::ConstructorVertex()
 			float u = ix / widthSegments;
 			float x = radius * cosf(phiStart + u * phiLength) * sinf(thetaStart + v * thetaLength);
 			float y = radius * cosf(thetaStart + v * thetaLength);
-			float z = radius * sinf(phiStart + u * phiLength) * sinf(thetaStart + v * thetaLength);
+			float z = -radius * sinf(phiStart + u * phiLength) * sinf(thetaStart + v * thetaLength);
 
 			//position
 			vertices.push_back(x);
@@ -50,8 +50,8 @@ void Sphere::ConstructorVertex()
 			vertices.push_back(z);
 
 			// uv
-			vertices.push_back(u + uOffset);
-			vertices.push_back(1 - v);
+			vertices.push_back((u + uOffset) * uScale);
+			vertices.push_back((1 - v) * vScale);
 
 			verticesRow.push_back(index++);
 		}
