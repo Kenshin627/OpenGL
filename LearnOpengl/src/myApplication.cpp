@@ -75,7 +75,7 @@ public:
 
 	void onAttach() override
 	{
-		auto root = sceneLoader.loadModel("resource/models/Cerberus/Cerberus.obj", renderer);
+		auto root = sceneLoader.loadModel("resource/models/samurai/samurai.fbx", renderer);
 
 		if (root)
 		{

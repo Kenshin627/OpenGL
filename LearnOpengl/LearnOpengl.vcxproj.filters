@@ -1908,6 +1908,7 @@
     <None Include="shader\ibl\prefiltermap\fragment.glsl" />
     <None Include="shader\ibl\brdfLut\vertex.glsl" />
     <None Include="shader\ibl\brdfLut\fragment.glsl" />
+    <None Include="resource\models\samurai\HelmetPresentationLightMap.fbx.fbx" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">
@@ -1929,6 +1930,24 @@
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="resource\textures\skyBox\top.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\models\samurai\AOMap.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\models\samurai\BaseColor.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\models\samurai\Metalness.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\models\samurai\NormalMap.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\models\samurai\PillarAO.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="resource\models\samurai\Roughness.png">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

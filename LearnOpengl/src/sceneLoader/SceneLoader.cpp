@@ -146,14 +146,21 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 
 			////mat = std::make_shared<Pbr2Material>(albedo, metallic[0], roughness[0], normal[0], ao[0], renderer);
 			//materialCache.insert({ materialIndex, mat });
+		//SAMURAI
+		auto albedo = std::make_shared<Texture>("resource/models/samurai/BaseColor.png", TEXTURE_TYPE::SPECULAR);
+		auto metallic = std::make_shared<Texture>("resource/models/samurai/Metalness.png", TEXTURE_TYPE::SPECULAR);
+		auto roughness = std::make_shared<Texture>("resource/models/samurai/Roughness.png", TEXTURE_TYPE::SPECULAR);
+		auto normalmap = std::make_shared<Texture>("resource/models/samurai/NormalMap.png", TEXTURE_TYPE::SPECULAR);
+		auto ao = std::make_shared<Texture>("resource/models/samurai/AOMap.png", TEXTURE_TYPE::SPECULAR);
+		mat = std::make_shared<Pbr2Material>(albedo, metallic, roughness, normalmap, ao, renderer); 
 
 		//GUN
-		auto albedo = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_A.jpg", TEXTURE_TYPE::SPECULAR);
+	/*	auto albedo = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_A.jpg", TEXTURE_TYPE::SPECULAR);
 		auto metallic = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_M.jpg", TEXTURE_TYPE::SPECULAR);
 		auto roughness = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_R.jpg", TEXTURE_TYPE::SPECULAR);
 		auto normalmap = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_N.jpg", TEXTURE_TYPE::SPECULAR);
 		auto ao = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_AO.png", TEXTURE_TYPE::SPECULAR);
-		mat = std::make_shared<Pbr2Material>(albedo, metallic, roughness, normalmap, ao, renderer);
+		mat = std::make_shared<Pbr2Material>(albedo, metallic, roughness, normalmap, ao, renderer);*/
 		}		
 	}
 	VertexDataLayout layout;
@@ -165,7 +172,7 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 	auto m = std::make_shared<Mesh>(mesh->mName.C_Str(), vertices, indices, mat, layout);
 	glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
 	//modelMatrix = glm::rotate(modelMatrix, glm::radians(60.0f), glm::vec3(0, 1, 0));
-	modelMatrix = glm::scale(modelMatrix, glm::vec3(15, 15, 15));
+	//modelMatrix = glm::scale(modelMatrix, glm::vec3(15, 15, 15));
 	m->setModelMatrix(modelMatrix);
 	return m;
 }

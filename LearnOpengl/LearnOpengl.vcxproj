@@ -773,6 +773,7 @@
     <None Include="dependencies\GLM\glm\gtx\wrap.inl" />
     <None Include="imgui.ini" />
     <None Include="resource\fonts\msyh.ttc" />
+    <None Include="resource\models\samurai\HelmetPresentationLightMap.fbx.fbx" />
     <None Include="resource\textures\hdr\country.hdr" />
     <None Include="resource\textures\hdr\forest.hdr" />
     <None Include="resource\textures\hdr\night.hdr" />
@@ -830,6 +831,12 @@
     <None Include="shader\wireFrame\vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="resource\models\samurai\AOMap.png" />
+    <Image Include="resource\models\samurai\BaseColor.png" />
+    <Image Include="resource\models\samurai\Metalness.png" />
+    <Image Include="resource\models\samurai\NormalMap.png" />
+    <Image Include="resource\models\samurai\PillarAO.png" />
+    <Image Include="resource\models\samurai\Roughness.png" />
     <Image Include="resource\textures\container.jpg" />
     <Image Include="resource\textures\skyBox\back.jpg" />
     <Image Include="resource\textures\skyBox\bottom.jpg" />
