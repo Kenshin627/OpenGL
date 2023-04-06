@@ -76,6 +76,7 @@ public:
 	void onAttach() override
 	{
 		auto root = sceneLoader.loadModel("resource/models/Cerberus/Cerberus.obj", renderer);
+
 		if (root)
 		{
 			sceneGraph.roots.push_back(root);
@@ -116,7 +117,11 @@ public:
 				}
 			}
 		}
-
+		//mesh auto rotate
+		for (auto& root : sceneGraph.roots)
+		{
+			autoRotate(root, payload.ts);
+		}
 		renderer.Render(sceneGraph, m_viewportSize, payload.ts);
 		ImGui::Image((void*)(intptr_t)(renderer.getFrameBufferTextureID()), ImVec2((float)m_viewportSize.x, (float)m_viewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
 	};
@@ -198,6 +203,20 @@ public:
 		ImGui::ColorEdit3("color", /*(float*)&color */ (float*)&renderer.getLights()[0]->getColor(), ImGuiColorEditFlags_Float);
 		ImGui::End();
 		#pragma endregion
+	}
+
+	void autoRotate(std::shared_ptr<Node> node, float ts)
+	{
+		auto rotateMatrix = glm::rotate(glm::identity<glm::mat4x4>(), 0.005f, glm::vec3(0, 1, 0));
+		for (auto& mesh : node->meshes)
+		{
+			glm::mat4x4 modelMatrix = mesh->getModelMatrix() * rotateMatrix;
+			mesh->setModelMatrix(modelMatrix);
+		}
+		for (auto& n: node->children)
+		{
+			autoRotate(n, ts);
+		}
 	}
 
 	SceneGraph& getSceneGraph() { return sceneGraph; };

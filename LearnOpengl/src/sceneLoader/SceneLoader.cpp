@@ -133,12 +133,27 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 			auto normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, TEXTURE_TYPE::NORMALMAP);
 			mat = std::make_shared<BlinnPhongMaterial>(ambientTextures, diffuseTextures, specularTextures, normalMaps, shininess, renderer);
 			materialCache.insert({ materialIndex, mat });*/
-			auto albedo = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_A.jpg", TEXTURE_TYPE::SPECULAR);
-			auto metallic = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_M.jpg", TEXTURE_TYPE::SPECULAR);
-			auto roughness = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_R.jpg", TEXTURE_TYPE::SPECULAR);
-			auto normalmap = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_N.jpg", TEXTURE_TYPE::SPECULAR);
-			auto ao = std::make_shared<Texture>("resource/models/Cerberus/ao.png", TEXTURE_TYPE::SPECULAR);
-			mat = std::make_shared<Pbr2Material>(albedo, metallic, roughness, normalmap, ao, renderer);
+
+			//aiMaterial* material = scene->mMaterials[materialIndex];
+			//aiString fileAlbedo, fileMetallic, fileRoughness, fileNormal, fileAo;
+			//auto albedo = material->GetTexture(aiTextureType_BASE_COLOR, 0, &fileAlbedo);
+			//auto metallic = loadMaterialTextures(material, aiTextureType_METALNESS, TEXTURE_TYPE::DIFFUSE);
+			//auto roughness = loadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, TEXTURE_TYPE::SPECULAR);
+			//auto normal = loadMaterialTextures(material, aiTextureType_NORMALS, TEXTURE_TYPE::NORMALMAP);
+			//auto ao = loadMaterialTextures(material, aiTextureType_AMBIENT_OCCLUSION, TEXTURE_TYPE::NORMALMAP);
+
+			//aiScene::GetEmbeddedTexture()
+
+			////mat = std::make_shared<Pbr2Material>(albedo, metallic[0], roughness[0], normal[0], ao[0], renderer);
+			//materialCache.insert({ materialIndex, mat });
+
+		//GUN
+		auto albedo = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_A.jpg", TEXTURE_TYPE::SPECULAR);
+		auto metallic = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_M.jpg", TEXTURE_TYPE::SPECULAR);
+		auto roughness = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_R.jpg", TEXTURE_TYPE::SPECULAR);
+		auto normalmap = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_N.jpg", TEXTURE_TYPE::SPECULAR);
+		auto ao = std::make_shared<Texture>("resource/models/Cerberus/Cerberus_AO.png", TEXTURE_TYPE::SPECULAR);
+		mat = std::make_shared<Pbr2Material>(albedo, metallic, roughness, normalmap, ao, renderer);
 		}		
 	}
 	VertexDataLayout layout;
@@ -149,8 +164,8 @@ std::shared_ptr<Mesh> SceneLoader::processMesh(aiMesh* mesh, const aiScene* scen
 	layout.push<float>(3);
 	auto m = std::make_shared<Mesh>(mesh->mName.C_Str(), vertices, indices, mat, layout);
 	glm::mat4x4 modelMatrix = glm::identity<glm::mat4x4>();
-	modelMatrix = glm::rotate(modelMatrix, glm::radians(60.0f), glm::vec3(0, 1, 0));
-	modelMatrix = glm::scale(modelMatrix, glm::vec3(20, 20, 20));
+	//modelMatrix = glm::rotate(modelMatrix, glm::radians(60.0f), glm::vec3(0, 1, 0));
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(15, 15, 15));
 	m->setModelMatrix(modelMatrix);
 	return m;
 }
