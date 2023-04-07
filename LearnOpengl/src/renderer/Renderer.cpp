@@ -26,7 +26,7 @@ X_Renderer::X_Renderer() :
 	enableShadows(false),
 	visiualNormal(false),
 	postProcess(nullptr),
-	ibl(std::make_shared<IBL>("resource/textures/hdr/night.hdr"))
+	ibl(std::make_shared<IBL>("resource/textures/hdr/umhlanga_sunrise_1k.hdr"))
 {
 	directionLights.push_back(std::make_shared<DirectionLight>(glm::vec3(-1, -1, -1), glm::vec3(1.0f)));
 	CompileShaders();
@@ -47,7 +47,7 @@ X_Renderer::X_Renderer() :
 	#pragma endregion
 
 	ibl->buildIrradianceMap();
-	setSkyBoxTexture(ibl->getENVCubemap());
+	setSkyBoxTexture(ibl->getPrefiltermap());
 }
 
 X_Renderer::~X_Renderer() = default;

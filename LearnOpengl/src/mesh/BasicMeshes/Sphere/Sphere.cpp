@@ -1,6 +1,6 @@
 #include "Sphere.h"
 
-Sphere::Sphere(const std::string& name, float radius, float widthSegments, float heightSegments, float phiStart, float phiLength, float thetaStart, float thetaLength, float uScale, float vScale, std::shared_ptr<Material> mat) :Mesh(name, {}, {}, nullptr, VertexDataLayout().push<float>(3).push<float>(3).push<float>(2)), radius(radius), widthSegments(widthSegments), heightSegments(heightSegments), thetaStart(thetaStart), thetaLength(thetaLength), phiStart(phiStart), phiLength(phiLength), uScale(uScale), vScale(vScale)
+Sphere::Sphere(const std::string& name, float radius, float widthSegments, float heightSegments, float phiStart, float phiLength, float thetaStart, float thetaLength, float uScale, float vScale, std::shared_ptr<Material> mat) :Mesh(name, {}, {}, mat, VertexDataLayout().push<float>(3).push<float>(3).push<float>(2)), radius(radius), widthSegments(widthSegments), heightSegments(heightSegments), thetaStart(thetaStart), thetaLength(thetaLength), phiStart(phiStart), phiLength(phiLength), uScale(uScale), vScale(vScale)
 {
 	ConstructorVertex();
 	isIndexed = true;
@@ -17,9 +17,13 @@ void Sphere::ConstructorVertex()
 	widthSegments =  glm::max<float>(3.0f, widthSegments);
 	heightSegments = glm::max<float>(2.0f, heightSegments);
 	auto thetaEnd = glm::min<float>(thetaStart + thetaLength, glm::pi<float>());
-
-	unsigned index = 0;
 	std::vector<std::vector<unsigned>> grid;
+
+	//reverse storage
+	vertices.reserve((widthSegments + 1) * (heightSegments + 1) * 8);
+	grid.reserve(widthSegments * heightSegments);
+	indices.reserve(widthSegments * heightSegments * 3);
+	unsigned index = 0;
 
 	// generate vertices, normals and uvs
 	for (unsigned iy = 0; iy <= heightSegments; iy++) {

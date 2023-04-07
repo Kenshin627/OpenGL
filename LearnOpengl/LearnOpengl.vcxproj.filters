@@ -156,6 +156,9 @@
     <ClCompile Include="src\ibl\IBL.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\mesh\BasicMeshes\TorusKnot\TorusKnot.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1415,6 +1418,9 @@
     <ClInclude Include="src\ibl\IBL.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\mesh\BasicMeshes\TorusKnot\TorusKnot.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\triangle\vertex.glsl" />
@@ -1909,6 +1915,9 @@
     <None Include="shader\ibl\brdfLut\vertex.glsl" />
     <None Include="shader\ibl\brdfLut\fragment.glsl" />
     <None Include="resource\models\samurai\HelmetPresentationLightMap.fbx.fbx" />
+    <None Include="resource\textures\hdr\parking.hdr" />
+    <None Include="resource\textures\hdr\winter_lake_01_1k.hdr" />
+    <None Include="resource\textures\hdr\umhlanga_sunrise_1k.hdr" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\textures\container.jpg">

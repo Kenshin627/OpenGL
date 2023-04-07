@@ -6,6 +6,7 @@
 #include "application/vendor/imGui/imgui_internal.h"
 #include "mesh/BasicMeshes/Box/Box.h"
 #include "mesh/BasicMeshes/Sphere/Sphere.h"
+#include "mesh/BasicMeshes/TorusKnot/TorusKnot.h"
 #include "material/base/BaseMaterial.h"
 #include "material/depth/DepthMaterial.h"
 #include "material/wireframe/WireFrameMaterial.h"
@@ -93,12 +94,11 @@ public:
 
 	void onAttach() override
 	{
-		auto root = sceneLoader.loadModel("resource/models/Cerberus/Cerberus.obj", renderer);
-
+		/*auto root = sceneLoader.loadModel("resource/models/Cerberus/Cerberus.obj", renderer);
 		if (root)
 		{
 			sceneGraph.roots.push_back(root);
-		}
+		}*/
 	}
 
 	void onUpdate(const Kenshin::updatePayload& payload) override
@@ -335,6 +335,23 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 				));
 				sphere->setModelMatrix(model);
 				node->meshes.push_back(sphere);
+				viewportLayer->getSceneGraph().roots.push_back(node);
+			}
+
+			if (ImGui::MenuItem("TorusKnot"))
+			{
+				auto node = std::make_shared<Node>();
+				auto torusKnot = std::make_shared<TorusKnot>("TorusKnot", 18.0f, 8.0f, 150, 20);
+				auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.0f, 1.0f, viewportLayer->getRenderer());
+				torusKnot->setMaterial(pbrmaterial);
+				glm::mat4x4 model = glm::identity<glm::mat4x4>();
+				model = glm::translate(model, glm::vec3(
+					0.0f,
+					4.5f,
+					0.0f
+				));
+				torusKnot->setModelMatrix(model);
+				node->meshes.push_back(torusKnot);
 				viewportLayer->getSceneGraph().roots.push_back(node);
 			}
 
