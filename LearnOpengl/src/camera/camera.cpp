@@ -42,17 +42,11 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& target, const glm::ve
 	fov(fov), 
 	sensitivity(sensitivity),
 	moveSpeed(moveSpeed), 
-	alpha(0),
-	beta(0),
-	radius(0),
-	uptoYMatrix(glm::identity<glm::mat4x4>()),
-	ytoUpMatrix(glm::identity<glm::mat4x4>()),
 	view(glm::identity<glm::mat4x4>()), 
 	proj(glm::identity<glm::mat4x4>()),
 	enableDamping(false)
 {
 	updateAxis();
-	//test();
 	perspective();
 	keyConfig = {
 		{ ImGuiKey::ImGuiKey_W, MoveDirection::Forward },
@@ -98,13 +92,6 @@ void Camera::updateAxis()
 	lookAt();
 }
 
-void Camera::pitchYaw(float xoffset, float yoffset, const glm::vec2& viewport)
-{
-	sphericalDelta.theta -= xoffset * sensitivity;
-	sphericalDelta.phi   -= yoffset * sensitivity;
-	test();
-}
-
 void Camera::setRatio(float ratio)
 {
 	aspectRatio = ratio;
@@ -117,11 +104,14 @@ void Camera::setFov(float v)
 	perspective();
 }
 
-void Camera::test()
+void Camera::orbitControl(float offsetX, float offsetY, const glm::vec2& viewport)
 {
+	//sphericalDelta.theta -= offsetX * sensitivity;
+	//sphericalDelta.phi -= offsetY * sensitivity;
+	sphericalDelta.theta -= glm::two_pi<float>() * offsetX / static_cast<float>(viewport.y) * sensitivity;
+	sphericalDelta.phi   -= glm::two_pi<float>() * offsetY / static_cast<float>(viewport.y) * sensitivity;
 	glm::vec3 offset(0, 0, 0);
-	glm::vec3 lastPosition;
-	Quaternion lastQuaternion;
+
 	const Quaternion quat = Quaternion().setFromUnitVectors(up, glm::vec3(0, 1, 0));
 	const Quaternion quaInverse = Quaternion().copy(quat).invert();
 
@@ -145,7 +135,6 @@ void Camera::test()
 	quaInverse.applyToVec(offset);
 	position = target + offset;
 	direction = glm::normalize(target - position);
-	//updateAxis();
 	lookAt();
 	if (enableDamping) {
 		sphericalDelta.theta *= (1 - dampingFactor);

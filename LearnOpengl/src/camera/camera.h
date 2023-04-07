@@ -58,11 +58,8 @@ public:
 	{
 		moveSpeed = s;
 	}
-
 	void move(MoveDirection direction, float deltaTime);
-	void pitchYaw(float xoffset, float yoffset, const glm::vec2& viewport);
 	void updateAxis();
-
 	const glm::mat4& viewMatrix() const { return view; };
 	const glm::mat4& projMatrix() const { return proj; };
 	float getNear() const { return minZ; };
@@ -70,9 +67,7 @@ public:
 	const std::unordered_map<ImGuiKey, MoveDirection>& getKeybordConfig() const { return keyConfig; };
 	void setRatio(float ratio);
 	void setFov(float fov);
-	void test();
-private:
-	void buildAnglesAndRadius();
+	void orbitControl(float xoffset, float yoffset, const glm::vec2& viewport);
 private:
 	glm::vec3 position;
 	glm::vec3 direction;
@@ -85,28 +80,15 @@ private:
 	float fov;
 	float sensitivity;
 	float moveSpeed;
-
-	float alpha;
-	float beta;
-	float radius;
-
-	glm::mat4x4 uptoYMatrix;
-	glm::mat4x4 ytoUpMatrix;
-
 	glm::mat4x4 view;
-	glm::mat4x4 proj;
-	
+	glm::mat4x4 proj;	
 	std::unordered_map<ImGuiKey, MoveDirection> keyConfig;
-
 	Spherical spherical;
 	Spherical sphericalDelta;
-
 	bool enableDamping{ false };
 	float dampingFactor = 0.01;
-
 	float minPolarAngle = 0.f;
 	float maxPolarAngle = glm::pi<float>();
-
 	float minAzimuthAngle = -std::numeric_limits<float>::infinity();// radians
 	float maxAzimuthAngle = std::numeric_limits<float>::infinity(); // radians
 };

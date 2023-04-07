@@ -121,11 +121,10 @@ public:
 
 		if (payload.isHover && payload.io.MouseDown[1])
 		{
-			camera->pitchYaw(payload.io.MouseDelta.x, payload.io.MouseDelta.y, payload.viewport);
+			camera->orbitControl(payload.io.MouseDelta.x, payload.io.MouseDelta.y, payload.viewport);
 		}
-		//camera->pitchYaw(0.001f, 0.0, payload.viewport);
 
-		/*if (payload.isHover && payload.isfocus)
+		if (payload.isHover && payload.isfocus)
 		{
 			for (auto& key : camera->getKeybordConfig())
 			{
@@ -135,7 +134,7 @@ public:
 					break;
 				}
 			}
-		}*/
+		}
 		//mesh auto rotate
 		/*for (auto& root : sceneGraph.roots)
 		{
