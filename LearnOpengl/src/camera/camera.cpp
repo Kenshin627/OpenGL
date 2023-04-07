@@ -1,5 +1,6 @@
 #include "camera.h"
 #include "../application/vendor/imGui/imgui.h"
+#include "../utils/Quaternion.h"
 
 glm::mat4x4 rotationAlignTo(const glm::vec3& from, const glm::vec3& to)
 {
@@ -145,9 +146,9 @@ void Camera::updateAxis()
 	lookAt();
 }
 
-void Camera::pitchYaw(float xoffset, float yoffset)
+void Camera::pitchYaw(float xoffset, float yoffset, const glm::vec2& viewport)
 {
-	alpha += xoffset * sensitivity;
+	/*alpha += xoffset * 0.006;
 	beta  += yoffset * sensitivity;
 
 	float x = cos(alpha) * sin(beta) * radius;
@@ -161,7 +162,14 @@ void Camera::pitchYaw(float xoffset, float yoffset)
 	
 	position = target + dir;
 	direction = glm::normalize(target - position);
-	updateAxis();
+	updateAxis();*/
+
+	//rotateLeft(2 * math::PI * rotateDelta.x / static_cast<float>(size.height));// yes, height
+
+	//rotateUp(2 * math::PI * rotateDelta.y / static_cast<float>(size.height));
+	sphericalDelta.theta -= glm::two_pi<float>() * xoffset / static_cast<float>(viewport.y);
+	sphericalDelta.phi -= glm::two_pi<float>() * yoffset / static_cast<float>(viewport.y);
+	test();
 }
 
 void Camera::setRatio(float ratio)
@@ -174,6 +182,36 @@ void Camera::setFov(float v)
 {
 	fov = v;
 	perspective();
+}
+
+void Camera::test()
+{
+	glm::vec3 offset{};
+	glm::vec3 lastPosition;
+	Quaternion lastQuaternion;
+	const auto quat = Quaternion().setFromUnitVectors(up, glm::vec3(0, 1, 0));
+	auto quaInverse = Quaternion().copy(quat).invert();
+
+	offset = position - target;
+	quat.applyToVec(offset);
+	spherical.setFromVector3(offset);
+
+	if (enableDamping)
+	{
+		spherical.theta += sphericalDelta.theta * dampingFactor;
+		spherical.phi += sphericalDelta.phi * dampingFactor;
+	}
+	else {
+		spherical.theta += sphericalDelta.theta;
+		spherical.phi = sphericalDelta.phi;
+	}
+	spherical.theta = glm::max<float>(minAzimuthAngle, glm::min<float>(maxAzimuthAngle, spherical.theta));
+	spherical.phi = glm::max<float>(minPolarAngle, glm::min<float>(maxPolarAngle, spherical.phi));
+	spherical.makeSafe();
+	spherical.setFromSpherical(offset);
+	quaInverse.applyToVec(offset);
+	position = target + offset;
+	lookAt();
 }
 
 std::ostream& operator<<(std::ostream& out, const Camera& camera)

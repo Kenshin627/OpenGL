@@ -6,6 +6,7 @@
 #include <string>
 #include <unordered_map>
 #include <GLFW/glfw3.h>
+#include "../utils/Spherical.h"
 
 enum MoveDirection
 {
@@ -59,7 +60,7 @@ public:
 	}
 
 	void move(MoveDirection direction, float deltaTime);
-	void pitchYaw(float xoffset, float yoffset);
+	void pitchYaw(float xoffset, float yoffset, const glm::vec2& viewport);
 	void updateAxis();
 
 	const glm::mat4& viewMatrix() const { return view; };
@@ -69,6 +70,7 @@ public:
 	const std::unordered_map<ImGuiKey, MoveDirection>& getKeybordConfig() const { return keyConfig; };
 	void setRatio(float ratio);
 	void setFov(float fov);
+	void test();
 private:
 	void buildAnglesAndRadius();
 private:
@@ -95,4 +97,16 @@ private:
 	glm::mat4x4 proj;
 	
 	std::unordered_map<ImGuiKey, MoveDirection> keyConfig;
+
+	Spherical spherical;
+	Spherical sphericalDelta;
+
+	bool enableDamping{ false };
+	float dampingFactor;
+
+	float minPolarAngle = 0.f;
+	float maxPolarAngle = glm::pi<float>();
+
+	float minAzimuthAngle = -std::numeric_limits<float>::infinity();// radians
+	float maxAzimuthAngle = std::numeric_limits<float>::infinity(); // radians
 };

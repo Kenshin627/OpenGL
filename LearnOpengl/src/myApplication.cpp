@@ -94,11 +94,11 @@ public:
 
 	void onAttach() override
 	{
-		/*auto root = sceneLoader.loadModel("resource/models/Cerberus/Cerberus.obj", renderer);
+		auto root = sceneLoader.loadModel("resource/models/Cerberus/Cerberus.obj", renderer);
 		if (root)
 		{
 			sceneGraph.roots.push_back(root);
-		}*/
+		}
 	}
 
 	void onUpdate(const Kenshin::updatePayload& payload) override
@@ -121,8 +121,9 @@ public:
 
 		if (payload.isHover && payload.io.MouseDown[1])
 		{
-			camera->pitchYaw(payload.io.MouseDelta.x, payload.io.MouseDelta.y);
+			camera->pitchYaw(payload.io.MouseDelta.x, payload.io.MouseDelta.y, payload.viewport);
 		}
+		//camera->pitchYaw(10.0f, 0.0);
 
 		if (payload.isHover && payload.isfocus)
 		{
@@ -136,10 +137,10 @@ public:
 			}
 		}
 		//mesh auto rotate
-		for (auto& root : sceneGraph.roots)
+		/*for (auto& root : sceneGraph.roots)
 		{
 			autoRotate(root, payload.ts);
-		}
+		}*/
 		renderer.Render(sceneGraph, m_viewportSize, payload.ts);
 		ImGui::Image((void*)(intptr_t)(renderer.getFrameBufferTextureID()), ImVec2((float)m_viewportSize.x, (float)m_viewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
 	};

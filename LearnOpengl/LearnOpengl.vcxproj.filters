@@ -159,6 +159,12 @@
     <ClCompile Include="src\mesh\BasicMeshes\TorusKnot\TorusKnot.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\Spherical.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\Quaternion.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h">
@@ -1419,6 +1425,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\mesh\BasicMeshes\TorusKnot\TorusKnot.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Spherical.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Quaternion.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
