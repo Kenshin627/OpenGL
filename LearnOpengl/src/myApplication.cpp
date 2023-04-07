@@ -48,6 +48,10 @@ struct ScrollingBuffer {
 		}
 	}
 };
+static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanFullWidth;
+static ImGuiTreeNodeFlags leafTreeNodeFlags = base_flags | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+static int selection_mask = 0;
+static int nodeIndex = 0;
 
 class ViewportLayer : public Kenshin::Layer
 {
@@ -59,11 +63,25 @@ public:
 	};
 	void makeTree(const std::shared_ptr<Node>& node) const
 	{
-		if (ImGui::TreeNode(node->nodeName.c_str()))
+		ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
+		if (ImGui::TreeNodeEx(node->nodeName.c_str(), base_flags))
 		{
 			for (const auto& mesh : node->meshes)
 			{
-				ImGui::Text(mesh->getName().c_str());				
+				nodeIndex++;
+				const bool is_selected = (selection_mask & (1 << nodeIndex)) != 0;
+				if (is_selected)
+				{
+					ImGui::TreeNodeEx(node->nodeName.c_str(), leafTreeNodeFlags | ImGuiTreeNodeFlags_Selected);
+				}
+				else {
+					ImGui::TreeNodeEx(node->nodeName.c_str(), leafTreeNodeFlags);
+				}
+				
+				if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+				{
+					selection_mask = 1 << nodeIndex;
+				}					
 			}
 			for (const auto& child : node->children)
 			{
@@ -136,6 +154,7 @@ public:
 		ImGui::Begin("SceneGraph");
 		if (ImGui::TreeNode("Scene TreeNode"))
 		{
+			nodeIndex = 0;
 			for (auto& root : sceneGraph.roots)
 			{
 				makeTree(root);
