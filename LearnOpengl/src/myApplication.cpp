@@ -123,9 +123,9 @@ public:
 		{
 			camera->pitchYaw(payload.io.MouseDelta.x, payload.io.MouseDelta.y, payload.viewport);
 		}
-		//camera->pitchYaw(10.0f, 0.0);
+		//camera->pitchYaw(0.001f, 0.0, payload.viewport);
 
-		if (payload.isHover && payload.isfocus)
+		/*if (payload.isHover && payload.isfocus)
 		{
 			for (auto& key : camera->getKeybordConfig())
 			{
@@ -135,7 +135,7 @@ public:
 					break;
 				}
 			}
-		}
+		}*/
 		//mesh auto rotate
 		/*for (auto& root : sceneGraph.roots)
 		{
@@ -196,31 +196,6 @@ public:
 			ImPlot::EndPlot();
 		}
 		//ImPlot::ShowDemoWindow();
-		ImGui::End();
-		#pragma endregion
-
-		#pragma region RenderMode
-		ImGui::Begin("Render Mode");
-		const char* items[] = { "wireFrame", "BlinnPhong", "PBR", "Depth", "Normal", "grid", "EnvironmentMapReflect", "EnvironmentMapRefract" };
-		static int item_current = 1;
-		if (ImGui::Combo(" ", &item_current, items, IM_ARRAYSIZE(items)))
-		{
-			renderer.setRenderMode((RenderMode)item_current);
-		}
-		if (item_current == 0)
-		{
-			ImGui::ColorPicker3("wireFrameColor", &renderer.getWireFrameColor().x);
-		}
-
-		ImGui::End();
-		#pragma endregion
-
-		#pragma region light
-		ImGui::Begin("light Direction");
-		glm::vec3 lightDirection = renderer.getLights()[0]->getDirection();
-		ImGui::ColorEdit3("direction", /*(float*)&color */ (float*) &lightDirection, ImGuiColorEditFlags_Float);
-		renderer.getLights()[0]->setDirection(lightDirection);
-		ImGui::ColorEdit3("color", /*(float*)&color */ (float*)&renderer.getLights()[0]->getColor(), ImGuiColorEditFlags_Float);
 		ImGui::End();
 		#pragma endregion
 	}

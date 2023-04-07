@@ -32,7 +32,7 @@ void multiplyMMM(const glm::mat4x4& m, glm::vec3& vec)
 
 Camera::Camera(const glm::vec3& position, const glm::vec3& target, const glm::vec3& up, float aspectRatio, float minZ, float maxZ, float fov, float moveSpeed, float sensitivity)
 	:position(position), 
-	direction(target - position), 
+	direction(glm::normalize(target - position)),
 	up(up),
 	right(glm::vec3(1, 0, 0)), 
 	target(target),
@@ -48,10 +48,11 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& target, const glm::ve
 	uptoYMatrix(glm::identity<glm::mat4x4>()),
 	ytoUpMatrix(glm::identity<glm::mat4x4>()),
 	view(glm::identity<glm::mat4x4>()), 
-	proj(glm::identity<glm::mat4x4>())
+	proj(glm::identity<glm::mat4x4>()),
+	enableDamping(false)
 {
 	updateAxis();
-	buildAnglesAndRadius();
+	//test();
 	perspective();
 	keyConfig = {
 		{ ImGuiKey::ImGuiKey_W, MoveDirection::Forward },
@@ -68,7 +69,7 @@ Camera::~Camera()
 
 void Camera::lookAt()
 {
-	view = glm::lookAt(position, position + direction, up);
+	view = glm::lookAt(position, target, up);
 }
 
 void Camera::perspective()
@@ -89,86 +90,18 @@ void Camera::move(MoveDirection where, float deltaTime)
 	lookAt();
 }
 
-void Camera::buildAnglesAndRadius()
-{
-	//计算初始的alpha(水平角) beta(垂直角)
-	glm::vec3 computationVec = position - target;
-
-	if (up.x != 0.0 || up.y != 1.0f || up.z != 0.0)
-	{
-		multiplyMMM(uptoYMatrix, computationVec);
-	}
-	radius = glm::distance(position, target);
-	if (radius == 0.0f)
-	{
-		radius = 0.0001f;
-	}
-
-	float previousAlpha = alpha;
-	if (computationVec.x == 0.0f && computationVec.z == 0.0f)
-	{
-		alpha = glm::half_pi<float>();
-	}
-	else {
-		alpha = acos(computationVec.x / sqrtf(powf(computationVec.x, 2) + powf(computationVec.z, 2)));
-	}
-
-	if (computationVec.z < 0)
-	{
-		alpha = glm::two_pi<float>() - alpha;
-	}
-
-	float alphaCorrectionTurns = roundf((previousAlpha - alpha) / (glm::two_pi<float>()));
-
-	alpha += alphaCorrectionTurns * glm::two_pi<float>();
-	beta = acos(computationVec.y / radius);
-
-	//CHECK
-	if (beta < 0.01f)
-	{
-		beta = 0.01f;
-	}
-	if (beta > glm::half_pi<float>())
-	{
-		beta = glm::half_pi<float>();
-	}
-}
-
 void Camera::updateAxis()
 {
 	direction = glm::normalize(direction);
 	right = glm::normalize(glm::cross(direction, up));
 	up = glm::normalize(glm::cross(right, direction));
-
-	ytoUpMatrix = rotationAlignTo(glm::vec3(0.0f, 1.0f, 0.0f), up);
-	uptoYMatrix = rotationAlignTo(up, glm::vec3(0.0f, 1.0f, 0.0f));
-
 	lookAt();
 }
 
 void Camera::pitchYaw(float xoffset, float yoffset, const glm::vec2& viewport)
 {
-	/*alpha += xoffset * 0.006;
-	beta  += yoffset * sensitivity;
-
-	float x = cos(alpha) * sin(beta) * radius;
-	float y = cos(beta) * radius;
-	float z = sin(alpha) * sin(beta) * radius;
-	glm::vec3 dir = glm::vec3(x, y, z);
-	if (up.x != 0.0f || up.y != 1.0f || up.z != 0.0f)
-	{
-		multiplyMMM(ytoUpMatrix, dir);
-	}
-	
-	position = target + dir;
-	direction = glm::normalize(target - position);
-	updateAxis();*/
-
-	//rotateLeft(2 * math::PI * rotateDelta.x / static_cast<float>(size.height));// yes, height
-
-	//rotateUp(2 * math::PI * rotateDelta.y / static_cast<float>(size.height));
-	sphericalDelta.theta -= glm::two_pi<float>() * xoffset / static_cast<float>(viewport.y);
-	sphericalDelta.phi -= glm::two_pi<float>() * yoffset / static_cast<float>(viewport.y);
+	sphericalDelta.theta -= xoffset * sensitivity;
+	sphericalDelta.phi   -= yoffset * sensitivity;
 	test();
 }
 
@@ -186,11 +119,11 @@ void Camera::setFov(float v)
 
 void Camera::test()
 {
-	glm::vec3 offset{};
+	glm::vec3 offset(0, 0, 0);
 	glm::vec3 lastPosition;
 	Quaternion lastQuaternion;
-	const auto quat = Quaternion().setFromUnitVectors(up, glm::vec3(0, 1, 0));
-	auto quaInverse = Quaternion().copy(quat).invert();
+	const Quaternion quat = Quaternion().setFromUnitVectors(up, glm::vec3(0, 1, 0));
+	const Quaternion quaInverse = Quaternion().copy(quat).invert();
 
 	offset = position - target;
 	quat.applyToVec(offset);
@@ -203,7 +136,7 @@ void Camera::test()
 	}
 	else {
 		spherical.theta += sphericalDelta.theta;
-		spherical.phi = sphericalDelta.phi;
+		spherical.phi += sphericalDelta.phi;
 	}
 	spherical.theta = glm::max<float>(minAzimuthAngle, glm::min<float>(maxAzimuthAngle, spherical.theta));
 	spherical.phi = glm::max<float>(minPolarAngle, glm::min<float>(maxPolarAngle, spherical.phi));
@@ -211,7 +144,16 @@ void Camera::test()
 	spherical.setFromSpherical(offset);
 	quaInverse.applyToVec(offset);
 	position = target + offset;
+	direction = glm::normalize(target - position);
+	//updateAxis();
 	lookAt();
+	if (enableDamping) {
+		sphericalDelta.theta *= (1 - dampingFactor);
+		sphericalDelta.phi   *= (1 - dampingFactor);
+	}
+	else {
+		sphericalDelta.set(0, 0, 0);
+	}
 }
 
 std::ostream& operator<<(std::ostream& out, const Camera& camera)

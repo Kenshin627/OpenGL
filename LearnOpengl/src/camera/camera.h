@@ -102,7 +102,7 @@ private:
 	Spherical sphericalDelta;
 
 	bool enableDamping{ false };
-	float dampingFactor;
+	float dampingFactor = 0.01;
 
 	float minPolarAngle = 0.f;
 	float maxPolarAngle = glm::pi<float>();
