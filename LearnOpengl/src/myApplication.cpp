@@ -119,11 +119,13 @@ public:
 			renderer.resizeFBO(m_viewportSize.x, m_viewportSize.y);
 		}
 
+		float mousedeltaX = 0.0f, mousedeltaY = 0.0f;
 		if (payload.isHover && payload.io.MouseDown[1])
 		{
-			camera->orbitControl(payload.io.MouseDelta.x, payload.io.MouseDelta.y, payload.viewport);
+			mousedeltaX = payload.io.MouseDelta.x;
+			mousedeltaY = payload.io.MouseDelta.y;
 		}
-
+		camera->orbitControl(mousedeltaX, mousedeltaY, payload.io.MouseWheel, payload.viewport);
 		if (payload.isHover && payload.isfocus)
 		{
 			for (auto& key : camera->getKeybordConfig())

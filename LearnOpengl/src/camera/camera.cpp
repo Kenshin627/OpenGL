@@ -2,34 +2,6 @@
 #include "../application/vendor/imGui/imgui.h"
 #include "../utils/Quaternion.h"
 
-glm::mat4x4 rotationAlignTo(const glm::vec3& from, const glm::vec3& to)
-{
-	auto v = glm::cross(to, from);
-	auto c = glm::dot(to, from);
-	auto k = 1 / (1 + c);
-
-	auto m = glm::mat4x4();
-	m[0][0] = v.x * v.x * k + c;   m[0][1] = v.y * v.x * k - v.z;  m[0][2] = v.z * v.x * k + v.y;  m[0][3] = 0;
-	m[1][0] = v.x * v.y * k + v.z; m[1][1] = v.y * v.y * k + c;    m[1][2] = v.z * v.y * k - v.x;  m[1][3] = 0;
-	m[2][0] = v.x * v.z * k - v.y; m[2][1] = v.y * v.z * k + v.x;  m[2][2] = v.z * v.z * k + c;    m[2][3] = 0;
-	m[3][0] = 0;                   m[3][1] = 0;                    m[3][2] = 0;                    m[3][3] = 1;
-
-	return m;
-}
-
-void multiplyMMM(const glm::mat4x4& m, glm::vec3& vec)
-{
-	auto rx = vec.x * m[0][0] + vec.y * m[1][0] + vec.z * m[2][0] + m[3][0];
-	auto ry = vec.x * m[0][1] + vec.y * m[1][1] + vec.z * m[2][1] + m[3][1];
-	auto rz = vec.x * m[0][2] + vec.y * m[1][2] + vec.z * m[2][2] + m[3][2];
-	float rw = 1.0f / (vec.x * m[0][3] + vec.y * m[1][3] + vec.z * m[2][3] + m[3][3]);
-
-
-	vec.x = rx * rw;
-	vec.y = ry * rw;
-	vec.z = rz * rw;
-}
-
 Camera::Camera(const glm::vec3& position, const glm::vec3& target, const glm::vec3& up, float aspectRatio, float minZ, float maxZ, float fov, float moveSpeed, float sensitivity)
 	:position(position), 
 	direction(glm::normalize(target - position)),
@@ -42,9 +14,15 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& target, const glm::ve
 	fov(fov), 
 	sensitivity(sensitivity),
 	moveSpeed(moveSpeed), 
+	scale(1.0f),
+	zoomSpeed(0.6f),
+	zoomScale(std::pow(0.95f, zoomSpeed)),
 	view(glm::identity<glm::mat4x4>()), 
 	proj(glm::identity<glm::mat4x4>()),
-	enableDamping(false)
+	enableDamping(true),
+	dampingFactor(0.05f),
+	minRadius(0.0f),
+	maxRadius(1000.0f)
 {
 	updateAxis();
 	perspective();
@@ -104,10 +82,15 @@ void Camera::setFov(float v)
 	perspective();
 }
 
-void Camera::orbitControl(float offsetX, float offsetY, const glm::vec2& viewport)
+void Camera::orbitControl(float offsetX, float offsetY, float mouseWheel, const glm::vec2& viewport)
 {
-	//sphericalDelta.theta -= offsetX * sensitivity;
-	//sphericalDelta.phi -= offsetY * sensitivity;
+	if (mouseWheel < 0.0f)
+	{
+		scale /= zoomScale;
+	}
+	else if(mouseWheel > 0.0f) {
+		scale *= zoomScale;
+	}
 	sphericalDelta.theta -= glm::two_pi<float>() * offsetX / static_cast<float>(viewport.y) * sensitivity;
 	sphericalDelta.phi   -= glm::two_pi<float>() * offsetY / static_cast<float>(viewport.y) * sensitivity;
 	glm::vec3 offset(0, 0, 0);
@@ -131,6 +114,8 @@ void Camera::orbitControl(float offsetX, float offsetY, const glm::vec2& viewpor
 	spherical.theta = glm::max<float>(minAzimuthAngle, glm::min<float>(maxAzimuthAngle, spherical.theta));
 	spherical.phi = glm::max<float>(minPolarAngle, glm::min<float>(maxPolarAngle, spherical.phi));
 	spherical.makeSafe();
+	spherical.radius *= scale;
+	spherical.radius = glm::max<float>(minRadius, glm::min<float>(spherical.radius, maxRadius));
 	spherical.setFromSpherical(offset);
 	quaInverse.applyToVec(offset);
 	position = target + offset;
@@ -143,6 +128,7 @@ void Camera::orbitControl(float offsetX, float offsetY, const glm::vec2& viewpor
 	else {
 		sphericalDelta.set(0, 0, 0);
 	}
+	scale = 1.0f;
 }
 
 std::ostream& operator<<(std::ostream& out, const Camera& camera)

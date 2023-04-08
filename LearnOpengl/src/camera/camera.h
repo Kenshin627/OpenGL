@@ -67,7 +67,7 @@ public:
 	const std::unordered_map<ImGuiKey, MoveDirection>& getKeybordConfig() const { return keyConfig; };
 	void setRatio(float ratio);
 	void setFov(float fov);
-	void orbitControl(float xoffset, float yoffset, const glm::vec2& viewport);
+	void orbitControl(float xoffset, float yoffset, float mouseWheel, const glm::vec2& viewport);
 private:
 	glm::vec3 position;
 	glm::vec3 direction;
@@ -80,15 +80,20 @@ private:
 	float fov;
 	float sensitivity;
 	float moveSpeed;
+	float scale;
+	float zoomSpeed;
+	float zoomScale;
 	glm::mat4x4 view;
 	glm::mat4x4 proj;	
 	std::unordered_map<ImGuiKey, MoveDirection> keyConfig;
 	Spherical spherical;
 	Spherical sphericalDelta;
-	bool enableDamping{ false };
-	float dampingFactor = 0.01;
+	bool enableDamping;
+	float dampingFactor;
 	float minPolarAngle = 0.f;
 	float maxPolarAngle = glm::pi<float>();
 	float minAzimuthAngle = -std::numeric_limits<float>::infinity();// radians
 	float maxAzimuthAngle = std::numeric_limits<float>::infinity(); // radians
+	float minRadius;
+	float maxRadius;
 };
