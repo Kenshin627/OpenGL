@@ -94,11 +94,11 @@ public:
 
 	void onAttach() override
 	{
-		auto root = sceneLoader.loadModel("resource/models/Cerberus/Cerberus.obj", renderer);
+		/*auto root = sceneLoader.loadModel("resource/models/Cerberus/Cerberus.obj", renderer);
 		if (root)
 		{
 			sceneGraph.roots.push_back(root);
-		}
+		}*/
 	}
 
 	void onUpdate(const Kenshin::updatePayload& payload) override
@@ -300,7 +300,7 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 			{
 				auto node = std::make_shared<Node>();
 				auto sphere = std::make_shared<Sphere>("metallicSphere", 4.5f);
-				auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(0.1f, 0.1f, 0.1f), 1.0f, 0.1f, 1.0f, viewportLayer->getRenderer());
+				auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.0f, 1.0f, viewportLayer->getRenderer());
 				sphere->setMaterial(pbrmaterial);
 				glm::mat4x4 model = glm::identity<glm::mat4x4>();
 				model = glm::translate(model, glm::vec3(

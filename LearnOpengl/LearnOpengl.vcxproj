@@ -784,7 +784,9 @@
     <None Include="resource\textures\hdr\forest.hdr" />
     <None Include="resource\textures\hdr\night.hdr" />
     <None Include="resource\textures\hdr\parking.hdr" />
+    <None Include="resource\textures\hdr\quarry_01_1k.hdr" />
     <None Include="resource\textures\hdr\room.hdr" />
+    <None Include="resource\textures\hdr\san_giuseppe_bridge_2k.hdr" />
     <None Include="resource\textures\hdr\umhlanga_sunrise_1k.hdr" />
     <None Include="resource\textures\hdr\winter_lake_01_1k.hdr" />
     <None Include="shader\base\fragment.glsl" />
