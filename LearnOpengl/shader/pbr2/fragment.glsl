@@ -98,7 +98,8 @@ void main()
 	vec3 color = ambient + lo;
 
 	//HDR toneMapping
-	color = color /(color + vec3(1.0));
+	float exposure = 1.05;
+	color = vec3(1.0) - exp(-color * exposure);
 
 	//Gamma correct
 	color = pow(color, vec3(1.0 / 2.2));

@@ -20,7 +20,7 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& target, const glm::ve
 	view(glm::identity<glm::mat4x4>()), 
 	proj(glm::identity<glm::mat4x4>()),
 	enableDamping(true),
-	dampingFactor(0.05f),
+	dampingFactor(0.1f),
 	minRadius(0.0f),
 	maxRadius(1000.0f)
 {

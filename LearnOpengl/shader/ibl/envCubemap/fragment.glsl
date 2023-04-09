@@ -6,15 +6,17 @@ in vec3 vPos;
 
 uniform sampler2D equirectangularMap;
 
-const vec2 invAtan = vec2(0.1591, 0.3183);
+const vec2 invAtan = vec2(0.15915494309189535, 0.3183098861837907);
 
-vec2 SampleSphericalMap(vec3 v)
+
+vec2 SampleSphericalMap(in vec3 dir)
 {
-	vec2 uv = vec2(atan(v.z, v.x), asin(v.y));
+	vec2 uv = vec2(atan(dir.z, dir.x), asin(clamp( dir.y, - 1.0, 1.0 )));
 	uv *= invAtan;
 	uv += 0.5;
 	return uv;
 }
+
 
 void main()
 {

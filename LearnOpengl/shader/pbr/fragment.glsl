@@ -93,7 +93,14 @@ void main()
 	vec3 color = ambient + lo;
 
 	//HDR toneMapping
-	color = color /(color + vec3(1.0));
+//	color = color /(color + vec3(1.0));
+//	float exposure = 1.5;
+//	color = vec3(1.0) - exp(-color * exposure);
+
+// optimized filmic operator by Jim Hejl and Richard Burgess-Dawson
+	color *= 0.6;
+	color = max( vec3( 0.0 ), color - 0.004 );
+	color = pow( ( color * ( 6.2 * color + 0.5 ) ) / ( color * ( 6.2 * color + 1.7 ) + 0.06 ), vec3( 2.2 ) );
 
 	//Gamma correct
 	color = pow(color, vec3(1.0 / 2.2));
