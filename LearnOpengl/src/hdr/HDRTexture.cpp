@@ -1,6 +1,6 @@
 #include "kspch.h"
 #include <glad/gl.h>
-#include "../vendor/stb_image/stb_image.h"
+#include "stb_image.h"
 #include "HDRTexture.h"
 
 HDRTexture::HDRTexture(const std::string& path, bool flip_vertically):

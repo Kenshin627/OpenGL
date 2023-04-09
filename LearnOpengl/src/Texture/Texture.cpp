@@ -1,5 +1,5 @@
 #include "kspch.h"
-#include "../vendor/stb_image/stb_image.h"
+#include "stb_image.h"
 #include <glad/gl.h>
 #include "Texture.h"
 

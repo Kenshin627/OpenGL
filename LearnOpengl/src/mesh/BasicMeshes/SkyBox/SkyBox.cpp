@@ -1,6 +1,6 @@
 #include "kspch.h"
 #include <glad/gl.h>
-#include "../../../vendor/stb_image/stb_image.h"
+#include "stb_image.h"
 #include "SkyBox.h"
 
 SkyBox::SkyBox(const std::vector<std::string>& faces, const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
