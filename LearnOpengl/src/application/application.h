@@ -1,7 +1,6 @@
 #pragma once
-
-#include "layer.h"
 #include "vendor/imGui/imgui.h"
+#include "LayerStack.h"
 
 struct GLFWwindow;
 
@@ -22,20 +21,8 @@ namespace Kenshin
 
 		void run();
 		void setMenuCallback(const std::function<void()>& menubarCallback) { m_MenubarCallback = menubarCallback; };
-		template <typename T>
-		void pushLayer()
-		{
-			static_assert(std::is_base_of<Layer, T>::value, "Pushed type is not subclass of layer!");
-			auto layer = std::make_shared<T>();
-			layer->onAttach();
-			m_LayerSatack.emplace_back(layer);
-		}
-
-		void pushLayer(const std::shared_ptr<Layer>& layer)
-		{
-			m_LayerSatack.emplace_back(layer);
-			layer->onAttach();
-		}
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* overLay);
 
 		void close();
 		float getTime() const;
@@ -58,7 +45,7 @@ namespace Kenshin
 		bool isFirst;
 		float last_mouseX;
 		float last_mouseY;
-		std::vector<std::shared_ptr<Layer>> m_LayerSatack;
+		LayerStack m_LayerStack;
 		glm::vec2 m_viewportSize;
 	};
 

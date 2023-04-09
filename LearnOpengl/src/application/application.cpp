@@ -2,7 +2,6 @@
 #include "application.h"
 #include "vendor/imGui/imgui_impl_glfw.h"
 #include "vendor/imGui/imgui_impl_opengl3.h"
-
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
@@ -137,12 +136,12 @@ namespace Kenshin
 
 	void Application::shutdown()
 	{
-		for (auto& layer : m_LayerSatack)
+		for (auto& layer : m_LayerStack)
 		{
 			layer->onDetach();
 		}
 
-		m_LayerSatack.clear();
+		/*m_LayerStack.clear();*/
 
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
@@ -212,14 +211,14 @@ namespace Kenshin
 			ImGuiIO io = ImGui::GetIO();
 			ImVec2 size = ImGui::GetContentRegionAvail();			
 			
-			for (auto& layer : m_LayerSatack)
+			for (auto& layer : m_LayerStack)
 			{
 				layer->onUpdate(Kenshin::updatePayload{ glm::vec2(size.x, size.y), m_FrameTime, io, ImGui::IsWindowHovered(), ImGui::IsWindowFocused(), getTime()});
 			}
 			ImGui::End();
 			ImGui::PopStyleVar();
 
-			for (auto& layer : m_LayerSatack)
+			for (auto& layer : m_LayerStack)
 			{
 				layer->onUIRender(getFPS(), getFrameTime());
 			}
@@ -234,6 +233,18 @@ namespace Kenshin
 			glfwSwapBuffers(m_windowHandle);
 			setTime();
 		}
+	}
+
+	void Application::PushLayer(Layer* layer)
+	{
+		layer->onAttach();
+		m_LayerStack.PushLayer(layer);
+	}
+
+	void Application::PushOverlay(Layer* overLay)
+	{
+		overLay->onAttach();
+		m_LayerStack.PushOverLay(overLay);
 	}
 
 	void Application::close()

@@ -17,10 +17,13 @@ namespace Kenshin
 	class Layer
 	{
 	public:
-		virtual ~Layer() = default;
+		Layer(const std::string& name = "Layer");
+		virtual ~Layer();
 		virtual void onAttach() { };
 		virtual void onDetach() { };
 		virtual void onUpdate(const updatePayload& payload) { };
 		virtual void onUIRender(float fps, float deltaTime) { };
+	protected:
+		std::string m_DebugName;
 	};
 }

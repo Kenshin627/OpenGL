@@ -229,163 +229,164 @@ Kenshin::Application* Kenshin::createApplication(int argc, char** argv)
 {
 	ApplicationSpecification spec { "X_Renderer", 1600, 900 };
 	Application* app = new Application(spec);
-	std::shared_ptr<ViewportLayer> viewportLayer = std::make_shared<ViewportLayer>();
-	app->pushLayer(viewportLayer);
-	app->setMenuCallback([app, viewportLayer]()
-	{
-		if (ImGui::BeginMenu("Mesh"))
-		{
-			if (ImGui::MenuItem("Box"))
-			{
-				//createBox
-				auto node = std::make_shared<Node>();
-				//MATERIAL TEST
-				auto base = std::make_shared<BaseMaterial>(glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.2, 0.3, 0.8), glm::vec3(1.0, 1.0, 1.0), 32.0f, viewportLayer->getRenderer());
-				auto depth = std::make_shared<DepthMaterial>(viewportLayer->getRenderer());
-				auto wireframe = std::make_shared<WireFrameMaterial>(viewportLayer->getRenderer());
-				auto normal = std::make_shared<NormalMaterial>(viewportLayer->getRenderer());
-				auto environmentReflectMaterial = std::make_shared<EnvironmentReflectMaterial>(viewportLayer->getRenderer());
-				auto environmentRefractMaterial = std::make_shared<EnvironmentRefractMaterial>(viewportLayer->getRenderer(), refractIndex.find("glass")->second);
+	Layer* viewportLayer = new ViewportLayer();
+	app->PushLayer(viewportLayer);
+	app->setMenuCallback([]() {});
+	/*app->setMenuCallback([app, viewportLayer]()
+	{*/
+		//if (ImGui::BeginMenu("Mesh"))
+		//{
+		//	if (ImGui::MenuItem("Box"))
+		//	{
+		//		//createBox
+		//		auto node = std::make_shared<Node>();
+		//		//MATERIAL TEST
+		//		auto base = std::make_shared<BaseMaterial>(glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.2, 0.3, 0.8), glm::vec3(1.0, 1.0, 1.0), 32.0f, viewportLayer->getRenderer());
+		//		auto depth = std::make_shared<DepthMaterial>(viewportLayer->getRenderer());
+		//		auto wireframe = std::make_shared<WireFrameMaterial>(viewportLayer->getRenderer());
+		//		auto normal = std::make_shared<NormalMaterial>(viewportLayer->getRenderer());
+		//		auto environmentReflectMaterial = std::make_shared<EnvironmentReflectMaterial>(viewportLayer->getRenderer());
+		//		auto environmentRefractMaterial = std::make_shared<EnvironmentRefractMaterial>(viewportLayer->getRenderer(), refractIndex.find("glass")->second);
 
-				node->meshes.push_back(std::make_shared<BoxMesh>("box", 10, 10, 20, environmentRefractMaterial));
-				viewportLayer->getSceneGraph().roots.push_back(node);
-			}
+		//		node->meshes.push_back(std::make_shared<BoxMesh>("box", 10, 10, 20, environmentRefractMaterial));
+		//		viewportLayer->getSceneGraph().roots.push_back(node);
+		//	}
 
-			if (ImGui::MenuItem("Sphere"))
-			{
-				// createSphere
-					auto node = std::make_shared<Node>();
-				//MATERIAL TEST
-				auto base = std::make_shared<BaseMaterial>(glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.2, 0.3, 0.8), glm::vec3(1.0, 1.0, 1.0), 32.0f, viewportLayer->getRenderer());
-				auto depth = std::make_shared<DepthMaterial>(viewportLayer->getRenderer());
-				auto wireframe = std::make_shared<WireFrameMaterial>(viewportLayer->getRenderer());
-				auto normal = std::make_shared<NormalMaterial>(viewportLayer->getRenderer());
-				auto environmentReflectMaterial = std::make_shared<EnvironmentReflectMaterial>(viewportLayer->getRenderer());
-				auto environmentRefractMaterial = std::make_shared<EnvironmentRefractMaterial>(viewportLayer->getRenderer(), refractIndex.find("damon")->second);
+		//	if (ImGui::MenuItem("Sphere"))
+		//	{
+		//		// createSphere
+		//			auto node = std::make_shared<Node>();
+		//		//MATERIAL TEST
+		//		auto base = std::make_shared<BaseMaterial>(glm::vec3(0.1, 0.1, 0.1), glm::vec3(0.2, 0.3, 0.8), glm::vec3(1.0, 1.0, 1.0), 32.0f, viewportLayer->getRenderer());
+		//		auto depth = std::make_shared<DepthMaterial>(viewportLayer->getRenderer());
+		//		auto wireframe = std::make_shared<WireFrameMaterial>(viewportLayer->getRenderer());
+		//		auto normal = std::make_shared<NormalMaterial>(viewportLayer->getRenderer());
+		//		auto environmentReflectMaterial = std::make_shared<EnvironmentReflectMaterial>(viewportLayer->getRenderer());
+		//		auto environmentRefractMaterial = std::make_shared<EnvironmentRefractMaterial>(viewportLayer->getRenderer(), refractIndex.find("damon")->second);
 
-				auto sphere = std::make_shared<Sphere>("sphere");
-				sphere->setMaterial(environmentRefractMaterial);
-				node->meshes.push_back(sphere);
-				viewportLayer->getSceneGraph().roots.push_back(node);
-			}
+		//		auto sphere = std::make_shared<Sphere>("sphere");
+		//		sphere->setMaterial(environmentRefractMaterial);
+		//		node->meshes.push_back(sphere);
+		//		viewportLayer->getSceneGraph().roots.push_back(node);
+		//	}
 
-			if (ImGui::MenuItem("PBRSphere"))
-			{
-				auto node = std::make_shared<Node>();
-				int nrRows = 7;
-				int nrColumns = 7;
-				float spacing = 3.5f;
-				glm::mat4x4 model = glm::identity<glm::mat4x4>();
-				for (size_t i = 0; i < nrRows; i++)
-				{
-					float metallic = (float)i / (float)nrRows;
-					for (size_t j = 0; j < nrColumns; j++)
-					{
-						float roughness = glm::clamp((float)j / (float)nrColumns, 0.05f, 2.0f);
-						auto sphere = std::make_shared<Sphere>("sphere" + std::to_string(i) + std::to_string(j), 1.0f);
-						auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(1.0f, 1.0f, 1.0f), metallic, roughness, 1.0f, viewportLayer->getRenderer());
-						sphere->setMaterial(pbrmaterial);
-						model = glm::identity<glm::mat4x4>();
-						model = glm::translate(model, glm::vec3(
-							(j - (nrColumns / 2.0f)) * spacing + 2.0f,
-							(i - (nrRows / 2.0f)) * spacing + 15.0f,
-							0.0f
-						));
-						sphere->setModelMatrix(model);
-						node->meshes.push_back(sphere);
-					}
-				}
-				viewportLayer->getSceneGraph().roots.push_back(node);
-			}
+		//	if (ImGui::MenuItem("PBRSphere"))
+		//	{
+		//		auto node = std::make_shared<Node>();
+		//		int nrRows = 7;
+		//		int nrColumns = 7;
+		//		float spacing = 3.5f;
+		//		glm::mat4x4 model = glm::identity<glm::mat4x4>();
+		//		for (size_t i = 0; i < nrRows; i++)
+		//		{
+		//			float metallic = (float)i / (float)nrRows;
+		//			for (size_t j = 0; j < nrColumns; j++)
+		//			{
+		//				float roughness = glm::clamp((float)j / (float)nrColumns, 0.05f, 2.0f);
+		//				auto sphere = std::make_shared<Sphere>("sphere" + std::to_string(i) + std::to_string(j), 1.0f);
+		//				auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(1.0f, 1.0f, 1.0f), metallic, roughness, 1.0f, viewportLayer->getRenderer());
+		//				sphere->setMaterial(pbrmaterial);
+		//				model = glm::identity<glm::mat4x4>();
+		//				model = glm::translate(model, glm::vec3(
+		//					(j - (nrColumns / 2.0f)) * spacing + 2.0f,
+		//					(i - (nrRows / 2.0f)) * spacing + 15.0f,
+		//					0.0f
+		//				));
+		//				sphere->setModelMatrix(model);
+		//				node->meshes.push_back(sphere);
+		//			}
+		//		}
+		//		viewportLayer->getSceneGraph().roots.push_back(node);
+		//	}
 
-			if (ImGui::MenuItem("GlassSphere"))
-			{
-				auto node = std::make_shared<Node>();
-				auto sphere = std::make_shared<Sphere>("metallicSphere", 4.5f);
-				auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.0f, 1.0f, viewportLayer->getRenderer());
-				sphere->setMaterial(pbrmaterial);
-				glm::mat4x4 model = glm::identity<glm::mat4x4>();
-				model = glm::translate(model, glm::vec3(
-					0.0f,
-					4.5f,
-					0.0f
-				));
-				sphere->setModelMatrix(model);
-				node->meshes.push_back(sphere);
-				viewportLayer->getSceneGraph().roots.push_back(node);
-			}
+		//	if (ImGui::MenuItem("GlassSphere"))
+		//	{
+		//		auto node = std::make_shared<Node>();
+		//		auto sphere = std::make_shared<Sphere>("metallicSphere", 4.5f);
+		//		auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.0f, 1.0f, viewportLayer->getRenderer());
+		//		sphere->setMaterial(pbrmaterial);
+		//		glm::mat4x4 model = glm::identity<glm::mat4x4>();
+		//		model = glm::translate(model, glm::vec3(
+		//			0.0f,
+		//			4.5f,
+		//			0.0f
+		//		));
+		//		sphere->setModelMatrix(model);
+		//		node->meshes.push_back(sphere);
+		//		viewportLayer->getSceneGraph().roots.push_back(node);
+		//	}
 
-			if (ImGui::MenuItem("TorusKnot"))
-			{
-				auto node = std::make_shared<Node>();
-				auto torusKnot = std::make_shared<TorusKnot>("TorusKnot", 18.0f, 8.0f, 150, 20);
-				auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.0f, 1.0f, viewportLayer->getRenderer());
-				torusKnot->setMaterial(pbrmaterial);
-				glm::mat4x4 model = glm::identity<glm::mat4x4>();
-				model = glm::translate(model, glm::vec3(
-					0.0f,
-					4.5f,
-					0.0f
-				));
-				torusKnot->setModelMatrix(model);
-				node->meshes.push_back(torusKnot);
-				viewportLayer->getSceneGraph().roots.push_back(node);
-			}
+		//	if (ImGui::MenuItem("TorusKnot"))
+		//	{
+		//		auto node = std::make_shared<Node>();
+		//		auto torusKnot = std::make_shared<TorusKnot>("TorusKnot", 18.0f, 8.0f, 150, 20);
+		//		auto pbrmaterial = std::make_shared<PbrMaterial>(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.0f, 1.0f, viewportLayer->getRenderer());
+		//		torusKnot->setMaterial(pbrmaterial);
+		//		glm::mat4x4 model = glm::identity<glm::mat4x4>();
+		//		model = glm::translate(model, glm::vec3(
+		//			0.0f,
+		//			4.5f,
+		//			0.0f
+		//		));
+		//		torusKnot->setModelMatrix(model);
+		//		node->meshes.push_back(torusKnot);
+		//		viewportLayer->getSceneGraph().roots.push_back(node);
+		//	}
 
-			if (ImGui::MenuItem("PBRSpheres"))
-			{
-				auto node = std::make_shared<Node>();
-				std::vector<std::vector<std::shared_ptr<Texture>>> textures = {
-					{
-						std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/normal.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/ao.png", TEXTURE_TYPE::SPECULAR)
-					},
-					{
-						std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/normal.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/ao.png", TEXTURE_TYPE::SPECULAR)
-					},
-					{
-						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/albedo.jpg", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/normal.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/ao.png", TEXTURE_TYPE::SPECULAR)
-					},
-					{
-						std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/normal.png", TEXTURE_TYPE::SPECULAR),
-						std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/ao.png", TEXTURE_TYPE::SPECULAR)
-					}
-				};
-				std::vector<std::shared_ptr<Pbr2Material>> mats;
-				unsigned index = 0;
-				for (auto& vecTex : textures)
-				{
-					auto mat = std::make_shared<Pbr2Material>(vecTex[0], vecTex[1], vecTex[2], vecTex[3], vecTex[4], viewportLayer->getRenderer());
-					auto sphere = std::make_shared<Sphere>("metallicSphere", 3.0f);
-					sphere->setMaterial(mat);
-					glm::mat4x4 model = glm::identity<glm::mat4x4>();
-					model = glm::translate(model, glm::vec3(
-						-10.0f + index * 7.0f,
-						3.0f,
-						0.0f
-					));
-					sphere->setModelMatrix(model);
-					node->meshes.push_back(sphere);
-					index++;
-				}							
-				viewportLayer->getSceneGraph().roots.push_back(node);
-			}
-			ImGui::EndMenu();
-		}
-	});
+		//	if (ImGui::MenuItem("PBRSpheres"))
+		//	{
+		//		auto node = std::make_shared<Node>();
+		//		std::vector<std::vector<std::shared_ptr<Texture>>> textures = {
+		//			{
+		//				std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/normal.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/Titanium-Scuffed-bl/ao.png", TEXTURE_TYPE::SPECULAR)
+		//			},
+		//			{
+		//				std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/normal.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/diamond-metal-siding-bl/ao.png", TEXTURE_TYPE::SPECULAR)
+		//			},
+		//			{
+		//				std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/albedo.jpg", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/normal.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/light-gold-bl/ao.png", TEXTURE_TYPE::SPECULAR)
+		//			},
+		//			{
+		//				std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/albedo.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/metallic.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/roughness.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/normal.png", TEXTURE_TYPE::SPECULAR),
+		//				std::make_shared<Texture>("resource/textures/pbr/fancy-brass-pattern1-bl/ao.png", TEXTURE_TYPE::SPECULAR)
+		//			}
+		//		};
+		//		std::vector<std::shared_ptr<Pbr2Material>> mats;
+		//		unsigned index = 0;
+		//		for (auto& vecTex : textures)
+		//		{
+		//			auto mat = std::make_shared<Pbr2Material>(vecTex[0], vecTex[1], vecTex[2], vecTex[3], vecTex[4], viewportLayer->getRenderer());
+		//			auto sphere = std::make_shared<Sphere>("metallicSphere", 3.0f);
+		//			sphere->setMaterial(mat);
+		//			glm::mat4x4 model = glm::identity<glm::mat4x4>();
+		//			model = glm::translate(model, glm::vec3(
+		//				-10.0f + index * 7.0f,
+		//				3.0f,
+		//				0.0f
+		//			));
+		//			sphere->setModelMatrix(model);
+		//			node->meshes.push_back(sphere);
+		//			index++;
+		//		}							
+		//		viewportLayer->getSceneGraph().roots.push_back(node);
+		//	}
+		//	ImGui::EndMenu();
+		//}
+	//});
 	return app;
 }

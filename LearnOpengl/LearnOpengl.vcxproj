@@ -176,6 +176,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\application\layer.cpp" />
+    <ClCompile Include="src\application\LayerStack.cpp" />
     <ClCompile Include="src\application\vendor\imGui\imgui_dmeo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -685,6 +686,7 @@
     <ClInclude Include="src\application\application.h" />
     <ClInclude Include="src\application\entityPoint.h" />
     <ClInclude Include="src\application\layer.h" />
+    <ClInclude Include="src\application\LayerStack.h" />
     <ClInclude Include="src\application\vendor\imGui\implot.h" />
     <ClInclude Include="src\application\vendor\imGui\implot_internal.h" />
     <ClInclude Include="src\Buffer\FrameBuffer.h" />

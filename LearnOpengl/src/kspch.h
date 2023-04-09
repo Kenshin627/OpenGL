@@ -9,6 +9,7 @@
 #include <fstream>
 #include <sstream>
 #include <unordered_map>
+#include <algorithm>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
