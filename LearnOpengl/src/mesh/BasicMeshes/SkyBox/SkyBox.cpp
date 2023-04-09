@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include <glad/gl.h>
 #include "../../../vendor/stb_image/stb_image.h"
 #include "SkyBox.h"

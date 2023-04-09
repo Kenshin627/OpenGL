@@ -1,4 +1,4 @@
-#include <iostream>
+#include "kspch.h"
 #include "../mesh/Mesh.h"
 #include "sceneLoader.h"
 #include "../material/blinnPhong/BlinnPhongMaterial.h"

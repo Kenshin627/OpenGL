@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include "pointLight.h"
 
 PointLight::PointLight(const glm::vec3& p, const glm::vec3& c = glm::vec3(1.0), float r = 13):

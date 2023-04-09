@@ -1,10 +1,6 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <memory>
-#include <functional>
-#include "layer.h"
 
+#include "layer.h"
 #include "vendor/imGui/imgui.h"
 
 struct GLFWwindow;

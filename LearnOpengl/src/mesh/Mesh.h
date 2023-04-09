@@ -1,9 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <string>
-#include <vector>
-#include <memory>
+
 #include "../Buffer/IndexBuffer.h"
 #include "../Buffer//VertexBuffer.h"
 #include "../Buffer/VertexArray.h"

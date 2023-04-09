@@ -1,5 +1,5 @@
+#include "kspch.h"
 #include <glad/gl.h>
-#include <iostream>
 #include "HDRFrameBuffer.h"
 
 HDRFrameBuffer::HDRFrameBuffer(unsigned width, unsigned height):FrameBuffer(width, height)

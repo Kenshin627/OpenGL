@@ -84,13 +84,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(ProjectDir)dependencies\ASSIMP\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(ProjectDir)dependencies\GLFW\include;$(ProjectDir)dependencies\GLAD\include;$(ProjectDir)dependencies\STB_IMAGE\includes;$(IncludePath);$(ProjectDir)dependencies\GLM;$(ProjectDir)dependencies\ASSIMP\include</IncludePath>
+    <IncludePath>$(ProjectDir)dependencies\GLFW\include;$(ProjectDir)dependencies\GLAD\include;$(ProjectDir)dependencies\STB_IMAGE\includes;$(IncludePath);$(ProjectDir)dependencies\GLM;$(ProjectDir)dependencies\ASSIMP\include;$(ProjectDir)src</IncludePath>
     <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>$(ProjectDir)dependencies\GLFW\lib-vc2022;$(ProjectDir)dependencies\ASSIMP\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(ProjectDir)dependencies\GLFW\include;$(ProjectDir)dependencies\GLAD\include;$(ProjectDir)dependencies\STB_IMAGE\includes;$(IncludePath);$(ProjectDir)dependencies\GLM;$(ProjectDir)dependencies\ASSIMP\include</IncludePath>
+    <IncludePath>$(ProjectDir)dependencies\GLFW\include;$(ProjectDir)dependencies\GLAD\include;$(ProjectDir)dependencies\STB_IMAGE\includes;$(IncludePath);$(ProjectDir)dependencies\GLM;$(ProjectDir)dependencies\ASSIMP\include;$(ProjectDir)src</IncludePath>
     <OutDir>$(SolutionDir)bin\$(platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -130,6 +130,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>kspch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,6 +149,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>kspch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,22 +163,71 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="dependencies\GLAD\src\gl.c" />
-    <ClCompile Include="dependencies\GLM\glm\detail\glm.cpp" />
-    <ClCompile Include="src\application\application.cpp" />
-    <ClCompile Include="src\application\vendor\imGui\imgui_dmeo.cpp" />
-    <ClCompile Include="src\application\vendor\imGui\implot.cpp" />
-    <ClCompile Include="src\application\vendor\imGui\implot_demo.cpp" />
-    <ClCompile Include="src\application\vendor\imGui\implot_items.cpp" />
-    <ClCompile Include="src\Buffer\FrameBuffer.cpp" />
-    <ClCompile Include="src\Buffer\HDRFrameBuffer.cpp" />
+    <ClCompile Include="dependencies\GLAD\src\gl.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="dependencies\GLM\glm\detail\glm.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\application\application.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\application\vendor\imGui\imgui_dmeo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\application\vendor\imGui\implot.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\application\vendor\imGui\implot_demo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\application\vendor\imGui\implot_items.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Buffer\FrameBuffer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Buffer\HDRFrameBuffer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\Buffer\IndexBuffer.cpp" />
-    <ClCompile Include="src\Buffer\ShadowFrameBuffer.cpp" />
-    <ClCompile Include="src\camera\camera.cpp" />
-    <ClCompile Include="src\hdr\HDRTexture.cpp" />
-    <ClCompile Include="src\ibl\IBL.cpp" />
-    <ClCompile Include="src\light\pointLight.cpp" />
-    <ClCompile Include="src\material\base\BaseMaterial.cpp" />
+    <ClCompile Include="src\Buffer\ShadowFrameBuffer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\camera\camera.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\hdr\HDRTexture.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\ibl\IBL.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\kspch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\light\pointLight.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\material\base\BaseMaterial.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\material\blinnPhong\BlinnPhongMaterial.cpp" />
     <ClCompile Include="src\material\depth\DepthMaterial.cpp" />
     <ClCompile Include="src\material\environmentReflect\EnvironmentReflectMaterial.cpp" />
@@ -187,24 +244,71 @@
     <ClCompile Include="src\mesh\BasicMeshes\SkyBox\SkyBox.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\Sphere\Sphere.cpp" />
     <ClCompile Include="src\mesh\BasicMeshes\TorusKnot\TorusKnot.cpp" />
-    <ClCompile Include="src\mesh\Mesh.cpp" />
-    <ClCompile Include="src\myApplication.cpp" />
-    <ClCompile Include="src\program\Shader.cpp" />
-    <ClCompile Include="src\renderer\Renderer.cpp" />
-    <ClCompile Include="src\sceneLoader\SceneLoader.cpp" />
-    <ClCompile Include="src\Texture\Texture.cpp" />
-    <ClCompile Include="src\Buffer\VertexArray.cpp" />
+    <ClCompile Include="src\mesh\Mesh.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\myApplication.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\program\Shader.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\renderer\Renderer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">kspch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">kspch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\sceneLoader\SceneLoader.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\scene\scene.cpp" />
+    <ClCompile Include="src\Texture\Texture.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Buffer\VertexArray.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\Buffer\VertexBuffer.cpp" />
-    <ClCompile Include="src\Buffer\VertexDataLayout.cpp" />
+    <ClCompile Include="src\Buffer\VertexDataLayout.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">kspch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">kspch.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="src\utils\Quaternion.cpp" />
     <ClCompile Include="src\utils\Spherical.cpp" />
     <ClCompile Include="src\vendor\stb_image\stb_image.cpp" />
-    <ClCompile Include="src\application\vendor\imGui\imgui.cpp" />
-    <ClCompile Include="src\application\vendor\imGui\imgui_draw.cpp" />
-    <ClCompile Include="src\application\vendor\imGui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="src\application\vendor\imGui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="src\application\vendor\imGui\imgui_tables.cpp" />
-    <ClCompile Include="src\application\vendor\imGui\imgui_widgets.cpp" />
+    <ClCompile Include="src\application\vendor\imGui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\application\vendor\imGui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\application\vendor\imGui\imgui_impl_glfw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\application\vendor\imGui\imgui_impl_opengl3.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\application\vendor\imGui\imgui_tables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\application\vendor\imGui\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\ASSIMP\include\assimp\aabb.h" />
@@ -290,6 +394,7 @@
     <ClInclude Include="dependencies\ASSIMP\include\assimp\XmlParser.h" />
     <ClInclude Include="dependencies\ASSIMP\include\assimp\XMLTools.h" />
     <ClInclude Include="dependencies\ASSIMP\include\assimp\ZipArchiveIOSystem.h" />
+    <ClInclude Include="dependencies\ENTT\entt.h" />
     <ClInclude Include="dependencies\GLAD\include\glad\gl.h" />
     <ClInclude Include="dependencies\GLAD\include\KHR\khrplatform.h" />
     <ClInclude Include="dependencies\GLFW\include\GLFW\glfw3.h" />
@@ -588,6 +693,7 @@
     <ClInclude Include="src\camera\camera.h" />
     <ClInclude Include="src\hdr\HDRTexture.h" />
     <ClInclude Include="src\ibl\IBL.h" />
+    <ClInclude Include="src\kspch.h" />
     <ClInclude Include="src\light\baseLight.h" />
     <ClInclude Include="src\light\directionLight.h" />
     <ClInclude Include="src\light\pointLight.h" />
@@ -613,6 +719,7 @@
     <ClInclude Include="src\program\Shader.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\sceneLoader\sceneLoader.h" />
+    <ClInclude Include="src\scene\scene.h" />
     <ClInclude Include="src\Texture\Texture.h" />
     <ClInclude Include="src\Buffer\VertexArray.h" />
     <ClInclude Include="src\Buffer\VertexBuffer.h" />

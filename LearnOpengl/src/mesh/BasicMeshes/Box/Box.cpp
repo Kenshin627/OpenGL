@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include "Box.h"
 
 BoxMesh::BoxMesh(const std::string& name, float w, float h, float d, std::shared_ptr<Material> mat) :Mesh(name,

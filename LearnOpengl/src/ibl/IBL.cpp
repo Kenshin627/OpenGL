@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include <glad/gl.h>
 #include "IBL.h"
 #include "../mesh/BasicMeshes/Box/Box.h"

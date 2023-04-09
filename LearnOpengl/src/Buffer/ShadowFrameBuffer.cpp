@@ -1,5 +1,5 @@
+#include "kspch.h"
 #include <glad/gl.h>
-#include <iostream>
 #include "ShadowFrameBuffer.h"
 
 ShadowFrameBuffer::ShadowFrameBuffer(unsigned width, unsigned height): FrameBuffer(width, height)

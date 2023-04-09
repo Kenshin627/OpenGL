@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include "camera.h"
 #include "../application/vendor/imGui/imgui.h"
 #include "../utils/Quaternion.h"

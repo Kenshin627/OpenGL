@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include "application/application.h"
 #include "application/entityPoint.h"
@@ -94,11 +95,11 @@ public:
 
 	void onAttach() override
 	{
-		/*auto root = sceneLoader.loadModel("resource/models/Cerberus/Cerberus.obj", renderer);
+		auto root = sceneLoader.loadModel("resource/models/Cerberus/Cerberus.obj", renderer);
 		if (root)
 		{
 			sceneGraph.roots.push_back(root);
-		}*/
+		}
 	}
 
 	void onUpdate(const Kenshin::updatePayload& payload) override

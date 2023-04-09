@@ -1,6 +1,5 @@
 #pragma once
-#include <vector>
-#include <array>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "../sceneLoader/sceneLoader.h"
@@ -10,7 +9,6 @@
 #include "../Buffer/FrameBuffer.h"
 //#include "../program/postProcess/PostProcess.h"
 #include "../mesh/BasicMeshes/Quad/Quad.h"
-
 #include "../mesh/BasicMeshes/SkyBox/SkyBox.h"
 #include "../Buffer/ShadowFrameBuffer.h"
 #include "../light/pointLight.h"

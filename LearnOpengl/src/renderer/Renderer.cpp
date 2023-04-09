@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include <glad/gl.h>
 #include "Renderer.h"
 #include "../mesh/BasicMeshes/Grid/Grid.h"
@@ -50,7 +51,7 @@ X_Renderer::X_Renderer() :
 	#pragma endregion
 
 	ibl->buildIrradianceMap();
-	setSkyBoxTexture(ibl->getIrradiancemap());
+	setSkyBoxTexture(ibl->getENVCubemap());
 }
 
 X_Renderer::~X_Renderer() = default;

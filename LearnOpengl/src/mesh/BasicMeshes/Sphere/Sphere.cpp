@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include "Sphere.h"
 
 Sphere::Sphere(const std::string& name, float radius, float widthSegments, float heightSegments, float phiStart, float phiLength, float thetaStart, float thetaLength, float uScale, float vScale, std::shared_ptr<Material> mat) :Mesh(name, {}, {}, mat, VertexDataLayout().push<float>(3).push<float>(3).push<float>(2)), radius(radius), widthSegments(widthSegments), heightSegments(heightSegments), thetaStart(thetaStart), thetaLength(thetaLength), phiStart(phiStart), phiLength(phiLength), uScale(uScale), vScale(vScale)

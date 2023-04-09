@@ -1,5 +1,5 @@
+#include "kspch.h"
 #include <glad/gl.h>
-#include <array>
 #include "Shader.h"
 
 Shader::Shader(const std::vector<std::string>& paths):m_RendererID(0)

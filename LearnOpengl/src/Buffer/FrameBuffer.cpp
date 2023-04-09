@@ -1,5 +1,5 @@
+#include "kspch.h"
 #include <glad/gl.h>
-#include <iostream>
 #include "FrameBuffer.h"
 
 FrameBuffer::FrameBuffer(unsigned width, unsigned height) :viewport_Width(width), viewport_Height(height)

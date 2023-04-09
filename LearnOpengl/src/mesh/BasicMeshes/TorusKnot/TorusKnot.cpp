@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include "TorusKnot.h"
 
 TorusKnot::TorusKnot(const std::string& name, float radius, float tube, unsigned tubelarSegments, unsigned radialSegments, float p, float q, std::shared_ptr<Material> mat) :

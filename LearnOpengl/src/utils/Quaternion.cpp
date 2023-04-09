@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include "Quaternion.h"
 
 Quaternion::Quaternion(float x, float y, float z, float w) :

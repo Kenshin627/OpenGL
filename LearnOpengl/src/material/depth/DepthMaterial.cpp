@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include "../../mesh/Mesh.h"
 #include "DepthMaterial.h"
 

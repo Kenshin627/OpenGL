@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include "Grid.h"
 
 GridMesh::GridMesh(float size) :Mesh("grid",

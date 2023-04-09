@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include <glad/gl.h>
 #include "../../mesh/Mesh.h"
 #include "EnvironmentReflectMaterial.h"

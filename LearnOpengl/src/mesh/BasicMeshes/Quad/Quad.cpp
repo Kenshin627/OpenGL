@@ -1,6 +1,4 @@
-#include <vector>
-#include <memory>
-
+#include "kspch.h"
 #include "../../../Buffer/IndexBuffer.h"
 #include "../../../Buffer/VertexArray.h"
 #include "../../../Buffer/VertexDataLayout.h"

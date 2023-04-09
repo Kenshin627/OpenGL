@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 
 #define GL_FLOAT 0x1406
 #define GL_FALSE 0

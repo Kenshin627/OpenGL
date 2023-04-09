@@ -1,8 +1,5 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include <memory>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <assimp/Importer.hpp>

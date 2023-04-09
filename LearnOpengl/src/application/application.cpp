@@ -1,8 +1,8 @@
+#include "kspch.h"
 #include "application.h"
 #include "vendor/imGui/imgui_impl_glfw.h"
 #include "vendor/imGui/imgui_impl_opengl3.h"
 #include <glm/glm.hpp>
-#include <iostream>
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>

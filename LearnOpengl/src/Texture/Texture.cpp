@@ -1,7 +1,6 @@
+#include "kspch.h"
 #include "../vendor/stb_image/stb_image.h"
 #include <glad/gl.h>
-#include <iostream>
-
 #include "Texture.h"
 
 Texture::Texture(const std::string& image, TEXTURE_TYPE type, bool flip_vertically):width(0), height(0), nrChannels(0),m_RendererID(0), path(image), type(type)

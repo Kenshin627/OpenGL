@@ -1,5 +1,5 @@
+#include "kspch.h"
 #include <glad/gl.h>
-#include <iostream>
 #include "../vendor/stb_image/stb_image.h"
 #include "HDRTexture.h"
 

@@ -1,3 +1,4 @@
+#include "kspch.h"
 #include "Spherical.h"
 #include <glm/gtc/matrix_transform.hpp>
 

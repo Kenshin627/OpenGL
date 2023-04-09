@@ -1,8 +1,6 @@
 #pragma once
-#include <memory>
+
 #include <glm/glm.hpp>
-#include <array>
-#include <unordered_map>
 #include "../hdr/HDRTexture.h"
 
 class Shader;
