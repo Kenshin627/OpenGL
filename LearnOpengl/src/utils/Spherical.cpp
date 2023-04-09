@@ -1,6 +1,5 @@
 #include "kspch.h"
 #include "Spherical.h"
-#include <glm/gtc/matrix_transform.hpp>
 
 //theta->Ë®Æ½½Ç phi->´¹Ö±½Ç
 Spherical::Spherical(float radius, float phi, float theta) :

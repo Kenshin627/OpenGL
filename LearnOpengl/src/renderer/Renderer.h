@@ -1,13 +1,9 @@
 #pragma once
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include "../sceneLoader/sceneLoader.h"
 #include "../camera/camera.h"
 #include "../light/directionLight.h"
 #include "../program/Shader.h"
 #include "../Buffer/FrameBuffer.h"
-//#include "../program/postProcess/PostProcess.h"
 #include "../mesh/BasicMeshes/Quad/Quad.h"
 #include "../mesh/BasicMeshes/SkyBox/SkyBox.h"
 #include "../Buffer/ShadowFrameBuffer.h"

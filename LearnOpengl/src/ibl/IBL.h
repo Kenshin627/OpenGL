@@ -1,6 +1,4 @@
 #pragma once
-
-#include <glm/glm.hpp>
 #include "../hdr/HDRTexture.h"
 
 class Shader;

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/matrix4x4.h>
 #include <assimp/vector3.h>

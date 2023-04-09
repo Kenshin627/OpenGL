@@ -1,5 +1,4 @@
 #pragma once
-#include <glm/glm.hpp>
 #include "vendor/imGui/imgui.h"
 
 namespace Kenshin

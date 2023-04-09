@@ -1,5 +1,4 @@
 #pragma once
-#include <glm/glm.hpp>
 #include "pointLight.h"
 
 class SpotLight :public PointLight {
