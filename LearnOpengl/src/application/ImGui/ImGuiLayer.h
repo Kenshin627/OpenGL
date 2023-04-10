@@ -9,6 +9,7 @@ namespace Kenshin
 		ImGuiLayer() :Layer("ImGuiLayer") {}
 		virtual void onAttach() override;
 		virtual void onDetach() override;
-		virtual void onUpdate(const updatePayload& payload) override;
+		static void begin();
+		static void end();
 	};
 }

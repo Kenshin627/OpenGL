@@ -1,6 +1,7 @@
 #pragma once
 #include "vendor/imGui/imgui.h"
 #include "LayerStack.h"
+#include "application/ImGui/ImGuiLayer.h"
 
 struct GLFWwindow;
 
@@ -17,7 +18,7 @@ namespace Kenshin
 	public:
 		Application(const ApplicationSpecification& spec = ApplicationSpecification());
 		~Application();
-		static Application& Get();
+		static Application& Get() { return *s_Instance; };
 
 		void run();
 		void setMenuCallback(const std::function<void()>& menubarCallback) { m_MenubarCallback = menubarCallback; };
@@ -47,6 +48,8 @@ namespace Kenshin
 		float last_mouseY;
 		LayerStack m_LayerStack;
 		glm::vec2 m_viewportSize;
+		static Application* s_Instance;
+		ImGuiLayer uiLayer;
 	};
 
 	Application* createApplication(int argc, char** argv);

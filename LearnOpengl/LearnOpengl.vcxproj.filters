@@ -48,9 +48,6 @@
     <ClCompile Include="src\sceneLoader\SceneLoader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\vendor\stb_image\stb_image.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\renderer\Renderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -169,6 +166,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\kspch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\layer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\LayerStack.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\stb_image\stb_image.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\ImGui\ImGuiLayer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1322,9 +1331,6 @@
     <ClInclude Include="dependencies\GLFW\include\GLFW\glfw3native.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\vendor\stb_image\stb_image.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\renderer\Renderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -1446,6 +1452,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\kspch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\LayerStack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\stb_image\stb_image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\ImGui\ImGuiLayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

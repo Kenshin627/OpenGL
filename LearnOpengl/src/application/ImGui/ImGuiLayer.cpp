@@ -13,10 +13,7 @@ void Kenshin::ImGuiLayer::onAttach()
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
-	Application& app = Application::getApplication();
-
+	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;		
 	ImGuiStyle* style = &ImGui::GetStyle();
 	ImGui::StyleColorsDark();
 	io.Fonts->AddFontFromFileTTF("./resource/fonts/JetBrainsMono-Medium.ttf", 18, NULL, io.Fonts->GetGlyphRangesChineseFull());
@@ -28,7 +25,6 @@ void Kenshin::ImGuiLayer::onAttach()
 	style->ScrollbarSize = 1.0f;
 	style->IndentSpacing = 25.0f;
 	style->GrabMinSize = 5.0f;
-
 	style->WindowRounding = 0.0f;
 	style->ChildRounding = 1.0f;
 	style->FrameRounding = 1.0f;
@@ -92,8 +88,7 @@ void Kenshin::ImGuiLayer::onAttach()
 	colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
 	colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
 	colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
-
-	ImGui_ImplGlfw_InitForOpenGL(app.getWindowHandle(), true);
+	ImGui_ImplGlfw_InitForOpenGL(Application::Get().getWindowHandle(), true);
 	ImGui_ImplOpenGL3_Init("#version 460");
 }
 
@@ -106,9 +101,7 @@ void Kenshin::ImGuiLayer::onDetach()
 
 void Kenshin::ImGuiLayer::onUpdate(const updatePayload& payload)
 {
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
+	
 	ImGuiIO& io = ImGui::GetIO();
 
 	static bool opt_fullscreen = true;
@@ -153,6 +146,18 @@ void Kenshin::ImGuiLayer::onUpdate(const updatePayload& payload)
 	ImGui::End();
 	ImGui::PopStyleVar();
 	ImGui::End();
+	
+}
+
+void Kenshin::ImGuiLayer::begin()
+{
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+}
+
+void Kenshin::ImGuiLayer::end()
+{
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

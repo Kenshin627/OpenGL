@@ -175,6 +175,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\application\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\application\layer.cpp" />
     <ClCompile Include="src\application\LayerStack.cpp" />
     <ClCompile Include="src\application\vendor\imGui\imgui_dmeo.cpp">
@@ -685,6 +686,7 @@
     <ClInclude Include="dependencies\GLM\glm\vector_relational.hpp" />
     <ClInclude Include="src\application\application.h" />
     <ClInclude Include="src\application\entityPoint.h" />
+    <ClInclude Include="src\application\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\application\layer.h" />
     <ClInclude Include="src\application\LayerStack.h" />
     <ClInclude Include="src\application\vendor\imGui\implot.h" />
